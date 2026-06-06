@@ -79,7 +79,7 @@ header{
   -webkit-background-clip:text;-webkit-text-fill-color:transparent;
 }
 .logo-sub{font-size:11px;color:var(--tx3);letter-spacing:.04em}
-.hdr-nav{margin-left:auto;display:flex;gap:4px}
+.hdr-nav{margin-left:auto;display:flex;gap:4px;align-items:center}
 .nav-btn{
   padding:7px 18px;border-radius:var(--r);
   border:1px solid var(--border);
@@ -90,9 +90,76 @@ header{
 .nav-btn:hover{border-color:var(--borderl);color:var(--tx1);background:var(--surf1)}
 .nav-btn.on{background:var(--lime);color:var(--bg);border-color:var(--lime);font-weight:600}
 
+/* ─── FIREBASE STATUS ─── */
+#fb-status{
+  display:flex;align-items:center;gap:6px;
+  font-size:11px;color:var(--tx3);
+  padding:5px 10px;border:1px solid var(--border);
+  border-radius:20px;background:var(--surf1);
+  white-space:nowrap;
+}
+.fb-dot{
+  width:6px;height:6px;border-radius:50%;
+  background:var(--tx3);flex-shrink:0;
+  transition:background .3s;
+}
+.fb-dot.ok{background:var(--green);box-shadow:0 0 8px rgba(0,229,140,.5);}
+.fb-dot.err{background:var(--red);}
+.fb-dot.cfg{background:var(--gold);animation:pulse 1.5s infinite;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+
 /* ─── PAGES ─── */
 .page{display:none;padding:28px 0 80px}
 .page.on{display:block}
+
+/* ─── CONFIG PANEL ─── */
+#cfg-panel{
+  background:var(--surf1);border:1px solid rgba(196,241,53,.25);
+  border-radius:var(--r3);padding:28px;margin:24px 0;
+  position:relative;overflow:hidden;
+}
+#cfg-panel::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,transparent,var(--lime),transparent);
+}
+.cfg-title{
+  font-family:'Bebas Neue',sans-serif;font-size:22px;
+  letter-spacing:1px;color:var(--lime);margin-bottom:4px;
+}
+.cfg-sub{font-size:13px;color:var(--tx2);margin-bottom:20px;line-height:1.6}
+.cfg-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}
+.cfg-field{display:flex;flex-direction:column;gap:5px}
+.cfg-field label{font-size:11px;color:var(--tx3);letter-spacing:.06em;text-transform:uppercase}
+.cfg-input{
+  background:var(--bg);border:1px solid var(--borderl);
+  border-radius:var(--r);padding:10px 14px;
+  color:var(--tx1);font-family:'JetBrains Mono',monospace;font-size:12px;
+  outline:none;transition:border .15s;
+}
+.cfg-input:focus{border-color:var(--lime)}
+.cfg-input::placeholder{color:var(--tx3);font-family:'DM Sans',sans-serif;font-size:12px}
+.cfg-note{
+  background:rgba(196,241,53,.06);border:1px solid rgba(196,241,53,.12);
+  border-radius:var(--r);padding:12px 16px;
+  font-size:12px;color:var(--tx2);line-height:1.7;margin-bottom:16px;
+}
+.cfg-note code{
+  font-family:'JetBrains Mono',monospace;
+  color:var(--lime);background:rgba(196,241,53,.1);
+  padding:1px 5px;border-radius:3px;font-size:11px;
+}
+.cfg-steps{list-style:none;margin-bottom:16px}
+.cfg-steps li{
+  display:flex;gap:10px;align-items:flex-start;
+  font-size:12px;color:var(--tx2);margin-bottom:8px;line-height:1.6;
+}
+.cfg-steps li::before{
+  content:attr(data-n);
+  min-width:20px;height:20px;border-radius:50%;
+  background:rgba(196,241,53,.12);color:var(--lime);
+  display:flex;align-items:center;justify-content:center;
+  font-size:11px;font-weight:700;flex-shrink:0;margin-top:1px;
+}
 
 /* ─── SECTION LABEL ─── */
 .sec-label{
@@ -118,6 +185,9 @@ header{
 }
 .name-input:focus{border-color:var(--lime)}
 .name-input::placeholder{color:var(--tx3)}
+.save-status{font-size:11px;color:var(--tx3);min-width:80px;text-align:right}
+.save-status.saving{color:var(--gold)}
+.save-status.saved{color:var(--green)}
 
 /* ─── SCORE PILLS ─── */
 .score-pills{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
@@ -169,6 +239,7 @@ header{
 .btn.suc:hover{background:#1affaa}
 .btn.dan{color:var(--red);border-color:var(--red)}
 .btn.dan:hover{background:rgba(255,90,90,.08)}
+.btn:disabled{opacity:.4;cursor:not-allowed}
 
 /* ─── PROGRESS ─── */
 .prog-wrap{margin-bottom:20px}
@@ -307,28 +378,6 @@ header{
 .champ-icon{font-size:28px;margin-bottom:6px}
 .champ-name{font-size:13px;font-weight:600;color:var(--tx1);line-height:1.3}
 
-/* ─── EXPORT / IMPORT ─── */
-.export-box{
-  background:var(--surf1);border:1px solid var(--border);
-  border-radius:var(--r3);padding:22px;margin-top:24px;
-}
-.export-code{
-  background:var(--bg);border:1px solid var(--borderl);
-  border-radius:var(--r);padding:12px;
-  font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--tx2);
-  word-break:break-all;margin:12px 0;max-height:72px;overflow-y:auto;
-  line-height:1.5;
-}
-.import-ta{
-  width:100%;min-height:76px;resize:vertical;
-  background:var(--bg);border:1px solid var(--borderl);
-  border-radius:var(--r);padding:12px;
-  font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--tx2);
-  outline:none;transition:border .15s;
-}
-.import-ta:focus{border-color:var(--lime)}
-.import-ta::placeholder{color:var(--tx3);font-family:'DM Sans',sans-serif;font-size:13px}
-
 /* ─── LEADERBOARD ─── */
 .lb-wrap{
   background:var(--surf1);border:1px solid var(--border);
@@ -352,15 +401,30 @@ header{
 .lb-row:last-child{border-bottom:none}
 .lb-row:hover{background:var(--surf2)}
 .lb-row.top1{background:rgba(245,200,66,.04)}
+.lb-row.mine{background:rgba(196,241,53,.04);border-left:2px solid var(--lime)}
 .lb-pos{font-size:16px;font-weight:700;color:var(--tx3)}
 .lb-pos.g{color:var(--gold)}
 .lb-pos.s{color:var(--silver)}
 .lb-pos.b{color:var(--bronze)}
-.lb-name{font-weight:500}
+.lb-name{font-weight:500;display:flex;align-items:center;gap:8px}
+.lb-name-you{font-size:9px;color:var(--lime);background:rgba(196,241,53,.12);padding:1px 6px;border-radius:10px;font-weight:700;letter-spacing:.06em}
 .lb-div{font-size:12px;color:var(--tx2);text-align:right}
 .lb-total{font-size:15px;font-weight:700;color:var(--lime);text-align:right}
 .lb-empty{padding:48px;text-align:center;color:var(--tx3);font-size:14px;line-height:1.8}
 .lb-note{font-size:11px;color:var(--tx3);text-align:center;margin-top:10px}
+
+/* ─── LIVE INDICATOR ─── */
+.live-badge{
+  display:inline-flex;align-items:center;gap:5px;
+  font-size:10px;font-weight:700;letter-spacing:.08em;
+  color:var(--green);background:rgba(0,229,140,.1);
+  border:1px solid rgba(0,229,140,.2);
+  border-radius:20px;padding:3px 10px;
+}
+.live-dot{
+  width:5px;height:5px;border-radius:50%;
+  background:var(--green);animation:pulse 1.5s infinite;
+}
 
 /* ─── TOAST ─── */
 .toast{
@@ -388,6 +452,25 @@ header{
 .r22-team{font-size:12px;font-weight:600;color:var(--tx1)}
 .r22-country{font-size:11px;color:var(--tx2);margin-top:1px}
 
+/* ─── ADMIN ─── */
+.export-box{
+  background:var(--surf1);border:1px solid var(--border);
+  border-radius:var(--r3);padding:22px;margin-top:24px;
+}
+.admin-section{
+  background:var(--surf1);border:1px solid var(--border);
+  border-radius:var(--r3);padding:22px;margin-bottom:18px;
+}
+.import-ta{
+  width:100%;min-height:76px;resize:vertical;
+  background:var(--bg);border:1px solid var(--borderl);
+  border-radius:var(--r);padding:12px;
+  font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--tx2);
+  outline:none;transition:border .15s;
+}
+.import-ta:focus{border-color:var(--lime)}
+.import-ta::placeholder{color:var(--tx3);font-family:'DM Sans',sans-serif;font-size:13px}
+
 /* ─── RESPONSIVE ─── */
 @media(max-width:700px){
   .groups-grid{grid-template-columns:1fr}
@@ -395,7 +478,8 @@ header{
   .lb-hdr>*:nth-child(n+3):nth-child(-n+5),
   .lb-row>*:nth-child(n+3):nth-child(-n+5){display:none}
   .hdr-nav .nav-btn{padding:6px 12px;font-size:12px}
-  .logo-title{font-size:22px}
+  .logo-title{font-size:20px}
+  .cfg-grid{grid-template-columns:1fr}
 }
 </style>
 </head>
@@ -414,6 +498,7 @@ header{
         </div>
       </div>
       <div class="hdr-nav">
+        <div id="fb-status"><div class="fb-dot cfg" id="fbDot"></div><span id="fbTxt">Configurando…</span></div>
         <button class="nav-btn on" onclick="showPage('picks')">🎯 Mis Picks</button>
         <button class="nav-btn" onclick="showPage('lb')">🏆 Leaderboard</button>
         <button class="nav-btn" onclick="showPage('admin')">⚙️ Admin</button>
@@ -425,6 +510,34 @@ header{
 <!-- ══════ PAGE: PICKS ══════ -->
 <div class="page on" id="page-picks">
 <div class="container">
+
+  <!-- Firebase Config Panel (shown until configured) -->
+  <div id="cfg-panel" style="margin-top:24px">
+    <div class="cfg-title">🔥 Conectar con Firebase</div>
+    <div class="cfg-sub">Pega los datos de tu proyecto Firebase para activar el leaderboard en tiempo real. Solo necesitas hacerlo una vez — se guarda en tu navegador.</div>
+    <div class="cfg-note">
+      <strong style="color:var(--lime)">¿Dónde consigo estos datos?</strong><br>
+      <ol class="cfg-steps" style="margin-top:8px">
+        <li data-n="1">Ve a <code>console.firebase.google.com</code> y crea un proyecto nuevo</li>
+        <li data-n="2">En el menú lateral: <code>Firestore Database → Crear base de datos → Modo de prueba</code></li>
+        <li data-n="3">Vuelve a Project Overview → <code>⚙️ Configuración del proyecto → Tus apps → &lt;/&gt; (Web)</code></li>
+        <li data-n="4">Registra la app y copia el bloque <code>firebaseConfig</code> que aparece</li>
+        <li data-n="5">Pega cada valor en los campos de abajo y haz clic en <strong>Guardar y conectar</strong></li>
+      </ol>
+    </div>
+    <div class="cfg-grid">
+      <div class="cfg-field"><label>API Key</label><input class="cfg-input" id="cfg-apiKey" placeholder="AIzaSy..."></div>
+      <div class="cfg-field"><label>Auth Domain</label><input class="cfg-input" id="cfg-authDomain" placeholder="proyecto.firebaseapp.com"></div>
+      <div class="cfg-field"><label>Project ID</label><input class="cfg-input" id="cfg-projectId" placeholder="mi-proyecto-wucc"></div>
+      <div class="cfg-field"><label>Storage Bucket</label><input class="cfg-input" id="cfg-storageBucket" placeholder="proyecto.appspot.com"></div>
+      <div class="cfg-field"><label>Messaging Sender ID</label><input class="cfg-input" id="cfg-messagingSenderId" placeholder="123456789"></div>
+      <div class="cfg-field"><label>App ID</label><input class="cfg-input" id="cfg-appId" placeholder="1:123:web:abc..."></div>
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="btn pri" onclick="saveFbConfig()">💾 Guardar y conectar</button>
+      <button class="btn" onclick="hideCfgPanel()" style="font-size:11px">Usar sin Firebase (solo local)</button>
+    </div>
+  </div>
 
   <!-- 2022 Results -->
   <div class="results-2022" style="margin-top:24px">
@@ -451,7 +564,7 @@ header{
       <div class="r22-card" style="border-color:rgba(196,241,53,.15)">
         <div class="r22-div" style="color:rgba(196,241,53,.6)">Badges en equipos</div>
         <div style="font-size:11px;color:var(--tx2);margin-top:6px;line-height:1.6">
-          Los equipos con historial en 2022 muestran su posición junto a su nombre en los grupos.
+          Los equipos con historial en 2022 muestran su posición junto a su nombre.
         </div>
       </div>
     </div>
@@ -460,8 +573,8 @@ header{
   <!-- Name -->
   <div class="name-card">
     <label>Tu nombre:</label>
-    <input class="name-input" id="myName" placeholder="Escribe tu nombre para el leaderboard..." oninput="saveName()">
-    <span style="font-size:11px;color:var(--tx3);white-space:nowrap">Necesario para exportar picks</span>
+    <input class="name-input" id="myName" placeholder="Escribe tu nombre para el leaderboard..." oninput="onNameInput()">
+    <span class="save-status" id="saveStatus">Necesario para guardar</span>
   </div>
 
   <!-- Scoring -->
@@ -472,7 +585,7 @@ header{
     <div class="s-pill">Cuartos <b>+5 pts</b></div>
     <div class="s-pill">Semis <b>+8 pts</b></div>
     <div class="s-pill">Campeón <b>+13 pts</b></div>
-    <div class="s-pill" style="margin-left:auto">Máx total <b id="maxTotal">635 pts</b></div>
+    <div class="s-pill" style="margin-left:auto">Máx total <b>635 pts</b></div>
   </div>
 
   <!-- Div Tabs -->
@@ -488,12 +601,13 @@ header{
   <div class="act-row">
     <button class="btn" onclick="clearPicksDiv()">✕ Limpiar división</button>
     <button class="btn" onclick="autoFill()">⚡ Autocompletar</button>
+    <button class="btn pri" onclick="savePicksToCloud()" id="btnSaveCloud">☁️ Guardar en leaderboard</button>
   </div>
 
   <!-- Progress -->
   <div class="prog-wrap">
     <div class="prog-hdr">
-      <span>Escoge el equipo ganador en cada cruce del round robin para elegir cuales equipos que pasan de ronda.      /          Partidos seleccionados</span>
+      <span>Selecciona ganadores en fase de grupos — luego completa el Championship</span>
       <span id="progTxt">0 / 0</span>
     </div>
     <div class="prog-track"><div class="prog-fill" id="progFill" style="width:0%"></div></div>
@@ -502,17 +616,6 @@ header{
   <div id="picksGroups"></div>
   <div id="picksBracket" style="display:none"></div>
 
-  <!-- Export -->
-  <div class="export-box">
-    <div style="font-size:16px;font-weight:600;margin-bottom:4px">📤 Exportar mis picks</div>
-    <div style="font-size:12px;color:var(--tx2);margin-bottom:14px">Genera tu código único y envíalo al organizador para participar en el leaderboard de apuestas. desdelalinea.tv@gmail.com</div>
-    <div class="act-row">
-      <button class="btn pri" onclick="exportPicks()">Generar código</button>
-      <button class="btn" onclick="copyCode()">📋 Copiar</button>
-    </div>
-    <div class="export-code" id="exportCode">— Haz clic en "Generar código" —</div>
-    <div style="font-size:11px;color:var(--tx3)">El código incluye tu nombre y todas tus selecciones de las 3 divisiones.</div>
-  </div>
 </div>
 </div>
 
@@ -521,17 +624,21 @@ header{
 <div class="container" style="padding-top:28px">
   <div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:20px">
     <div>
-      <h2 style="font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:1px;line-height:1">LEADERBOARD</h2>
-      <p style="font-size:12px;color:var(--tx2);margin-top:4px">Ranking de predicciones · Los puntos se calculan contra los resultados reales ingresados por el admin cuando se publiquen oficialmente el results.wucc2026.com el 22 de agosto despues de las finales.</p>
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:6px">
+        <h2 style="font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:1px;line-height:1">LEADERBOARD</h2>
+        <span class="live-badge" id="liveBadge" style="display:none"><span class="live-dot"></span>EN VIVO</span>
+      </div>
+      <p style="font-size:12px;color:var(--tx2)">Ranking de predicciones · Se actualiza automáticamente · Compara contra resultados oficiales cuando el admin los ingrese</p>
     </div>
     <button class="btn suc" onclick="renderLB()">↺ Actualizar</button>
   </div>
 
   <div class="score-pills" style="margin-bottom:20px">
-    <div class="s-pill">Open máx <b id="mxO">225</b></div>
-    <div class="s-pill">Mixed máx <b id="mxM">225</b></div>
-    <div class="s-pill">Women máx <b id="mxW">185</b></div>
+    <div class="s-pill">Open máx <b>225</b></div>
+    <div class="s-pill">Mixed máx <b>225</b></div>
+    <div class="s-pill">Women máx <b>185</b></div>
     <div class="s-pill">Total máx <b>635</b></div>
+    <div class="s-pill">Participantes <b id="lbCount">0</b></div>
   </div>
 
   <div class="lb-wrap">
@@ -544,10 +651,10 @@ header{
       <div style="text-align:right">Total</div>
     </div>
     <div id="lbBody">
-      <div class="lb-empty">Aún no hay picks importados.<br>Pide a los participantes que exporten su código<br>y ve a <strong>Admin → Importar picks</strong>.</div>
+      <div class="lb-empty">Conectando con Firebase…<br>Si ves esto por mucho tiempo, configura Firebase en la pestaña <strong>Mis Picks</strong>.</div>
     </div>
   </div>
-  <div class="lb-note" id="lbNote">Los puntos reflejan los resultados ingresados por el admin. Si aún no hay resultados, todos aparecen en 0.</div>
+  <div class="lb-note">Los puntos reflejan los resultados ingresados por el admin. Antes de las finales todos aparecen en 0.</div>
 </div>
 </div>
 
@@ -555,25 +662,21 @@ header{
 <div class="page" id="page-admin">
 <div class="container" style="padding-top:28px">
 
-  <!-- Import section -->
-  <div style="background:var(--surf1);border:1px solid var(--border);border-radius:var(--r3);padding:22px;margin-bottom:18px">
-    <div style="font-size:16px;font-weight:600;margin-bottom:4px">📥 Importar picks de participantes</div>
-    <div style="font-size:12px;color:var(--tx2);margin-bottom:14px">Pega el código de cada participante y presiona Importar. Puedes importar múltiples personas.</div>
-    <textarea class="import-ta" id="importTA" placeholder="Pega aquí el código del participante..."></textarea>
-    <div class="act-row" style="margin-top:10px">
-      <button class="btn pri" onclick="importCode()">Importar picks</button>
-      <button class="btn dan" onclick="clearAllSubs()">🗑 Borrar todos</button>
-    </div>
-    <div style="margin-top:10px;font-size:12px;color:var(--tx2)">
-      Picks importados: <strong id="subCount" style="color:var(--lime)">0</strong>
-      <span id="subNames" style="color:var(--tx3);margin-left:8px"></span>
-    </div>
+  <div style="margin-bottom:20px">
+    <h2 style="font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:1px">ADMIN</h2>
+    <p style="font-size:12px;color:var(--tx2);margin-top:4px">Ingresa los resultados reales. El leaderboard se recalcula automáticamente para todos.</p>
+  </div>
+
+  <!-- Firebase config in admin too -->
+  <div class="admin-section" id="adminCfgHint" style="display:none;border-color:rgba(245,200,66,.2)">
+    <div style="font-size:14px;font-weight:600;margin-bottom:6px;color:var(--gold)">⚠️ Firebase no configurado</div>
+    <div style="font-size:12px;color:var(--tx2);margin-bottom:10px">Los resultados se guardan localmente. Para que afecten el leaderboard de todos, configura Firebase en la pestaña <strong>Mis Picks</strong>.</div>
   </div>
 
   <!-- Results section -->
-  <div style="background:var(--surf1);border:1px solid var(--border);border-radius:var(--r3);padding:22px">
+  <div class="admin-section">
     <div style="font-size:16px;font-weight:600;margin-bottom:4px">📋 Resultados oficiales del torneo</div>
-    <div style="font-size:12px;color:var(--tx2);margin-bottom:16px">Ingresa los resultados reales partido a partido. El leaderboard se calcula automáticamente.</div>
+    <div style="font-size:12px;color:var(--tx2);margin-bottom:16px">Ingresa los resultados reales partido a partido. Se publicarán en <strong>results.wucc2026.com</strong> el 22 de agosto después de las finales.</div>
 
     <div class="div-tabs" id="adminDiv"></div>
     <div class="phase-tabs" id="adminPhaseTabs">
@@ -582,7 +685,7 @@ header{
     </div>
     <div class="act-row">
       <button class="btn" onclick="clearResultsDiv()">✕ Limpiar</button>
-      <button class="btn suc" onclick="saveAndCalc()">💾 Guardar y calcular</button>
+      <button class="btn suc" onclick="saveAndCalc()">💾 Guardar y publicar resultados</button>
     </div>
     <div id="adminGroups"></div>
     <div id="adminBracket" style="display:none"></div>
@@ -592,6 +695,32 @@ header{
 
 </div><!-- /wrap -->
 <div class="toast" id="toast"></div>
+
+<!-- ══════ FIREBASE SDK ══════ -->
+<script type="module">
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+import {
+  getFirestore, doc, setDoc, getDoc, onSnapshot, collection, getDocs
+} from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+
+// ── Expose to global scope for non-module script ──
+window._fbInit = async (cfg) => {
+  try {
+    const app = initializeApp(cfg);
+    const db  = getFirestore(app);
+    // quick connectivity test
+    await getDoc(doc(db,'_ping','test')).catch(()=>{});
+    window._db = db;
+    window._fbFns = {
+      doc, setDoc, getDoc, onSnapshot, collection, getDocs
+    };
+    return true;
+  } catch(e) {
+    console.error('Firebase init error', e);
+    return false;
+  }
+};
+</script>
 
 <script>
 /* ══════════════════════════════════════════════════════
@@ -655,10 +784,161 @@ const GROUPS={
     {g:'D',t:[{s:4,n:'Wall City',c:'GER'},{s:16,n:'Cotarica Grandes',c:'ITA'},{s:17,n:'Technicolor',c:'JPN'},{s:29,n:'Otakaro',c:'AUS'},{s:36,n:'Catchup Graz',c:'AUT'},{s:47,n:'New Age',c:'ISR'}]},
     {g:'E',t:[{s:5,n:'Clapham',c:'GBR'},{s:10,n:'Mephisto',c:'CAN'},{s:21,n:'3SB',c:'CHZ'},{s:28,n:'Gentle',c:'BEL'},{s:38,n:'Flywild',c:'IND'},{s:42,n:'Junk',c:'RCH'}]},
     {g:'F',t:[{s:6,n:'Nomadic Tribe',c:'JPN'},{s:11,n:'Chevron Action Flash',c:'GBR'},{s:24,n:'Tchac',c:'FRA'},{s:26,n:'Freespeed Basel',c:'SUI'},{s:40,n:'Blue Devils',c:'RDM'},{s:43,n:'Zoom',c:'TRK'}]},
-    {g:'G',t:[{s:7,n:'Pony',c:'USA'},{s:9,n:'Sunder',c:'AUS'},{s:22,n:'REX',c:'SAF'},{s:25,n:'NLSU Iznogood',c:'FRA'},{s:39,n:'Chuchai',c:'CHN'},{s:44,n:'FrankN',c:'GER'}]},
+    {g:'G',t:[{s:7,n:'Pony',c:'USA'},{s:9,n:'Sunder',c:'AUS'},{s:22,n:'REX',c:'SAF'},{s:25,n:'NLSU Iznogood',c:'FRA'},{s:39,n:'Chuchái',c:'CHN'},{s:44,n:'FrankN',c:'GER'}]},
     {g:'H',t:[{s:8,n:'GOAT',c:'CAN'},{s:12,n:'BFD La Fotta',c:'ITA'},{s:23,n:'Wildcats',c:'AUS'},{s:27,n:'Makawua',c:'COL'},{s:37,n:'XVI',c:'IRL'},{s:41,n:'KFK',c:'DEN'}]}
   ]
 };
+
+/* ══════════════════════════════════════════════════════
+   FIREBASE CONFIG & STATE
+══════════════════════════════════════════════════════ */
+let fbReady = false;
+let fbUnsubLB = null; // leaderboard listener
+
+function lsGet(k,def){try{const v=localStorage.getItem(k);return v?JSON.parse(v):def;}catch{return def;}}
+function lsSet(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch{}}
+
+async function saveFbConfig(){
+  const cfg = {
+    apiKey:            document.getElementById('cfg-apiKey').value.trim(),
+    authDomain:        document.getElementById('cfg-authDomain').value.trim(),
+    projectId:         document.getElementById('cfg-projectId').value.trim(),
+    storageBucket:     document.getElementById('cfg-storageBucket').value.trim(),
+    messagingSenderId: document.getElementById('cfg-messagingSenderId').value.trim(),
+    appId:             document.getElementById('cfg-appId').value.trim(),
+  };
+  if(!cfg.apiKey||!cfg.projectId){toast('⚠️ API Key y Project ID son obligatorios');return;}
+  toast('🔄 Conectando con Firebase…');
+  const ok = await window._fbInit(cfg);
+  if(ok){
+    lsSet('w26_fbcfg', cfg);
+    fbReady = true;
+    setFbStatus('ok','Conectado');
+    document.getElementById('cfg-panel').style.display='none';
+    subscribeToLB();
+    toast('✅ Firebase conectado. ¡El leaderboard ya está en vivo!');
+  } else {
+    setFbStatus('err','Error de conexión');
+    toast('❌ No se pudo conectar. Verifica los datos e intenta de nuevo.');
+  }
+}
+
+function hideCfgPanel(){
+  document.getElementById('cfg-panel').style.display='none';
+  setFbStatus('err','Sin Firebase');
+}
+
+function setFbStatus(state, txt){
+  const dot = document.getElementById('fbDot');
+  const label = document.getElementById('fbTxt');
+  dot.className = 'fb-dot ' + state;
+  label.textContent = txt;
+}
+
+async function initFirebase(){
+  const cfg = lsGet('w26_fbcfg', null);
+  if(!cfg){
+    setFbStatus('cfg','Configurar Firebase');
+    return;
+  }
+  setFbStatus('cfg','Conectando…');
+  // wait for module to load
+  let tries = 0;
+  while(!window._fbInit && tries < 20){ await new Promise(r=>setTimeout(r,200)); tries++; }
+  if(!window._fbInit){ setFbStatus('err','SDK no cargó'); return; }
+
+  const ok = await window._fbInit(cfg);
+  if(ok){
+    fbReady = true;
+    setFbStatus('ok','Conectado');
+    document.getElementById('cfg-panel').style.display='none';
+    // pre-fill config fields
+    document.getElementById('cfg-apiKey').value            = cfg.apiKey||'';
+    document.getElementById('cfg-authDomain').value        = cfg.authDomain||'';
+    document.getElementById('cfg-projectId').value         = cfg.projectId||'';
+    document.getElementById('cfg-storageBucket').value     = cfg.storageBucket||'';
+    document.getElementById('cfg-messagingSenderId').value = cfg.messagingSenderId||'';
+    document.getElementById('cfg-appId').value             = cfg.appId||'';
+    subscribeToLB();
+  } else {
+    setFbStatus('err','Reconectar');
+    toast('⚠️ Firebase guardado pero no conectó. Verifica config.');
+  }
+}
+
+/* ── Subscribe to leaderboard in real-time ── */
+function subscribeToLB(){
+  if(!fbReady||!window._db) return;
+  if(fbUnsubLB) fbUnsubLB(); // unsub previous
+  const {collection, onSnapshot} = window._fbFns;
+  const badge = document.getElementById('liveBadge');
+  if(badge) badge.style.display='inline-flex';
+  fbUnsubLB = onSnapshot(
+    collection(window._db,'picks'),
+    (snap) => {
+      subs = snap.docs.map(d => d.data());
+      lsSet('w26_subs', subs);
+      updateSubCount();
+      // re-render LB if visible
+      const lbPage = document.getElementById('page-lb');
+      if(lbPage && lbPage.classList.contains('on')) renderLB();
+    },
+    (err) => {
+      console.error('LB listener error', err);
+      setFbStatus('err','Error sync');
+    }
+  );
+}
+
+/* ── Save picks to Firestore ── */
+async function savePicksToCloud(){
+  const name = document.getElementById('myName').value.trim();
+  if(!name){ toast('⚠️ Ingresa tu nombre primero'); return; }
+  if(!fbReady||!window._db){
+    toast('⚠️ Firebase no configurado. Configúralo arriba para guardar en el leaderboard.');
+    return;
+  }
+  const btn = document.getElementById('btnSaveCloud');
+  btn.disabled = true;
+  btn.textContent = '⏳ Guardando…';
+  try {
+    const {doc, setDoc} = window._fbFns;
+    // use name as document ID (sanitized)
+    const docId = name.toLowerCase().replace(/[^a-z0-9_-]/g,'_').slice(0,40);
+    const payload = {v:2, n:name, docId, p:myPicks, ts:Date.now()};
+    await setDoc(doc(window._db,'picks',docId), payload);
+    lsSet('w26_name', name);
+    setSaveStatus('saved','✅ Guardado en leaderboard');
+    toast('🏆 ¡Picks guardados! Apareces en el leaderboard.');
+    showPage('lb');
+  } catch(e) {
+    console.error('Save error', e);
+    toast('❌ Error al guardar. Intenta de nuevo.');
+    setSaveStatus('','');
+  } finally {
+    btn.disabled = false;
+    btn.textContent = '☁️ Guardar en leaderboard';
+  }
+}
+
+/* ── Save results to Firestore (admin) ── */
+async function saveResultsToCloud(){
+  if(!fbReady||!window._db) return;
+  try {
+    const {doc, setDoc} = window._fbFns;
+    await setDoc(doc(window._db,'config','results'), {results, ts:Date.now()});
+  } catch(e){ console.error('Save results error',e); }
+}
+
+/* ── Load results from Firestore ── */
+async function loadResultsFromCloud(){
+  if(!fbReady||!window._db) return;
+  try {
+    const {doc, getDoc} = window._fbFns;
+    const snap = await getDoc(doc(window._db,'config','results'));
+    if(snap.exists()){ results = snap.data().results; lsSet('w26_res',results); }
+  } catch(e){ console.error('Load results error',e); }
+}
 
 /* ══════════════════════════════════════════════════════
    ESTADO
@@ -681,36 +961,15 @@ function mkState(){
   return o;
 }
 
-/* localStorage con debounce — evita bloqueo de main thread en cada keypress */
-const _lsQ={};
-function lsGet(k,def){try{const v=localStorage.getItem(k);return v?JSON.parse(v):def;}catch{return def;}}
-function lsSet(k,v){
-  _lsQ[k]=v;
-  clearTimeout(_lsQ['__t_'+k]);
-  _lsQ['__t_'+k]=setTimeout(()=>{
-    try{localStorage.setItem(k,JSON.stringify(_lsQ[k]));}catch{}
-    delete _lsQ[k];delete _lsQ['__t_'+k];
-  },400);
-}
-function lsFlush(){
-  Object.keys(_lsQ).forEach(k=>{
-    if(k.startsWith('__t_'))return;
-    clearTimeout(_lsQ['__t_'+k]);
-    try{localStorage.setItem(k,JSON.stringify(_lsQ[k]));}catch{}
-  });
-}
-window.addEventListener('beforeunload',lsFlush);
-window.addEventListener('pagehide',lsFlush);
-
-let myPicks=lsGet('w26_picks',null)||mkState();
-let myName=lsGet('w26_name','')||'';
-let results=lsGet('w26_res',null)||mkState();
-let subs=lsGet('w26_subs',[])||[];
+let myPicks  = lsGet('w26_picks',null)||mkState();
+let myName   = lsGet('w26_name','')||'';
+let results  = lsGet('w26_res',null)||mkState();
+let subs     = lsGet('w26_subs',[])||[];
 
 if(myName) document.getElementById('myName').value=myName;
 
 /* ══════════════════════════════════════════════════════
-   CACHE DE STANDINGS — invalida solo el grupo afectado
+   CACHE DE STANDINGS
 ══════════════════════════════════════════════════════ */
 const _stCache=new Map();
 function _stKey(state,div,gi){
@@ -772,7 +1031,7 @@ function progress(state,div){
 }
 
 /* ══════════════════════════════════════════════════════
-   SCORING — con short-circuit y Set para avanzados
+   SCORING
 ══════════════════════════════════════════════════════ */
 function scoreDiv(pState,rState,div){
   let pts=0;
@@ -805,7 +1064,7 @@ function _roundWinners(br){
 }
 
 /* ══════════════════════════════════════════════════════
-   RENDER — GROUP CARD (array join en vez de +=)
+   RENDER — GROUP CARD
 ══════════════════════════════════════════════════════ */
 function renderGroupCard(div,gi,state,prefix){
   const grp=GROUPS[div][gi];
@@ -830,7 +1089,6 @@ function renderGroupCard(div,gi,state,prefix){
   return parts.join('');
 }
 
-/* Delegación de eventos: 1 listener por contenedor vs N inline onclick */
 function _attachGroupDelegate(containerId){
   const el=document.getElementById(containerId);
   if(el._delegated)return;
@@ -853,7 +1111,6 @@ function renderGroups(div,state,containerId,prefix){
   _attachGroupDelegate(containerId);
 }
 
-/* Re-renderiza solo el card del grupo afectado */
 function renderGroupOnly(div,gi,state,containerId,prefix){
   const grid=document.getElementById(containerId);
   if(!grid)return;
@@ -905,7 +1162,7 @@ function _attachBktDelegate(containerId){
 }
 
 /* ══════════════════════════════════════════════════════
-   PICK ACTIONS — re-render quirúrgico (1 card, no toda la grilla)
+   PICK ACTIONS
 ══════════════════════════════════════════════════════ */
 function pickG(gi,mi,w){
   myPicks[curDiv].g[gi].m[mi].w=w;
@@ -965,67 +1222,35 @@ function autoFill(){
   lsSet('w26_picks',myPicks);renderPicksView();
 }
 
-let _nameT;
-function saveName(){
-  myName=document.getElementById('myName').value;
-  clearTimeout(_nameT);
-  _nameT=setTimeout(()=>lsSet('w26_name',myName),600);
+let _saveStatusT;
+function setSaveStatus(cls, txt){
+  const el = document.getElementById('saveStatus');
+  el.className = 'save-status ' + cls;
+  el.textContent = txt;
+}
+function onNameInput(){
+  myName = document.getElementById('myName').value;
+  clearTimeout(_saveStatusT);
+  setSaveStatus('saving','Escribe nombre…');
+  _saveStatusT = setTimeout(()=>{
+    lsSet('w26_name',myName);
+    setSaveStatus('','Necesario para guardar');
+  },500);
 }
 
 /* ══════════════════════════════════════════════════════
-   EXPORT / IMPORT
-══════════════════════════════════════════════════════ */
-function exportPicks(){
-  const name=document.getElementById('myName').value.trim();
-  if(!name){toast('⚠️ Ingresa tu nombre primero');return;}
-  try{
-    lsFlush();
-    const payload={v:2,n:name,p:myPicks,ts:Date.now()};
-    const code=btoa(encodeURIComponent(JSON.stringify(payload)));
-    document.getElementById('exportCode').textContent=code;
-    toast('✅ Código generado. Copia y envía al organizador.');
-  }catch(e){toast('❌ Error al generar código');}
-}
-function copyCode(){
-  const code=document.getElementById('exportCode').textContent;
-  if(code.startsWith('—')){toast('⚠️ Primero genera el código');return;}
-  navigator.clipboard.writeText(code).then(()=>toast('📋 Código copiado')).catch(()=>{
-    const ta=document.createElement('textarea');
-    ta.value=code;document.body.appendChild(ta);ta.select();
-    document.execCommand('copy');document.body.removeChild(ta);
-    toast('📋 Código copiado');
-  });
-}
-function importCode(){
-  const raw=document.getElementById('importTA').value.trim();
-  if(!raw){toast('⚠️ Pega un código primero');return;}
-  try{
-    const payload=JSON.parse(decodeURIComponent(atob(raw)));
-    if(!payload.v||!payload.n||!payload.p)throw 0;
-    const idx=subs.findIndex(s=>s.n===payload.n);
-    if(idx>=0){subs[idx]=payload;toast('🔄 Picks de "'+payload.n+'" actualizados');}
-    else{subs.push(payload);toast('✅ "'+payload.n+'" importado');}
-    lsSet('w26_subs',subs);
-    document.getElementById('importTA').value='';
-    updateSubCount();
-  }catch{toast('❌ Código inválido. Verifica que esté completo.');}
-}
-function clearAllSubs(){
-  if(!confirm('¿Borrar TODOS los picks importados? No se puede deshacer.'))return;
-  subs=[];lsSet('w26_subs',subs);updateSubCount();
-  toast('🗑️ Picks borrados');
-}
-function updateSubCount(){
-  document.getElementById('subCount').textContent=subs.length;
-  document.getElementById('subNames').textContent=subs.length?'('+subs.map(s=>s.n).join(', ')+')':'';
-}
-
-/* ══════════════════════════════════════════════════════
-   LEADERBOARD — DocumentFragment (batch DOM insert)
+   LEADERBOARD
 ══════════════════════════════════════════════════════ */
 function renderLB(){
+  const myN = (document.getElementById('myName').value||'').trim();
+  document.getElementById('lbCount').textContent = subs.length;
+
   if(!subs.length){
-    document.getElementById('lbBody').innerHTML='<div class="lb-empty">Aún no hay picks importados.<br>Pide a los participantes que exporten su código<br>y ve a <strong>Admin → Importar picks</strong>.</div>';
+    if(!fbReady){
+      document.getElementById('lbBody').innerHTML='<div class="lb-empty">Firebase no configurado.<br>Ve a <strong>Mis Picks</strong> y conecta Firebase para ver el leaderboard compartido.</div>';
+    } else {
+      document.getElementById('lbBody').innerHTML='<div class="lb-empty">Aún no hay participantes.<br>Haz tus picks y haz clic en <strong>☁️ Guardar en leaderboard</strong>.</div>';
+    }
     return;
   }
   const entries=subs.map(s=>{
@@ -1038,14 +1263,24 @@ function renderLB(){
   const frag=document.createDocumentFragment();
   entries.forEach((e,i)=>{
     const row=document.createElement('div');
-    row.className='lb-row'+(i===0?' top1':'');
+    const isMe = myN && e.name.toLowerCase()===myN.toLowerCase();
+    row.className='lb-row'+(i===0?' top1':'')+(isMe?' mine':'');
     const posClass=i===0?'g':i===1?'s':i===2?'b':'';
-    row.innerHTML='<div class="lb-pos '+posClass+'">'+(medals[i]||i+1)+'</div><div class="lb-name">'+e.name+'</div><div class="lb-div">'+e.o+'</div><div class="lb-div">'+e.m+'</div><div class="lb-div">'+e.w+'</div><div class="lb-total">'+e.total+'</div>';
+    const youBadge = isMe ? '<span class="lb-name-you">TÚ</span>' : '';
+    row.innerHTML='<div class="lb-pos '+posClass+'">'+(medals[i]||i+1)+'</div><div class="lb-name">'+e.name+youBadge+'</div><div class="lb-div">'+e.o+'</div><div class="lb-div">'+e.m+'</div><div class="lb-div">'+e.w+'</div><div class="lb-total">'+e.total+'</div>';
     frag.appendChild(row);
   });
   const body=document.getElementById('lbBody');
   body.innerHTML='';
   body.appendChild(frag);
+}
+
+function updateSubCount(){
+  // count for admin if shown
+  const sc = document.getElementById('subCount');
+  const sn = document.getElementById('subNames');
+  if(sc) sc.textContent = subs.length;
+  if(sn) sn.textContent = subs.length?'('+subs.map(s=>s.n).join(', ')+')':'';
 }
 
 /* ══════════════════════════════════════════════════════
@@ -1056,8 +1291,13 @@ function showPage(p){
   document.getElementById('page-'+p).classList.add('on');
   document.querySelectorAll('.nav-btn').forEach((b,i)=>
     b.classList.toggle('on',['picks','lb','admin'][i]===p));
-  if(p==='lb')renderLB();
-  if(p==='admin')updateSubCount();
+  if(p==='lb'){ renderLB(); }
+  if(p==='admin'){
+    updateSubCount();
+    if(!fbReady) document.getElementById('adminCfgHint').style.display='block';
+    // load latest results from cloud when admin opens
+    loadResultsFromCloud().then(()=>renderAdminView());
+  }
 }
 function setPicksDiv(div){
   curDiv=div;
@@ -1101,11 +1341,12 @@ function renderAdminView(){
   if(adminPhase==='groups')renderGroups(adminDiv,results,'adminGroups','R');
   else renderBkt(adminDiv,results,'adminBracket','R');
 }
-function saveAndCalc(){
-  lsFlush();
+async function saveAndCalc(){
+  lsSet('w26_res',results);
+  await saveResultsToCloud();
   renderLB();
   showPage('lb');
-  toast('✅ Resultados guardados. Leaderboard actualizado.');
+  toast('✅ Resultados guardados y publicados. Leaderboard actualizado.');
 }
 
 /* ══════════════════════════════════════════════════════
@@ -1115,7 +1356,7 @@ let _tt;
 function toast(msg){
   const t=document.getElementById('toast');
   t.textContent=msg;t.style.display='block';
-  clearTimeout(_tt);_tt=setTimeout(()=>t.style.display='none',2800);
+  clearTimeout(_tt);_tt=setTimeout(()=>t.style.display='none',3000);
 }
 
 /* ══════════════════════════════════════════════════════
@@ -1133,11 +1374,29 @@ function mkDivTabs(id,setFn,initial){
     c.appendChild(b);
   });
 }
+
+// Expose functions needed by inline handlers
+window.showPage=showPage;
+window.setPicksPhase=setPicksPhase;
+window.setAdminPhase=setAdminPhase;
+window.clearPicksDiv=clearPicksDiv;
+window.autoFill=autoFill;
+window.savePicksToCloud=savePicksToCloud;
+window.renderLB=renderLB;
+window.clearResultsDiv=clearResultsDiv;
+window.saveAndCalc=saveAndCalc;
+window.saveFbConfig=saveFbConfig;
+window.hideCfgPanel=hideCfgPanel;
+window.onNameInput=onNameInput;
+
 mkDivTabs('picksDiv',setPicksDiv,'Open');
 mkDivTabs('adminDiv',setAdminDiv,'Open');
 updateSubCount();
 renderPicksView();
 renderAdminView();
+
+// Initialize Firebase after DOM is ready
+initFirebase();
 </script>
 </body>
 </html>
