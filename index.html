@@ -487,12 +487,12 @@ import { getFirestore, doc, setDoc, getDoc, onSnapshot, collection } from 'https
 // ── HARDCODED CONFIG — users never see this ──
 // Replace these values with your Firebase project credentials
 const FIREBASE_CONFIG = {
-  apiKey:            "AIzaSyAPhggKAQxklGDmarci0Ij3tlm84RKG5Po",
-  authDomain:        "wucc2026-pronostico.firebaseapp.com",
-  projectId:         "wucc2026-pronostico",
-  storageBucket:     "wucc2026-pronostico.firebasestorage.app",
-  messagingSenderId: "433959575984",
-  appId:             "1:433959575984:web:d5d5a29fe103d988893675"
+  apiKey:            "REPLACE_API_KEY",
+  authDomain:        "REPLACE_AUTH_DOMAIN",
+  projectId:         "REPLACE_PROJECT_ID",
+  storageBucket:     "REPLACE_STORAGE_BUCKET",
+  messagingSenderId: "REPLACE_SENDER_ID",
+  appId:             "REPLACE_APP_ID"
 };
 
 window._fbBoot = async () => {
@@ -523,7 +523,7 @@ window._fbBoot();
 ═══════════════════════════════════════════════════ */
 // Admin password hash (SHA-256 of "desdelalinea2026" — change this)
 // To change: run sha256("yourpassword") and replace below
-const ADMIN_PWD_HASH = "a00776006671ec15a514969d03f958c181392aca"; // SHA1 placeholder — see SETUP.md
+const ADMIN_PWD_HASH = "ba28268b2957fcd3906aaab48e02693b8f8d146a"; // SHA-1 of "desdelalinea2026"
 const ADMIN_SESSION_KEY = "w26_admin_sess";
 
 // ── Tournament deadline: Aug 15 2026 09:00 Ireland (UTC+1) ──
