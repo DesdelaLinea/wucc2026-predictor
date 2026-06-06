@@ -1,0 +1,1143 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>WUCC 2026 — Pronostico & Apuestas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:       #07080C;
+  --surf1:    #0F1119;
+  --surf2:    #171B27;
+  --surf3:    #1E2235;
+  --border:   #1F2333;
+  --borderl:  #2A2F45;
+  --lime:     #C4F135;
+  --lime-dim: rgba(196,241,53,.12);
+  --green:    #00E58C;
+  --green-dim:rgba(0,229,140,.1);
+  --red:      #FF5A5A;
+  --tx1:      #E8EAF2;
+  --tx2:      #7B7E9A;
+  --tx3:      #3D4060;
+  --gold:     #F5C842;
+  --silver:   #A0AAB4;
+  --bronze:   #CD7F32;
+  --r:        8px;
+  --r2:       12px;
+  --r3:       16px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  background:var(--bg);
+  color:var(--tx1);
+  font-family:'DM Sans',sans-serif;
+  min-height:100vh;
+  -webkit-font-smoothing:antialiased;
+}
+body::before{
+  content:'';
+  position:fixed;inset:0;
+  background:
+    radial-gradient(ellipse 60% 50% at 80% 0%,rgba(196,241,53,.04) 0%,transparent 60%),
+    radial-gradient(ellipse 40% 40% at 10% 90%,rgba(0,229,140,.03) 0%,transparent 50%);
+  pointer-events:none;z-index:0;
+}
+.wrap{position:relative;z-index:1}
+.container{max-width:1280px;margin:0 auto;padding:0 24px}
+
+/* ─── HEADER ─── */
+header{
+  background:rgba(7,8,12,.95);
+  border-bottom:1px solid var(--border);
+  backdrop-filter:blur(20px);
+  position:sticky;top:0;z-index:100;
+}
+.hdr-inner{
+  display:flex;align-items:center;gap:20px;
+  padding:14px 0;flex-wrap:wrap;
+}
+.logo{
+  display:flex;align-items:center;gap:12px;flex-shrink:0;
+}
+.logo-disc{
+  width:42px;height:42px;
+  background:linear-gradient(135deg,var(--lime),#8fc420);
+  border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:20px;
+  box-shadow:0 0 24px rgba(196,241,53,.2);
+}
+.logo-text{line-height:1.1}
+.logo-title{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:26px;letter-spacing:1px;
+  background:linear-gradient(90deg,var(--tx1),var(--lime));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+}
+.logo-sub{font-size:11px;color:var(--tx3);letter-spacing:.04em}
+.hdr-nav{margin-left:auto;display:flex;gap:4px}
+.nav-btn{
+  padding:7px 18px;border-radius:var(--r);
+  border:1px solid var(--border);
+  background:transparent;color:var(--tx2);
+  font-size:13px;font-family:'DM Sans',sans-serif;
+  cursor:pointer;transition:all .15s;white-space:nowrap;
+}
+.nav-btn:hover{border-color:var(--borderl);color:var(--tx1);background:var(--surf1)}
+.nav-btn.on{background:var(--lime);color:var(--bg);border-color:var(--lime);font-weight:600}
+
+/* ─── PAGES ─── */
+.page{display:none;padding:28px 0 80px}
+.page.on{display:block}
+
+/* ─── SECTION LABEL ─── */
+.sec-label{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:13px;letter-spacing:.14em;color:var(--tx3);
+  margin-bottom:14px;
+}
+
+/* ─── NAME CARD ─── */
+.name-card{
+  background:var(--surf1);border:1px solid var(--border);
+  border-radius:var(--r3);padding:16px 20px;
+  display:flex;align-items:center;gap:12px;
+  flex-wrap:wrap;margin-bottom:20px;
+}
+.name-card label{font-size:13px;color:var(--tx2);white-space:nowrap}
+.name-input{
+  flex:1;min-width:200px;
+  background:var(--bg);border:1px solid var(--borderl);
+  border-radius:var(--r);padding:9px 14px;
+  color:var(--tx1);font-size:14px;font-family:'DM Sans',sans-serif;
+  outline:none;transition:border .15s;
+}
+.name-input:focus{border-color:var(--lime)}
+.name-input::placeholder{color:var(--tx3)}
+
+/* ─── SCORE PILLS ─── */
+.score-pills{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.s-pill{
+  padding:5px 12px;border-radius:6px;
+  border:1px solid var(--border);
+  background:var(--surf1);
+  font-size:11px;color:var(--tx2);
+}
+.s-pill b{color:var(--lime);font-weight:600}
+
+/* ─── TABS ─── */
+.div-tabs{display:flex;gap:6px;margin-bottom:16px;flex-wrap:wrap}
+.div-tab{
+  padding:6px 16px;border-radius:100px;
+  border:1px solid var(--border);background:transparent;
+  color:var(--tx3);font-size:12px;font-weight:500;
+  font-family:'DM Sans',sans-serif;cursor:pointer;transition:all .15s;
+}
+.div-tab:hover{color:var(--tx2);border-color:var(--borderl)}
+.div-tab.on{border-color:var(--lime);color:var(--lime)}
+
+.phase-tabs{
+  display:flex;gap:3px;margin-bottom:18px;
+  background:var(--surf1);border-radius:var(--r);
+  padding:4px;width:fit-content;
+}
+.phase-tab{
+  padding:6px 18px;border-radius:var(--r);border:none;
+  background:transparent;color:var(--tx3);
+  font-size:13px;font-family:'DM Sans',sans-serif;
+  cursor:pointer;transition:all .15s;
+}
+.phase-tab.on{background:var(--surf3);color:var(--tx1);font-weight:500}
+
+/* ─── ACTION BUTTONS ─── */
+.act-row{display:flex;gap:8px;margin-bottom:18px;flex-wrap:wrap}
+.btn{
+  padding:7px 14px;border-radius:var(--r);
+  border:1px solid var(--borderl);background:transparent;
+  color:var(--tx2);font-size:12px;font-family:'DM Sans',sans-serif;
+  cursor:pointer;display:flex;align-items:center;gap:6px;
+  transition:all .15s;
+}
+.btn:hover{background:var(--surf1);color:var(--tx1)}
+.btn.pri{background:var(--lime);color:var(--bg);border-color:var(--lime);font-weight:600}
+.btn.pri:hover{background:#d1f650}
+.btn.suc{background:var(--green);color:var(--bg);border-color:var(--green);font-weight:600}
+.btn.suc:hover{background:#1affaa}
+.btn.dan{color:var(--red);border-color:var(--red)}
+.btn.dan:hover{background:rgba(255,90,90,.08)}
+
+/* ─── PROGRESS ─── */
+.prog-wrap{margin-bottom:20px}
+.prog-hdr{display:flex;justify-content:space-between;font-size:11px;color:var(--tx3);margin-bottom:5px}
+.prog-track{height:3px;background:var(--surf3);border-radius:3px}
+.prog-fill{height:100%;background:linear-gradient(90deg,#7ec822,var(--lime));border-radius:3px;transition:width .3s}
+
+/* ─── GROUPS GRID ─── */
+.groups-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(245px,1fr));gap:12px}
+
+/* ─── GROUP CARD ─── */
+.g-card{
+  background:var(--surf1);border:1px solid var(--border);
+  border-radius:var(--r3);overflow:hidden;
+  transition:border-color .2s;
+}
+.g-card:hover{border-color:var(--borderl)}
+.g-hdr{
+  padding:9px 14px;
+  background:var(--surf2);border-bottom:1px solid var(--border);
+  display:flex;justify-content:space-between;align-items:center;
+}
+.g-name{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:15px;letter-spacing:.06em;color:var(--tx1);
+}
+.g-pill{
+  font-size:9px;color:var(--tx3);
+  border:1px solid var(--border);border-radius:4px;padding:2px 7px;
+  letter-spacing:.06em;
+}
+
+/* ─── STANDINGS ─── */
+.s-row{
+  padding:5px 14px;font-size:12px;
+  display:flex;align-items:center;gap:7px;
+  border-bottom:1px solid var(--border);
+}
+.s-row:last-child{border-bottom:none}
+.s-row.champ{color:var(--green)}
+.s-row.cons{color:var(--tx3)}
+.s-cut{border-top:1.5px dashed var(--green);position:relative}
+.s-cut::before{
+  content:'CHAMPIONSHIP';position:absolute;right:10px;top:-8px;
+  font-size:8px;font-weight:700;color:var(--green);
+  background:var(--surf1);padding:0 4px;letter-spacing:.08em;
+  font-family:'DM Sans',sans-serif;
+}
+.s-seed{font-size:9px;color:var(--tx3);min-width:20px;text-align:right;font-weight:500}
+.s-flag{min-width:18px;font-size:14px}
+.s-name{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:11.5px}
+.s-w{font-size:10px;font-weight:600;min-width:18px;text-align:right}
+.s-badge{
+  font-size:8px;font-weight:700;padding:1px 5px;
+  border-radius:3px;letter-spacing:.04em;flex-shrink:0;
+}
+.badge-champ{background:var(--green-dim);color:var(--green)}
+.badge-cons{background:rgba(61,64,96,.2);color:var(--tx3)}
+.badge-22{
+  font-size:9px;padding:1px 5px;border-radius:3px;
+  background:rgba(196,241,53,.07);color:rgba(196,241,53,.7);
+  border:1px solid rgba(196,241,53,.12);flex-shrink:0;
+  cursor:help;
+}
+
+/* ─── MATCHES ─── */
+.matches-sec{background:var(--bg);border-top:1px solid var(--border)}
+.m-row{
+  display:flex;align-items:center;gap:6px;
+  padding:4px 14px;border-bottom:1px solid rgba(31,35,51,.6);
+}
+.m-row:last-child{border-bottom:none}
+.m-team{
+  flex:1;font-size:11px;color:var(--tx3);
+  display:flex;align-items:center;gap:5px;cursor:pointer;
+  padding:3px 6px;border-radius:5px;transition:all .1s;
+  white-space:nowrap;overflow:hidden;min-width:0;
+}
+.m-team:hover{background:var(--surf2);color:var(--tx2)}
+.m-team.win{color:var(--tx1);font-weight:500}
+.m-team.win::after{content:'✓';font-size:9px;color:var(--lime);margin-left:4px;flex-shrink:0}
+.m-vs{font-size:9px;color:var(--tx3);flex-shrink:0}
+
+/* ─── BRACKET ─── */
+.bkt-info{
+  background:var(--surf1);border:1px solid var(--border);
+  border-radius:var(--r2);padding:12px 18px;margin-bottom:16px;
+  display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;
+}
+.bkt-title{font-size:14px;font-weight:600;color:var(--tx1)}
+.bkt-sub{font-size:11px;color:var(--tx3);margin-top:2px}
+.bkt-wrap{overflow-x:auto;padding-bottom:16px}
+.bracket{display:flex;align-items:stretch;min-width:740px}
+.b-round{display:flex;flex-direction:column;min-width:160px}
+.b-rlbl{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:11px;letter-spacing:.14em;color:var(--tx3);
+  padding:0 10px 8px;
+}
+.b-slots{display:flex;flex-direction:column;flex:1;justify-content:space-around}
+.b-match{
+  display:flex;flex-direction:column;justify-content:center;
+  padding:4px 10px;flex:1;position:relative;
+}
+.b-match::after{
+  content:'';position:absolute;right:0;top:25%;bottom:25%;
+  width:1px;background:var(--border);
+}
+.b-team{
+  padding:5px 9px;border:1px solid var(--border);border-radius:5px;
+  font-size:11px;color:var(--tx3);margin:2px 0;
+  display:flex;align-items:center;gap:5px;cursor:pointer;
+  transition:all .12s;background:var(--surf1);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.b-team:hover{border-color:var(--borderl);color:var(--tx2);background:var(--surf2)}
+.b-team.win{
+  color:var(--tx1);font-weight:500;
+  border-color:var(--green);background:rgba(0,229,140,.06);
+}
+.b-team.tbd{color:var(--tx3);font-style:italic;cursor:default}
+.b-team.tbd:hover{background:var(--surf1);border-color:var(--border);color:var(--tx3)}
+.champ-col{
+  display:flex;flex-direction:column;justify-content:center;
+  padding:10px;min-width:140px;
+}
+.champ-card{
+  border:1px solid var(--green);border-radius:var(--r2);
+  padding:16px 12px;text-align:center;
+  background:linear-gradient(135deg,rgba(0,229,140,.06),rgba(0,229,140,.02));
+}
+.champ-lbl{
+  font-size:9px;font-weight:700;letter-spacing:.12em;
+  color:var(--green);text-transform:uppercase;margin-bottom:8px;
+}
+.champ-icon{font-size:28px;margin-bottom:6px}
+.champ-name{font-size:13px;font-weight:600;color:var(--tx1);line-height:1.3}
+
+/* ─── EXPORT / IMPORT ─── */
+.export-box{
+  background:var(--surf1);border:1px solid var(--border);
+  border-radius:var(--r3);padding:22px;margin-top:24px;
+}
+.export-code{
+  background:var(--bg);border:1px solid var(--borderl);
+  border-radius:var(--r);padding:12px;
+  font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--tx2);
+  word-break:break-all;margin:12px 0;max-height:72px;overflow-y:auto;
+  line-height:1.5;
+}
+.import-ta{
+  width:100%;min-height:76px;resize:vertical;
+  background:var(--bg);border:1px solid var(--borderl);
+  border-radius:var(--r);padding:12px;
+  font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--tx2);
+  outline:none;transition:border .15s;
+}
+.import-ta:focus{border-color:var(--lime)}
+.import-ta::placeholder{color:var(--tx3);font-family:'DM Sans',sans-serif;font-size:13px}
+
+/* ─── LEADERBOARD ─── */
+.lb-wrap{
+  background:var(--surf1);border:1px solid var(--border);
+  border-radius:var(--r3);overflow:hidden;margin-top:16px;
+}
+.lb-hdr{
+  display:grid;
+  grid-template-columns:48px 1fr 70px 70px 70px 80px;
+  padding:10px 18px;background:var(--surf2);
+  border-bottom:1px solid var(--border);
+  font-size:10px;font-weight:600;text-transform:uppercase;
+  letter-spacing:.1em;color:var(--tx3);gap:8px;
+}
+.lb-row{
+  display:grid;
+  grid-template-columns:48px 1fr 70px 70px 70px 80px;
+  padding:13px 18px;border-bottom:1px solid var(--border);
+  align-items:center;gap:8px;transition:background .1s;
+  font-size:13px;
+}
+.lb-row:last-child{border-bottom:none}
+.lb-row:hover{background:var(--surf2)}
+.lb-row.top1{background:rgba(245,200,66,.04)}
+.lb-pos{font-size:16px;font-weight:700;color:var(--tx3)}
+.lb-pos.g{color:var(--gold)}
+.lb-pos.s{color:var(--silver)}
+.lb-pos.b{color:var(--bronze)}
+.lb-name{font-weight:500}
+.lb-div{font-size:12px;color:var(--tx2);text-align:right}
+.lb-total{font-size:15px;font-weight:700;color:var(--lime);text-align:right}
+.lb-empty{padding:48px;text-align:center;color:var(--tx3);font-size:14px;line-height:1.8}
+.lb-note{font-size:11px;color:var(--tx3);text-align:center;margin-top:10px}
+
+/* ─── TOAST ─── */
+.toast{
+  position:fixed;bottom:24px;right:24px;
+  background:var(--surf2);border:1px solid var(--green);
+  border-radius:var(--r2);padding:12px 18px;
+  font-size:13px;color:var(--tx1);display:none;z-index:999;
+  box-shadow:0 8px 40px rgba(0,0,0,.5);
+  animation:su .2s ease;
+}
+@keyframes su{from{transform:translateY(8px);opacity:0}to{transform:translateY(0);opacity:1}}
+
+/* ─── 2022 RESULTS CARD ─── */
+.results-2022{
+  background:var(--surf1);border:1px solid var(--border);
+  border-radius:var(--r2);padding:16px 20px;margin-bottom:20px;
+}
+.r22-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;margin-top:12px}
+.r22-card{
+  background:var(--surf2);border:1px solid var(--border);
+  border-radius:var(--r);padding:10px 12px;
+}
+.r22-div{font-size:9px;font-weight:600;letter-spacing:.1em;color:var(--tx3);text-transform:uppercase;margin-bottom:4px}
+.r22-medal{font-size:18px;margin-bottom:3px}
+.r22-team{font-size:12px;font-weight:600;color:var(--tx1)}
+.r22-country{font-size:11px;color:var(--tx2);margin-top:1px}
+
+/* ─── RESPONSIVE ─── */
+@media(max-width:700px){
+  .groups-grid{grid-template-columns:1fr}
+  .lb-hdr,.lb-row{grid-template-columns:36px 1fr 60px 80px}
+  .lb-hdr>*:nth-child(n+3):nth-child(-n+5),
+  .lb-row>*:nth-child(n+3):nth-child(-n+5){display:none}
+  .hdr-nav .nav-btn{padding:6px 12px;font-size:12px}
+  .logo-title{font-size:22px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<!-- ══════ HEADER ══════ -->
+<header>
+  <div class="container">
+    <div class="hdr-inner">
+      <div class="logo">
+        <div class="logo-disc">🥏</div>
+        <div class="logo-text">
+          <div class="logo-title">DESDE LA LINEA - WUCC 2026 PRONOSTICO & APUESTA</div>
+          <div class="logo-sub">LIMERICK · IRLANDA · 15–22 AGOSTO</div>
+        </div>
+      </div>
+      <div class="hdr-nav">
+        <button class="nav-btn on" onclick="showPage('picks')">🎯 Mis Picks</button>
+        <button class="nav-btn" onclick="showPage('lb')">🏆 Leaderboard</button>
+        <button class="nav-btn" onclick="showPage('admin')">⚙️ Admin</button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ══════ PAGE: PICKS ══════ -->
+<div class="page on" id="page-picks">
+<div class="container">
+
+  <!-- 2022 Results -->
+  <div class="results-2022" style="margin-top:24px">
+    <div class="sec-label">RESULTADOS WUCC 2022 — CINCINATTI</div>
+    <div class="r22-grid">
+      <div class="r22-card">
+        <div class="r22-div">Open 🥇</div>
+        <div class="r22-medal">🇺🇸</div>
+        <div class="r22-team">PoNY</div>
+        <div class="r22-country">USA</div>
+      </div>
+      <div class="r22-card">
+        <div class="r22-div">Women 🥇</div>
+        <div class="r22-medal">🇨🇴</div>
+        <div class="r22-team">Revolution</div>
+        <div class="r22-country">Colombia — en 2026 Grupo B</div>
+      </div>
+      <div class="r22-card">
+        <div class="r22-div">Mixed 🥇</div>
+        <div class="r22-medal">🇺🇸</div>
+        <div class="r22-team">Seattle Mixtape</div>
+        <div class="r22-country">USA</div>
+      </div>
+      <div class="r22-card" style="border-color:rgba(196,241,53,.15)">
+        <div class="r22-div" style="color:rgba(196,241,53,.6)">Badges en equipos</div>
+        <div style="font-size:11px;color:var(--tx2);margin-top:6px;line-height:1.6">
+          Los equipos con historial en 2022 muestran su posición junto a su nombre en los grupos.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Name -->
+  <div class="name-card">
+    <label>Tu nombre:</label>
+    <input class="name-input" id="myName" placeholder="Escribe tu nombre para el leaderboard..." oninput="saveName()">
+    <span style="font-size:11px;color:var(--tx3);white-space:nowrap">Necesario para exportar picks</span>
+  </div>
+
+  <!-- Scoring -->
+  <div class="score-pills">
+    <div class="s-pill">Partido <b>+1 pt</b></div>
+    <div class="s-pill">Avanza <b>+2 pts</b></div>
+    <div class="s-pill">Octavos <b>+3 pts</b></div>
+    <div class="s-pill">Cuartos <b>+5 pts</b></div>
+    <div class="s-pill">Semis <b>+8 pts</b></div>
+    <div class="s-pill">Campeón <b>+13 pts</b></div>
+    <div class="s-pill" style="margin-left:auto">Máx total <b id="maxTotal">635 pts</b></div>
+  </div>
+
+  <!-- Div Tabs -->
+  <div class="div-tabs" id="picksDiv"></div>
+
+  <!-- Phase Tabs -->
+  <div class="phase-tabs" id="picksPhaseTabs">
+    <button class="phase-tab on" onclick="setPicksPhase('groups')">Fase de grupos</button>
+    <button class="phase-tab" onclick="setPicksPhase('bracket')">Championship</button>
+  </div>
+
+  <!-- Actions -->
+  <div class="act-row">
+    <button class="btn" onclick="clearPicksDiv()">✕ Limpiar división</button>
+    <button class="btn" onclick="autoFill()">⚡ Autocompletar</button>
+  </div>
+
+  <!-- Progress -->
+  <div class="prog-wrap">
+    <div class="prog-hdr">
+      <span>Escoge el equipo ganador en cada cruce del round robin para elegir cuales equipos que pasan de ronda.      /          Partidos seleccionados</span>
+      <span id="progTxt">0 / 0</span>
+    </div>
+    <div class="prog-track"><div class="prog-fill" id="progFill" style="width:0%"></div></div>
+  </div>
+
+  <div id="picksGroups"></div>
+  <div id="picksBracket" style="display:none"></div>
+
+  <!-- Export -->
+  <div class="export-box">
+    <div style="font-size:16px;font-weight:600;margin-bottom:4px">📤 Exportar mis picks</div>
+    <div style="font-size:12px;color:var(--tx2);margin-bottom:14px">Genera tu código único y envíalo al organizador para participar en el leaderboard de apuestas. desdelalinea.tv@gmail.com</div>
+    <div class="act-row">
+      <button class="btn pri" onclick="exportPicks()">Generar código</button>
+      <button class="btn" onclick="copyCode()">📋 Copiar</button>
+    </div>
+    <div class="export-code" id="exportCode">— Haz clic en "Generar código" —</div>
+    <div style="font-size:11px;color:var(--tx3)">El código incluye tu nombre y todas tus selecciones de las 3 divisiones.</div>
+  </div>
+</div>
+</div>
+
+<!-- ══════ PAGE: LEADERBOARD ══════ -->
+<div class="page" id="page-lb">
+<div class="container" style="padding-top:28px">
+  <div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:20px">
+    <div>
+      <h2 style="font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:1px;line-height:1">LEADERBOARD</h2>
+      <p style="font-size:12px;color:var(--tx2);margin-top:4px">Ranking de predicciones · Los puntos se calculan contra los resultados reales ingresados por el admin cuando se publiquen oficialmente el results.wucc2026.com el 22 de agosto despues de las finales.</p>
+    </div>
+    <button class="btn suc" onclick="renderLB()">↺ Actualizar</button>
+  </div>
+
+  <div class="score-pills" style="margin-bottom:20px">
+    <div class="s-pill">Open máx <b id="mxO">225</b></div>
+    <div class="s-pill">Mixed máx <b id="mxM">225</b></div>
+    <div class="s-pill">Women máx <b id="mxW">185</b></div>
+    <div class="s-pill">Total máx <b>635</b></div>
+  </div>
+
+  <div class="lb-wrap">
+    <div class="lb-hdr">
+      <div>#</div>
+      <div>Participante</div>
+      <div style="text-align:right">Open</div>
+      <div style="text-align:right">Mixed</div>
+      <div style="text-align:right">Women</div>
+      <div style="text-align:right">Total</div>
+    </div>
+    <div id="lbBody">
+      <div class="lb-empty">Aún no hay picks importados.<br>Pide a los participantes que exporten su código<br>y ve a <strong>Admin → Importar picks</strong>.</div>
+    </div>
+  </div>
+  <div class="lb-note" id="lbNote">Los puntos reflejan los resultados ingresados por el admin. Si aún no hay resultados, todos aparecen en 0.</div>
+</div>
+</div>
+
+<!-- ══════ PAGE: ADMIN ══════ -->
+<div class="page" id="page-admin">
+<div class="container" style="padding-top:28px">
+
+  <!-- Import section -->
+  <div style="background:var(--surf1);border:1px solid var(--border);border-radius:var(--r3);padding:22px;margin-bottom:18px">
+    <div style="font-size:16px;font-weight:600;margin-bottom:4px">📥 Importar picks de participantes</div>
+    <div style="font-size:12px;color:var(--tx2);margin-bottom:14px">Pega el código de cada participante y presiona Importar. Puedes importar múltiples personas.</div>
+    <textarea class="import-ta" id="importTA" placeholder="Pega aquí el código del participante..."></textarea>
+    <div class="act-row" style="margin-top:10px">
+      <button class="btn pri" onclick="importCode()">Importar picks</button>
+      <button class="btn dan" onclick="clearAllSubs()">🗑 Borrar todos</button>
+    </div>
+    <div style="margin-top:10px;font-size:12px;color:var(--tx2)">
+      Picks importados: <strong id="subCount" style="color:var(--lime)">0</strong>
+      <span id="subNames" style="color:var(--tx3);margin-left:8px"></span>
+    </div>
+  </div>
+
+  <!-- Results section -->
+  <div style="background:var(--surf1);border:1px solid var(--border);border-radius:var(--r3);padding:22px">
+    <div style="font-size:16px;font-weight:600;margin-bottom:4px">📋 Resultados oficiales del torneo</div>
+    <div style="font-size:12px;color:var(--tx2);margin-bottom:16px">Ingresa los resultados reales partido a partido. El leaderboard se calcula automáticamente.</div>
+
+    <div class="div-tabs" id="adminDiv"></div>
+    <div class="phase-tabs" id="adminPhaseTabs">
+      <button class="phase-tab on" onclick="setAdminPhase('groups')">Grupos</button>
+      <button class="phase-tab" onclick="setAdminPhase('bracket')">Bracket</button>
+    </div>
+    <div class="act-row">
+      <button class="btn" onclick="clearResultsDiv()">✕ Limpiar</button>
+      <button class="btn suc" onclick="saveAndCalc()">💾 Guardar y calcular</button>
+    </div>
+    <div id="adminGroups"></div>
+    <div id="adminBracket" style="display:none"></div>
+  </div>
+</div>
+</div>
+
+</div><!-- /wrap -->
+<div class="toast" id="toast"></div>
+
+<script>
+/* ══════════════════════════════════════════════════════
+   DATA — inmutable
+══════════════════════════════════════════════════════ */
+const FL={
+  USA:'🇺🇸',CAN:'🇨🇦',AUS:'🇦🇺',GBR:'🇬🇧',COL:'🇨🇴',JPN:'🇯🇵',GER:'🇩🇪',
+  FRA:'🇫🇷',ITA:'🇮🇹',BEL:'🇧🇪',NED:'🇳🇱',NZL:'🇳🇿',SUI:'🇨🇭',IRL:'🇮🇪',
+  ESP:'🇪🇸',ARG:'🇦🇷',MEX:'🇲🇽',CHI:'🇨🇱',RCH:'🇨🇱',AUT:'🇦🇹',NOR:'🇳🇴',
+  POL:'🇵🇱',DEN:'🇩🇰',SGP:'🇸🇬',IND:'🇮🇳',EST:'🇪🇪',FIN:'🇫🇮',SAF:'🇿🇦',
+  CHN:'🇨🇳',VZL:'🇻🇪',ISR:'🇮🇱',URY:'🇺🇾',PAN:'🇵🇦',TRK:'🇹🇷',SVK:'🇸🇰',
+  URU:'🇺🇾',OLP:'🌍',RDM:'🇩🇴',CHR:'🇭🇰',CHZ:'🇨🇿'
+};
+const fl=c=>FL[c]||'🌍';
+
+const H22={
+  'Clapham':{p:3,d:'O',m:'🥉'},'Mooncatchers':{p:4,d:'O'},'Sunder':{p:9,d:'O'},
+  'Mephisto':{p:10,d:'O'},'NLSU Iznogood':{p:11,d:'O'},'Tchac':{p:12,d:'O'},
+  'GOAT':{p:13,d:'O'},'Nomadic Tribe':{p:15,d:'O'},'KFK':{p:16,d:'O'},
+  'Euforia':{p:17,d:'O'},'Wall City':{p:19,d:'O'},'Ranelagh':{p:22,d:'O'},
+  'Bad Skid':{p:27,d:'O'},'Makawua':{p:35,d:'O'},
+  'Revolution':{p:1,d:'W',m:'🥇',t:'¡Campeona WUCC 2022!'},
+  'Fury':{p:2,d:'W',m:'🥈'},'Ellipsis':{p:4,d:'W'},
+  'Tokyo Maverick':{p:6,d:'W'},'Brute Squad':{p:7,d:'W'},
+  'Sixers':{p:8,d:'W'},'MUD':{p:9,d:'W'},
+  'JinX Midnight':{p:10,d:'W'},'Iris':{p:13,d:'W'},
+  'Aerosoul':{p:14,d:'W'},'NLSU Yaka':{p:15,d:'W'},
+  'Blueberries':{p:18,d:'W'},'Swampybarg':{p:5,d:'W'},
+  'Iceni':{p:35,d:'W'},'Dublin Gravity':{p:37,d:'W'},
+  'Hybrid':{p:7,d:'M'},'Reading':{p:8,d:'M'},
+  'Deep Space':{p:21,d:'M'},'Macondo':{p:16,d:'M'},
+  'Hammers':{p:35,d:'M'},'Meclao':{p:10,d:'M'},
+  'Tartu Turbulence':{p:12,d:'M'},'Manly Mosh':{p:3,d:'M',m:'🥉'}
+};
+
+const GROUPS={
+  Women:[
+    {g:'A',t:[{s:1,n:'Macana',c:'COL'},{s:13,n:'Iris',c:'CAN'},{s:19,n:'GRUT',c:'NED'},{s:30,n:'Dublin Gravity',c:'IRL'},{s:35,n:'CPH Hucks+',c:'DEN'}]},
+    {g:'B',t:[{s:2,n:'Brute Squad',c:'USA'},{s:14,n:'Seacows',c:'CAN'},{s:20,n:'Revolution',c:'COL'},{s:31,n:'Horizon',c:'GBR'},{s:33,n:'Puck',c:'FRA'}]},
+    {g:'C',t:[{s:3,n:'Fury',c:'USA'},{s:15,n:'Aerosoul',c:'COL'},{s:18,n:'BFD Shout',c:'ITA'},{s:29,n:'Heidees',c:'GER'},{s:36,n:'Venado Azul',c:'MEX'}]},
+    {g:'D',t:[{s:4,n:'Ellipsis',c:'AUS'},{s:16,n:'NLSU Yaka',c:'FRA'},{s:17,n:'Blueberries',c:'NZL'},{s:32,n:'Flame',c:'IRL'},{s:34,n:'Sirens',c:'CHI'}]},
+    {g:'E',t:[{s:5,n:'Tokyo Maverick',c:'JPN'},{s:11,n:'Tequila Boom Boom',c:'ITA'},{s:22,n:'JinX Midnight',c:'GER'},{s:25,n:'Sharks',c:'ESP'},{s:39,n:'Condor',c:'MEX'}]},
+    {g:'F',t:[{s:6,n:'MUD',c:'JPN'},{s:9,n:'Rouche',c:'AUS'},{s:24,n:'Bristol',c:'GBR'},{s:27,n:'Catchup Graz',c:'AUT'},{s:37,n:'Fieras',c:'RDM'}]},
+    {g:'G',t:[{s:7,n:'Scandal',c:'USA'},{s:10,n:'Swampybarg',c:'JPN'},{s:23,n:'3SB',c:'CHR'},{s:28,n:'Spice',c:'GBR'},{s:40,n:'Wakanda',c:'ARG'}]},
+    {g:'H',t:[{s:8,n:'Sixers',c:'CAN'},{s:12,n:'Mooncup',c:'BEL'},{s:21,n:'Iceni',c:'GBR'},{s:26,n:'Fabulous',c:'SUI'},{s:38,n:'To Be',c:'RCH'}]}
+  ],
+  Mixed:[
+    {g:'A',t:[{s:1,n:'Hybrid',c:'USA'},{s:13,n:'Savage',c:'POL'},{s:20,n:'ZU Splash',c:'SUI'},{s:29,n:'Airborne',c:'IND'},{s:35,n:'Huwa',c:'CHI'},{s:48,n:'Aethers Warsaw',c:'POL'}]},
+    {g:'B',t:[{s:2,n:'Odyssée',c:'CAN'},{s:16,n:'Reading',c:'GBR'},{s:19,n:'Freakshow',c:'SGP'},{s:31,n:'Zamperi',c:'GER'},{s:34,n:'Charruá',c:'URU'},{s:46,n:'Discterics',c:'ESP'}]},
+    {g:'C',t:[{s:3,n:'Manly Mosh',c:'AUS'},{s:15,n:'Macondo',c:'COL'},{s:17,n:'Union',c:'CAN'},{s:30,n:'Framnes',c:'NOR'},{s:36,n:'Gentle',c:'BEL'},{s:45,n:'Outsiterz',c:'SVK'}]},
+    {g:'D',t:[{s:4,n:'Mosquitos',c:'AUT'},{s:14,n:'Academia',c:'COL'},{s:18,n:'Leamington Lemmings',c:'GBR'},{s:32,n:'Brisbanites',c:'AUS'},{s:33,n:'Monkey',c:'FRA'},{s:47,n:'Sweet Dreams',c:'TRK'}]},
+    {g:'E',t:[{s:5,n:'Deep Space',c:'GBR'},{s:11,n:'Jandlux',c:'JPN'},{s:21,n:'Helsinki',c:'FIN'},{s:26,n:'TOP',c:'PAN'},{s:37,n:'PELT',c:'IRL'},{s:41,n:'Chilli Heat',c:'SAF'}]},
+    {g:'F',t:[{s:6,n:'XIST',c:'USA'},{s:9,n:'Meclao',c:'RDM'},{s:23,n:'33 Tours',c:'FRA'},{s:27,n:'Chilly',c:'AUS'},{s:40,n:'CUS Padova Rangers',c:'ITA'},{s:43,n:'Guayota',c:'ESP'}]},
+    {g:'G',t:[{s:7,n:'Shame.',c:'USA'},{s:12,n:'Tartu Turbulence',c:'EST'},{s:24,n:'BFD Redshot',c:'ITA'},{s:28,n:'Hammers',c:'ARG'},{s:38,n:'Avalon',c:'MEX'},{s:44,n:'Rebel',c:'IRL'}]},
+    {g:'H',t:[{s:8,n:'Tiefseetaucher',c:'GER'},{s:10,n:'Royals',c:'CAN'},{s:22,n:'Panic',c:'NED'},{s:25,n:'ERHe',c:'FIN'},{s:39,n:'Supernova',c:'OLP'},{s:42,n:'Siempre',c:'RCH'}]}
+  ],
+  Open:[
+    {g:'A',t:[{s:1,n:'Revolver',c:'USA'},{s:15,n:'GRUT',c:'NED'},{s:18,n:'Águilas',c:'MEX'},{s:30,n:'Quijotes',c:'ESP'},{s:33,n:'SMOG',c:'GBR'},{s:48,n:'USHH Mafia',c:'RDM'}]},
+    {g:'B',t:[{s:2,n:'Chicago Machine',c:'USA'},{s:14,n:'Euforia',c:'COL'},{s:20,n:'Bristol',c:'GBR'},{s:31,n:'Ranelagh',c:'IRL'},{s:34,n:'Freezzzbeezzz',c:'BEL'},{s:45,n:'Wolves',c:'CHI'}]},
+    {g:'C',t:[{s:3,n:'Mooncatchers',c:'BEL'},{s:13,n:'Osaka Spirits',c:'JPN'},{s:19,n:'Bad Skid',c:'GER'},{s:32,n:'Echo Vienna',c:'AUT'},{s:35,n:'Warao',c:'VZL'},{s:46,n:'Aarhus',c:'DEN'}]},
+    {g:'D',t:[{s:4,n:'Wall City',c:'GER'},{s:16,n:'Cotarica Grandes',c:'ITA'},{s:17,n:'Technicolor',c:'JPN'},{s:29,n:'Otakaro',c:'AUS'},{s:36,n:'Catchup Graz',c:'AUT'},{s:47,n:'New Age',c:'ISR'}]},
+    {g:'E',t:[{s:5,n:'Clapham',c:'GBR'},{s:10,n:'Mephisto',c:'CAN'},{s:21,n:'3SB',c:'CHZ'},{s:28,n:'Gentle',c:'BEL'},{s:38,n:'Flywild',c:'IND'},{s:42,n:'Junk',c:'RCH'}]},
+    {g:'F',t:[{s:6,n:'Nomadic Tribe',c:'JPN'},{s:11,n:'Chevron Action Flash',c:'GBR'},{s:24,n:'Tchac',c:'FRA'},{s:26,n:'Freespeed Basel',c:'SUI'},{s:40,n:'Blue Devils',c:'RDM'},{s:43,n:'Zoom',c:'TRK'}]},
+    {g:'G',t:[{s:7,n:'Pony',c:'USA'},{s:9,n:'Sunder',c:'AUS'},{s:22,n:'REX',c:'SAF'},{s:25,n:'NLSU Iznogood',c:'FRA'},{s:39,n:'Chuchai',c:'CHN'},{s:44,n:'FrankN',c:'GER'}]},
+    {g:'H',t:[{s:8,n:'GOAT',c:'CAN'},{s:12,n:'BFD La Fotta',c:'ITA'},{s:23,n:'Wildcats',c:'AUS'},{s:27,n:'Makawua',c:'COL'},{s:37,n:'XVI',c:'IRL'},{s:41,n:'KFK',c:'DEN'}]}
+  ]
+};
+
+/* ══════════════════════════════════════════════════════
+   ESTADO
+══════════════════════════════════════════════════════ */
+let curDiv='Open', picksPhase='groups', adminPhase='groups', adminDiv='Open';
+
+function mkMatches(ts){
+  const m=[];
+  for(let i=0;i<ts.length;i++)for(let j=i+1;j<ts.length;j++)m.push({a:i,b:j,w:null});
+  return m;
+}
+function mkBkt(){
+  return [8,4,2,1].map(n=>({m:Array.from({length:n},()=>({a:null,b:null,w:null}))}));
+}
+function mkState(){
+  const o={};
+  for(const d of ['Open','Mixed','Women']){
+    o[d]={g:GROUPS[d].map(grp=>({m:mkMatches(grp.t)})),b:mkBkt()};
+  }
+  return o;
+}
+
+/* localStorage con debounce — evita bloqueo de main thread en cada keypress */
+const _lsQ={};
+function lsGet(k,def){try{const v=localStorage.getItem(k);return v?JSON.parse(v):def;}catch{return def;}}
+function lsSet(k,v){
+  _lsQ[k]=v;
+  clearTimeout(_lsQ['__t_'+k]);
+  _lsQ['__t_'+k]=setTimeout(()=>{
+    try{localStorage.setItem(k,JSON.stringify(_lsQ[k]));}catch{}
+    delete _lsQ[k];delete _lsQ['__t_'+k];
+  },400);
+}
+function lsFlush(){
+  Object.keys(_lsQ).forEach(k=>{
+    if(k.startsWith('__t_'))return;
+    clearTimeout(_lsQ['__t_'+k]);
+    try{localStorage.setItem(k,JSON.stringify(_lsQ[k]));}catch{}
+  });
+}
+window.addEventListener('beforeunload',lsFlush);
+window.addEventListener('pagehide',lsFlush);
+
+let myPicks=lsGet('w26_picks',null)||mkState();
+let myName=lsGet('w26_name','')||'';
+let results=lsGet('w26_res',null)||mkState();
+let subs=lsGet('w26_subs',[])||[];
+
+if(myName) document.getElementById('myName').value=myName;
+
+/* ══════════════════════════════════════════════════════
+   CACHE DE STANDINGS — invalida solo el grupo afectado
+══════════════════════════════════════════════════════ */
+const _stCache=new Map();
+function _stKey(state,div,gi){
+  const sig=state[div].g[gi].m.map(m=>m.w??'_').join('');
+  return div+':'+gi+':'+sig;
+}
+function standings(grp,gState,div,gi,state){
+  if(state&&div!=null&&gi!=null){
+    const k=_stKey(state,div,gi);
+    if(_stCache.has(k))return _stCache.get(k);
+    const r=_computeStandings(grp,gState);
+    _stCache.set(k,r);
+    return r;
+  }
+  return _computeStandings(grp,gState);
+}
+function _computeStandings(grp,gState){
+  const w=new Int32Array(grp.t.length);
+  for(const m of gState.m){if(m.w!==null)w[m.w]++;}
+  return grp.t.map((t,i)=>({...t,i,w:w[i]})).sort((a,b)=>b.w-a.w||(a.s-b.s));
+}
+
+function teamLabel(t){return fl(t.c)+' '+t.n;}
+
+function deriveBktSeeds(div,state){
+  const wins=[],runs=[];
+  GROUPS[div].forEach((grp,gi)=>{
+    const st=standings(grp,state[div].g[gi],div,gi,state);
+    if(st[0])wins.push(teamLabel(st[0]));
+    if(st[1])runs.push(teamLabel(st[1]));
+  });
+  const all=[...wins,...runs];
+  const pairs=[[0,15],[1,14],[2,13],[3,12],[4,11],[5,10],[6,9],[7,8]];
+  return pairs.map(([a,b])=>({a:all[a]||null,b:all[b]||null}));
+}
+
+function buildBkt(div,state){
+  const seeds=deriveBktSeeds(div,state);
+  const br=state[div].b;
+  br[0].m.forEach((m,i)=>{m.a=seeds[i].a;m.b=seeds[i].b;m.w=null;});
+  for(let r=1;r<br.length;r++)br[r].m.forEach(m=>{m.a=null;m.b=null;m.w=null;});
+}
+
+function propagate(br,ri,mi){
+  const m=br[ri].m[mi];
+  if(ri+1<br.length){
+    const nm=Math.floor(mi/2),ns=mi%2===0?'a':'b';
+    const next=br[ri+1].m[nm];
+    next[ns]=m.w;
+    if(next.w&&next.w!==next.a&&next.w!==next.b){next.w=null;propagate(br,ri+1,nm);}
+  }
+}
+
+function progress(state,div){
+  let tot=0,done=0;
+  state[div].g.forEach(gst=>gst.m.forEach(m=>{tot++;if(m.w!==null)done++;}));
+  state[div].b.forEach(r=>r.m.forEach(m=>{if(m.a&&m.b){tot++;if(m.w)done++;}}));
+  return{tot,done};
+}
+
+/* ══════════════════════════════════════════════════════
+   SCORING — con short-circuit y Set para avanzados
+══════════════════════════════════════════════════════ */
+function scoreDiv(pState,rState,div){
+  let pts=0;
+  const G=GROUPS[div];
+  G.forEach((grp,gi)=>{
+    const pm=pState[div].g[gi].m;
+    const rm=rState[div].g[gi].m;
+    for(let mi=0;mi<pm.length;mi++){
+      if(pm[mi].w!==null&&rm[mi].w!==null&&pm[mi].w===rm[mi].w)pts++;
+    }
+  });
+  G.forEach((grp,gi)=>{
+    const pSt=standings(grp,pState[div].g[gi],div,gi,pState);
+    const rSt=standings(grp,rState[div].g[gi],div,gi,rState);
+    const rTopSet=new Set([rSt[0]&&rSt[0].s,rSt[1]&&rSt[1].s]);
+    if(pSt[0]&&rTopSet.has(pSt[0].s))pts+=2;
+    if(pSt[1]&&rTopSet.has(pSt[1].s))pts+=2;
+  });
+  const bPts=[3,5,8,13];
+  const pW=_roundWinners(pState[div].b);
+  const rW=_roundWinners(rState[div].b);
+  for(let ri=0;ri<bPts.length;ri++){
+    if(!pW[ri]||!rW[ri])continue;
+    for(const t of pW[ri]){if(rW[ri].has(t))pts+=bPts[ri];}
+  }
+  return pts;
+}
+function _roundWinners(br){
+  return br.map(r=>{const s=new Set();for(const m of r.m){if(m.w)s.add(m.w);}return s;});
+}
+
+/* ══════════════════════════════════════════════════════
+   RENDER — GROUP CARD (array join en vez de +=)
+══════════════════════════════════════════════════════ */
+function renderGroupCard(div,gi,state,prefix){
+  const grp=GROUPS[div][gi];
+  const gst=state[div].g[gi];
+  const st=standings(grp,gst,div,gi,state);
+  const p=prefix||'';
+  const parts=['<div class="g-card"><div class="g-hdr"><span class="g-name">GRUPO '+grp.g+'</span><span class="g-pill">'+grp.t.length+' EQ · RR</span></div>'];
+  for(let rank=0;rank<st.length;rank++){
+    const t=st[rank];
+    const champ=rank<2,cut=rank===2;
+    const h22=H22[t.n];
+    const b22=h22?'<span class="badge-22" title="WUCC 2022 '+(h22.d==='O'?'Open':h22.d==='W'?'Women':'Mixed')+' — '+(h22.m||'')+h22.p+'°'+(h22.t?' · '+h22.t:'')+'">'+(h22.m||'')+h22.p+'°</span>':'';
+    parts.push('<div class="s-row '+(champ?'champ':'cons')+(cut?' s-cut':'')+'"><span class="s-seed">'+t.s+'</span><span class="s-flag">'+fl(t.c)+'</span><span class="s-name" title="'+t.n+'">'+t.n+'</span>'+b22+'<span class="s-w">'+t.w+'W</span><span class="s-badge '+(champ?'badge-champ':'badge-cons')+'">'+(champ?'▲CHM':'▼CON')+'</span></div>');
+  }
+  parts.push('<div class="matches-sec">');
+  for(let mi=0;mi<gst.m.length;mi++){
+    const m=gst.m[mi];
+    const ta=grp.t[m.a],tb=grp.t[m.b];
+    parts.push('<div class="m-row"><div class="m-team '+(m.w===m.a?'win':'')+'" data-gi="'+gi+'" data-mi="'+mi+'" data-side="'+m.a+'" data-pfx="'+p+'">'+fl(ta.c)+' '+ta.n+'</div><span class="m-vs">vs</span><div class="m-team '+(m.w===m.b?'win':'')+'" data-gi="'+gi+'" data-mi="'+mi+'" data-side="'+m.b+'" data-pfx="'+p+'">'+fl(tb.c)+' '+tb.n+'</div></div>');
+  }
+  parts.push('</div></div>');
+  return parts.join('');
+}
+
+/* Delegación de eventos: 1 listener por contenedor vs N inline onclick */
+function _attachGroupDelegate(containerId){
+  const el=document.getElementById(containerId);
+  if(el._delegated)return;
+  el._delegated=true;
+  el.addEventListener('click',e=>{
+    const btn=e.target.closest('.m-team');
+    if(!btn)return;
+    const{gi,mi,side,pfx}=btn.dataset;
+    if(gi==null)return;
+    if(pfx==='R')RpickG(+gi,+mi,+side);
+    else pickG(+gi,+mi,+side);
+  });
+}
+
+function renderGroups(div,state,containerId,prefix){
+  const parts=['<div class="groups-grid">'];
+  for(let gi=0;gi<GROUPS[div].length;gi++)parts.push(renderGroupCard(div,gi,state,prefix));
+  parts.push('</div>');
+  document.getElementById(containerId).innerHTML=parts.join('');
+  _attachGroupDelegate(containerId);
+}
+
+/* Re-renderiza solo el card del grupo afectado */
+function renderGroupOnly(div,gi,state,containerId,prefix){
+  const grid=document.getElementById(containerId);
+  if(!grid)return;
+  const cards=grid.querySelectorAll('.g-card');
+  if(cards[gi]){
+    const tmp=document.createElement('div');
+    tmp.innerHTML=renderGroupCard(div,gi,state,prefix);
+    cards[gi].replaceWith(tmp.firstChild);
+  }else{
+    renderGroups(div,state,containerId,prefix);
+  }
+}
+
+/* ══════════════════════════════════════════════════════
+   RENDER — BRACKET
+══════════════════════════════════════════════════════ */
+function renderBkt(div,state,containerId,prefix){
+  const br=state[div].b;
+  const p=prefix||'';
+  const rl=['OCTAVOS','CUARTOS','SEMIFINAL','GRAN FINAL'];
+  const parts=['<div class="bkt-info"><div><div class="bkt-title">Championship Bracket · '+div+'</div><div class="bkt-sub">Top 2 de cada grupo (16 equipos) · Completa los grupos primero</div></div><div style="font-size:11px;color:var(--tx3)">Seeding: 1°A vs 2°H · 1°B vs 2°G · etc.</div></div><div class="bkt-wrap"><div class="bracket">'];
+  for(let ri=0;ri<br.length;ri++){
+    const round=br[ri];
+    parts.push('<div class="b-round"><div class="b-rlbl">'+rl[ri]+'</div><div class="b-slots">');
+    for(let mi=0;mi<round.m.length;mi++){
+      const m=round.m[mi];
+      const atbd=!m.a,btbd=!m.b;
+      parts.push('<div class="b-match"><div class="b-team '+(!atbd&&m.w===m.a?'win ':'')+( atbd?'tbd':'')+'" data-ri="'+ri+'" data-mi="'+mi+'" data-side="a" data-pfx="'+p+'">'+(m.a||'Por definir')+'</div><div class="b-team '+(!btbd&&m.w===m.b?'win ':'')+( btbd?'tbd':'')+'" data-ri="'+ri+'" data-mi="'+mi+'" data-side="b" data-pfx="'+p+'">'+(m.b||'Por definir')+'</div></div>');
+    }
+    parts.push('</div></div>');
+  }
+  const champ=br[3].m[0].w;
+  parts.push('<div class="champ-col"><div class="champ-card"><div class="champ-lbl">Campeón '+div+'</div><div class="champ-icon">🏆</div><div class="champ-name">'+(champ||'¿?')+'</div></div></div></div></div>');
+  document.getElementById(containerId).innerHTML=parts.join('');
+  _attachBktDelegate(containerId);
+}
+
+function _attachBktDelegate(containerId){
+  const el=document.getElementById(containerId);
+  if(el._delegated)return;
+  el._delegated=true;
+  el.addEventListener('click',e=>{
+    const btn=e.target.closest('.b-team');
+    if(!btn||btn.classList.contains('tbd'))return;
+    const{ri,mi,side,pfx}=btn.dataset;
+    if(pfx==='R')RpickB(+ri,+mi,side);
+    else pickB(+ri,+mi,side);
+  });
+}
+
+/* ══════════════════════════════════════════════════════
+   PICK ACTIONS — re-render quirúrgico (1 card, no toda la grilla)
+══════════════════════════════════════════════════════ */
+function pickG(gi,mi,w){
+  myPicks[curDiv].g[gi].m[mi].w=w;
+  lsSet('w26_picks',myPicks);
+  renderGroupOnly(curDiv,gi,myPicks,'picksGroups','');
+  _attachGroupDelegate('picksGroups');
+  updateProgress();
+}
+function pickB(ri,mi,side){
+  const br=myPicks[curDiv].b;
+  const m=br[ri].m[mi];
+  if(!m.a||!m.b)return;
+  m.w=side==='a'?m.a:m.b;
+  propagate(br,ri,mi);
+  lsSet('w26_picks',myPicks);
+  renderBkt(curDiv,myPicks,'picksBracket','');
+  updateProgress();
+}
+function RpickG(gi,mi,w){
+  results[adminDiv].g[gi].m[mi].w=w;
+  lsSet('w26_res',results);
+  renderGroupOnly(adminDiv,gi,results,'adminGroups','R');
+  _attachGroupDelegate('adminGroups');
+}
+function RpickB(ri,mi,side){
+  const br=results[adminDiv].b;
+  const m=br[ri].m[mi];
+  if(!m.a||!m.b)return;
+  m.w=side==='a'?m.a:m.b;
+  propagate(br,ri,mi);
+  lsSet('w26_res',results);
+  renderBkt(adminDiv,results,'adminBracket','R');
+}
+
+/* ══════════════════════════════════════════════════════
+   UTILITIES
+══════════════════════════════════════════════════════ */
+function clearPicksDiv(){
+  const d=myPicks[curDiv];
+  d.g.forEach(gst=>gst.m.forEach(m=>m.w=null));
+  d.b.forEach(r=>r.m.forEach(m=>{m.w=null;m.a=null;m.b=null;}));
+  lsSet('w26_picks',myPicks);renderPicksView();
+}
+function clearResultsDiv(){
+  const d=results[adminDiv];
+  d.g.forEach(gst=>gst.m.forEach(m=>m.w=null));
+  d.b.forEach(r=>r.m.forEach(m=>{m.w=null;m.a=null;m.b=null;}));
+  lsSet('w26_res',results);renderAdminView();
+}
+function autoFill(){
+  const d=myPicks[curDiv];
+  GROUPS[curDiv].forEach((_,gi)=>d.g[gi].m.forEach(m=>{if(m.w===null)m.w=Math.random()<.5?m.a:m.b;}));
+  buildBkt(curDiv,myPicks);
+  myPicks[curDiv].b.forEach((r,ri)=>r.m.forEach((m,mi)=>{
+    if(m.a&&m.b&&!m.w){m.w=Math.random()<.5?m.a:m.b;propagate(myPicks[curDiv].b,ri,mi);}
+  }));
+  lsSet('w26_picks',myPicks);renderPicksView();
+}
+
+let _nameT;
+function saveName(){
+  myName=document.getElementById('myName').value;
+  clearTimeout(_nameT);
+  _nameT=setTimeout(()=>lsSet('w26_name',myName),600);
+}
+
+/* ══════════════════════════════════════════════════════
+   EXPORT / IMPORT
+══════════════════════════════════════════════════════ */
+function exportPicks(){
+  const name=document.getElementById('myName').value.trim();
+  if(!name){toast('⚠️ Ingresa tu nombre primero');return;}
+  try{
+    lsFlush();
+    const payload={v:2,n:name,p:myPicks,ts:Date.now()};
+    const code=btoa(encodeURIComponent(JSON.stringify(payload)));
+    document.getElementById('exportCode').textContent=code;
+    toast('✅ Código generado. Copia y envía al organizador.');
+  }catch(e){toast('❌ Error al generar código');}
+}
+function copyCode(){
+  const code=document.getElementById('exportCode').textContent;
+  if(code.startsWith('—')){toast('⚠️ Primero genera el código');return;}
+  navigator.clipboard.writeText(code).then(()=>toast('📋 Código copiado')).catch(()=>{
+    const ta=document.createElement('textarea');
+    ta.value=code;document.body.appendChild(ta);ta.select();
+    document.execCommand('copy');document.body.removeChild(ta);
+    toast('📋 Código copiado');
+  });
+}
+function importCode(){
+  const raw=document.getElementById('importTA').value.trim();
+  if(!raw){toast('⚠️ Pega un código primero');return;}
+  try{
+    const payload=JSON.parse(decodeURIComponent(atob(raw)));
+    if(!payload.v||!payload.n||!payload.p)throw 0;
+    const idx=subs.findIndex(s=>s.n===payload.n);
+    if(idx>=0){subs[idx]=payload;toast('🔄 Picks de "'+payload.n+'" actualizados');}
+    else{subs.push(payload);toast('✅ "'+payload.n+'" importado');}
+    lsSet('w26_subs',subs);
+    document.getElementById('importTA').value='';
+    updateSubCount();
+  }catch{toast('❌ Código inválido. Verifica que esté completo.');}
+}
+function clearAllSubs(){
+  if(!confirm('¿Borrar TODOS los picks importados? No se puede deshacer.'))return;
+  subs=[];lsSet('w26_subs',subs);updateSubCount();
+  toast('🗑️ Picks borrados');
+}
+function updateSubCount(){
+  document.getElementById('subCount').textContent=subs.length;
+  document.getElementById('subNames').textContent=subs.length?'('+subs.map(s=>s.n).join(', ')+')':'';
+}
+
+/* ══════════════════════════════════════════════════════
+   LEADERBOARD — DocumentFragment (batch DOM insert)
+══════════════════════════════════════════════════════ */
+function renderLB(){
+  if(!subs.length){
+    document.getElementById('lbBody').innerHTML='<div class="lb-empty">Aún no hay picks importados.<br>Pide a los participantes que exporten su código<br>y ve a <strong>Admin → Importar picks</strong>.</div>';
+    return;
+  }
+  const entries=subs.map(s=>{
+    const o=scoreDiv(s.p,results,'Open');
+    const m=scoreDiv(s.p,results,'Mixed');
+    const w=scoreDiv(s.p,results,'Women');
+    return{name:s.n,o,m,w,total:o+m+w};
+  }).sort((a,b)=>b.total-a.total);
+  const medals=['🥇','🥈','🥉'];
+  const frag=document.createDocumentFragment();
+  entries.forEach((e,i)=>{
+    const row=document.createElement('div');
+    row.className='lb-row'+(i===0?' top1':'');
+    const posClass=i===0?'g':i===1?'s':i===2?'b':'';
+    row.innerHTML='<div class="lb-pos '+posClass+'">'+(medals[i]||i+1)+'</div><div class="lb-name">'+e.name+'</div><div class="lb-div">'+e.o+'</div><div class="lb-div">'+e.m+'</div><div class="lb-div">'+e.w+'</div><div class="lb-total">'+e.total+'</div>';
+    frag.appendChild(row);
+  });
+  const body=document.getElementById('lbBody');
+  body.innerHTML='';
+  body.appendChild(frag);
+}
+
+/* ══════════════════════════════════════════════════════
+   NAVIGATION
+══════════════════════════════════════════════════════ */
+function showPage(p){
+  document.querySelectorAll('.page').forEach(el=>el.classList.remove('on'));
+  document.getElementById('page-'+p).classList.add('on');
+  document.querySelectorAll('.nav-btn').forEach((b,i)=>
+    b.classList.toggle('on',['picks','lb','admin'][i]===p));
+  if(p==='lb')renderLB();
+  if(p==='admin')updateSubCount();
+}
+function setPicksDiv(div){
+  curDiv=div;
+  document.querySelectorAll('#picksDiv .div-tab').forEach(b=>b.classList.toggle('on',b.dataset.div===div));
+  renderPicksView();
+}
+function setPicksPhase(ph){
+  picksPhase=ph;
+  document.querySelectorAll('#picksPhaseTabs .phase-tab').forEach((b,i)=>
+    b.classList.toggle('on',['groups','bracket'][i]===ph));
+  document.getElementById('picksGroups').style.display=ph==='groups'?'':'none';
+  document.getElementById('picksBracket').style.display=ph==='bracket'?'':'none';
+  if(ph==='bracket')buildBkt(curDiv,myPicks);
+  renderPicksView();
+}
+function setAdminDiv(div){
+  adminDiv=div;
+  document.querySelectorAll('#adminDiv .div-tab').forEach(b=>b.classList.toggle('on',b.dataset.div===div));
+  renderAdminView();
+}
+function setAdminPhase(ph){
+  adminPhase=ph;
+  document.querySelectorAll('#adminPhaseTabs .phase-tab').forEach((b,i)=>
+    b.classList.toggle('on',['groups','bracket'][i]===ph));
+  document.getElementById('adminGroups').style.display=ph==='groups'?'':'none';
+  document.getElementById('adminBracket').style.display=ph==='bracket'?'':'none';
+  if(ph==='bracket')buildBkt(adminDiv,results);
+  renderAdminView();
+}
+function updateProgress(){
+  const{tot,done}=progress(myPicks,curDiv);
+  document.getElementById('progTxt').textContent=done+' / '+tot;
+  document.getElementById('progFill').style.width=tot?Math.round(done/tot*100)+'%':'0%';
+}
+function renderPicksView(){
+  if(picksPhase==='groups')renderGroups(curDiv,myPicks,'picksGroups','');
+  else renderBkt(curDiv,myPicks,'picksBracket','');
+  updateProgress();
+}
+function renderAdminView(){
+  if(adminPhase==='groups')renderGroups(adminDiv,results,'adminGroups','R');
+  else renderBkt(adminDiv,results,'adminBracket','R');
+}
+function saveAndCalc(){
+  lsFlush();
+  renderLB();
+  showPage('lb');
+  toast('✅ Resultados guardados. Leaderboard actualizado.');
+}
+
+/* ══════════════════════════════════════════════════════
+   TOAST
+══════════════════════════════════════════════════════ */
+let _tt;
+function toast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.style.display='block';
+  clearTimeout(_tt);_tt=setTimeout(()=>t.style.display='none',2800);
+}
+
+/* ══════════════════════════════════════════════════════
+   INIT
+══════════════════════════════════════════════════════ */
+function mkDivTabs(id,setFn,initial){
+  const c=document.getElementById(id);
+  const n={Open:'48',Mixed:'48',Women:'40'};
+  ['Open','Mixed','Women'].forEach(div=>{
+    const b=document.createElement('button');
+    b.className='div-tab'+(div===initial?' on':'');
+    b.dataset.div=div;
+    b.textContent=div+' · '+n[div];
+    b.onclick=()=>setFn(div);
+    c.appendChild(b);
+  });
+}
+mkDivTabs('picksDiv',setPicksDiv,'Open');
+mkDivTabs('adminDiv',setAdminDiv,'Open');
+updateSubCount();
+renderPicksView();
+renderAdminView();
+</script>
+</body>
+</html>
