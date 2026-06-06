@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>WUCC 2026 — Cómo participar / How to participate</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#07080C;--surf:#0F1119;--surf2:#171B27;
+    --border:#1F2333;--lime:#C4F135;--green:#00E58C;
+    --tx1:#E8EAF2;--tx2:#7B7E9A;--tx3:#3D4060;
+    --gold:#F5C842;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--tx1);font-family:'DM Sans',sans-serif;min-height:100vh;padding:40px 24px 80px;-webkit-font-smoothing:antialiased}
+  body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 60% 50% at 80% 0%,rgba(196,241,53,.04),transparent 60%),radial-gradient(ellipse 40% 40% at 10% 90%,rgba(0,229,140,.03),transparent 50%);pointer-events:none;z-index:0}
+  .wrap{position:relative;z-index:1;max-width:680px;margin:0 auto}
+
+  .hero{text-align:center;margin-bottom:48px}
+  .disc{width:64px;height:64px;background:linear-gradient(135deg,var(--lime),#8fc420);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:30px;margin:0 auto 16px;box-shadow:0 0 40px rgba(196,241,53,.25)}
+  h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(28px,6vw,48px);letter-spacing:1px;background:linear-gradient(90deg,var(--tx1),var(--lime));-webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1.1;margin-bottom:8px}
+  .sub{font-size:14px;color:var(--tx2);letter-spacing:.04em}
+
+  .lang-block{margin-bottom:40px}
+  .lang-badge{display:inline-flex;align-items:center;gap:8px;font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--lime);background:rgba(196,241,53,.08);border:1px solid rgba(196,241,53,.15);border-radius:20px;padding:4px 14px;margin-bottom:20px}
+
+  .steps{display:flex;flex-direction:column;gap:12px}
+  .step{display:flex;gap:16px;align-items:flex-start;background:var(--surf);border:1px solid var(--border);border-radius:12px;padding:16px 20px;transition:border-color .2s}
+  .step:hover{border-color:#2A2F45}
+  .step-n{width:36px;height:36px;border-radius:50%;background:rgba(196,241,53,.1);color:var(--lime);font-family:'Bebas Neue',sans-serif;font-size:18px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px}
+  .step-body{}
+  .step-title{font-weight:600;font-size:15px;margin-bottom:3px}
+  .step-desc{font-size:13px;color:var(--tx2);line-height:1.6}
+  .step-desc code{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--lime);background:rgba(196,241,53,.08);padding:1px 6px;border-radius:4px}
+
+  .url-box{background:var(--surf2);border:1px solid rgba(196,241,53,.2);border-radius:12px;padding:20px 24px;text-align:center;margin:32px 0}
+  .url-label{font-size:11px;color:var(--tx3);letter-spacing:.1em;text-transform:uppercase;margin-bottom:8px}
+  .url-link{font-family:'JetBrains Mono',monospace;font-size:16px;color:var(--lime);word-break:break-all}
+
+  .scoring{background:var(--surf);border:1px solid var(--border);border-radius:12px;padding:20px 24px;margin-bottom:32px}
+  .scoring-title{font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:.1em;color:var(--tx3);margin-bottom:12px}
+  .score-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+  .score-item{display:flex;justify-content:space-between;align-items:center;font-size:12px;color:var(--tx2);padding:6px 10px;background:var(--surf2);border-radius:6px}
+  .score-item b{color:var(--lime);font-weight:700}
+
+  .divider{border:none;border-top:1px solid var(--border);margin:40px 0}
+
+  .footer{text-align:center;font-size:12px;color:var(--tx3)}
+  .footer a{color:var(--tx2);text-decoration:none}
+  .footer a:hover{color:var(--tx1)}
+
+  @media(max-width:500px){.score-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="hero">
+    <div class="disc">🥏</div>
+    <h1>WUCC 2026<br>PREDICTOR & APUESTAS</h1>
+    <div class="sub">DESDE LA LÍNEA · LIMERICK, IRLANDA · 15–22 AGOSTO</div>
+  </div>
+
+  <!-- URL BOX -->
+  <div class="url-box">
+    <div class="url-label">🌐 Enlace de la app / App link</div>
+    <div class="url-link">👉 tu-usuario.github.io/wucc2026</div>
+  </div>
+
+  <!-- ESPAÑOL -->
+  <div class="lang-block">
+    <div class="lang-badge">🇨🇴 Español</div>
+    <div class="steps">
+      <div class="step">
+        <div class="step-n">1</div>
+        <div class="step-body">
+          <div class="step-title">Abre la app y conecta Firebase</div>
+          <div class="step-desc">Al entrar por primera vez verás un panel de configuración. Pega los valores de <code>firebaseConfig</code> que te compartió el organizador y haz clic en <strong>Guardar y conectar</strong>. Solo se hace una vez.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-n">2</div>
+        <div class="step-body">
+          <div class="step-title">Escribe tu nombre</div>
+          <div class="step-desc">Tu nombre es tu ID en el leaderboard. Usa siempre el mismo — si lo cambias se crea una entrada nueva.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-n">3</div>
+        <div class="step-body">
+          <div class="step-title">Haz tus picks</div>
+          <div class="step-desc">Elige ganadores en <strong>Fase de grupos</strong> partido a partido. Luego ve al <strong>Championship</strong> y arma tu bracket eliminatorio. Hay 3 divisiones: Open · Mixed · Women.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-n">4</div>
+        <div class="step-body">
+          <div class="step-title">Guarda en el leaderboard</div>
+          <div class="step-desc">Haz clic en <strong>☁️ Guardar en leaderboard</strong>. Aparecerás en el ranking en vivo instantáneamente. Puedes volver a guardar si cambias de opinión antes del torneo.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-n">5</div>
+        <div class="step-body">
+          <div class="step-title">Sigue el torneo</div>
+          <div class="step-desc">El organizador ingresa los resultados reales partido a partido. El leaderboard se actualiza automáticamente para todos. Abre la app para ver tu posición en cualquier momento.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- ENGLISH -->
+  <div class="lang-block">
+    <div class="lang-badge">🇬🇧 English</div>
+    <div class="steps">
+      <div class="step">
+        <div class="step-n">1</div>
+        <div class="step-body">
+          <div class="step-title">Open the app and connect Firebase</div>
+          <div class="step-desc">On first visit you'll see a setup panel. Paste the <code>firebaseConfig</code> values shared by the organizer and click <strong>Guardar y conectar</strong>. This only needs to be done once per device.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-n">2</div>
+        <div class="step-body">
+          <div class="step-title">Enter your name</div>
+          <div class="step-desc">Your name is your leaderboard ID. Always use the same name — changing it creates a new entry.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-n">3</div>
+        <div class="step-body">
+          <div class="step-title">Make your picks</div>
+          <div class="step-desc">Select winners for every <strong>group stage</strong> match. Then go to <strong>Championship</strong> and build your knockout bracket. There are 3 divisions: Open · Mixed · Women.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-n">4</div>
+        <div class="step-body">
+          <div class="step-title">Save to the leaderboard</div>
+          <div class="step-desc">Click <strong>☁️ Guardar en leaderboard</strong>. You'll appear on the live ranking instantly. You can save again if you change your mind before the tournament starts.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-n">5</div>
+        <div class="step-body">
+          <div class="step-title">Follow the tournament</div>
+          <div class="step-desc">The organizer enters official results match by match. The leaderboard updates automatically for everyone. Open the app at any time to check your ranking.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- SCORING -->
+  <div class="scoring">
+    <div class="scoring-title">📊 SISTEMA DE PUNTAJE / SCORING SYSTEM</div>
+    <div class="score-grid">
+      <div class="score-item"><span>Partido ganado / Match</span><b>+1 pt</b></div>
+      <div class="score-item"><span>Equipo avanza / Advances</span><b>+2 pts</b></div>
+      <div class="score-item"><span>Octavos / Round of 16</span><b>+3 pts</b></div>
+      <div class="score-item"><span>Cuartos / Quarterfinal</span><b>+5 pts</b></div>
+      <div class="score-item"><span>Semis / Semifinal</span><b>+8 pts</b></div>
+      <div class="score-item"><span>Campeón / Champion</span><b>+13 pts</b></div>
+    </div>
+    <div style="text-align:right;font-size:12px;color:var(--tx3);margin-top:10px">Máximo total / Max total: <strong style="color:var(--lime)">635 pts</strong></div>
+  </div>
+
+  <div class="footer">
+    <p>Construido por / Built by <a href="mailto:desdelalinea.tv@gmail.com">Desde La Línea</a></p>
+    <p style="margin-top:6px">Resultados oficiales / Official results: <strong>results.wucc2026.com</strong> · 22 agosto / August 22</p>
+  </div>
+
+</div>
+</body>
+</html>
