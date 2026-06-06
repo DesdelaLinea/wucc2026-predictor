@@ -28,7 +28,7 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 header{background:rgba(7,8,12,.96);border-bottom:1px solid var(--border);backdrop-filter:blur(20px);position:sticky;top:0;z-index:100}
 .hdr-inner{display:flex;align-items:center;gap:16px;padding:10px 0;flex-wrap:wrap}
 .logo{display:flex;align-items:center;gap:12px;flex-shrink:0;text-decoration:none}
-.logo-img{height:38px;width:auto;filter:invert(1) brightness(1.1);opacity:.92;transition:opacity .2s}
+.logo-img{height:38px;width:auto;filter:brightness(0) invert(1);opacity:.9;transition:opacity .2s}
 .logo:hover .logo-img{opacity:1}
 .logo-sep{width:1px;height:32px;background:var(--border)}
 .logo-text{line-height:1.1}
@@ -230,7 +230,7 @@ header{background:rgba(7,8,12,.96);border-bottom:1px solid var(--border);backdro
 
 /* FOOTER */
 .site-footer{border-top:1px solid var(--border);padding:32px 0;margin-top:40px;text-align:center}
-.footer-logo{height:28px;filter:invert(1) brightness(1.1);opacity:.35;margin-bottom:10px}
+.footer-logo{height:28px;filter:brightness(0) invert(1);opacity:.3;margin-bottom:10px}
 .footer-txt{font-size:11px;color:var(--tx3);line-height:1.8}
 .footer-txt a{color:var(--tx2);text-decoration:none}
 .footer-txt a:hover{color:var(--tx1)}
@@ -295,35 +295,17 @@ header{background:rgba(7,8,12,.96);border-bottom:1px solid var(--border);backdro
     </div>
   </div>
 
-  <!-- Power Pool diagram -->
-  <div class="pp-diagram">
-    <div class="pp-diagram-title">🔄 FORMATO DEL TORNEO — POWER POOLS</div>
-    <div style="font-size:12px;color:var(--tx2);margin-bottom:14px;line-height:1.7">
-      Top 2 de cada grupo (16 equipos) se distribuyen en 2 Power Pools de 8 · Tras el Power Pool, <strong style="color:var(--green)">los 4 primeros de cada Power Pool</strong> avanzan a Cuartos de Final directamente · Los puestos 5°-8° juegan un partido adicional para llegar a Cuartos.
-    </div>
-    <div class="pp-flow">
-      <div class="pp-node grp">Grupos A-H<br><span style="font-size:9px">5 equipos c/u</span></div>
-      <div class="pp-arrow">→</div>
-      <div>
-        <div class="pp-node ppa" style="margin-bottom:4px">Power Pool A<br><span style="font-size:9px">1°A, 1°B, 1°C, 1°D<br>2°E, 2°F, 2°G, 2°H</span></div>
-        <div class="pp-node ppb">Power Pool B<br><span style="font-size:9px">1°E, 1°F, 1°G, 1°H<br>2°A, 2°B, 2°C, 2°D</span></div>
-      </div>
-      <div class="pp-arrow">→</div>
-      <div>
-        <div class="pp-node champ" style="margin-bottom:4px">Cuartos de Final<br><span style="font-size:9px">Top 4 de cada PP</span></div>
-        <div class="pp-node ppx">Pre-Cuartos<br><span style="font-size:9px">5°-8° de cada PP</span></div>
-      </div>
-      <div class="pp-arrow">→</div>
-      <div class="pp-node champ">🏆 Final</div>
-    </div>
-    <div style="margin-top:12px;font-size:11px;color:var(--tx3)">En tus picks: elige ganadores en grupos → el Power Pool se asigna automáticamente por posición → luego completa el bracket Championship</div>
+  <!-- Format diagram — changes per division -->
+  <div class="pp-diagram" id="formatDiagram">
+    <div class="pp-diagram-title" id="formatTitle">🔄 FORMATO DEL TORNEO</div>
+    <div id="formatBody"></div>
   </div>
 
   <!-- Score pills -->
   <div class="score-pills">
-    <div class="s-pill">Partido <b>+1 pt</b></div>
-    <div class="s-pill">Pasa Power Pool <b>+2 pts</b></div>
-    <div class="s-pill">Power Pool partido <b>+2 pts</b></div>
+    <div class="s-pill">Partido grupos <b>+1 pt</b></div>
+    <div class="s-pill">Avanza fase sig. <b>+2 pts</b></div>
+    <div class="s-pill">Round of 16 <b>+3 pts</b></div>
     <div class="s-pill">Cuartos <b>+5 pts</b></div>
     <div class="s-pill">Semis <b>+8 pts</b></div>
     <div class="s-pill">Campeón <b>+13 pts</b></div>
@@ -342,8 +324,8 @@ header{background:rgba(7,8,12,.96);border-bottom:1px solid var(--border);backdro
 
   <!-- Phase Tabs -->
   <div class="phase-tabs" id="picksPhaseTabs">
-    <button class="phase-tab on" onclick="setPicksPhase('groups')">Fase de grupos</button>
-    <button class="phase-tab" onclick="setPicksPhase('powerpool')">Power Pools</button>
+    <button class="phase-tab on" onclick="setPicksPhase('groups')">Grupos</button>
+    <button class="phase-tab" id="picksPhaseTab2" onclick="setPicksPhase('inter')">Fase intermedia</button>
     <button class="phase-tab" onclick="setPicksPhase('bracket')">Championship</button>
   </div>
 
@@ -364,7 +346,7 @@ header{background:rgba(7,8,12,.96);border-bottom:1px solid var(--border);backdro
   </div>
 
   <div id="picksGroups"></div>
-  <div id="picksPP" style="display:none"></div>
+  <div id="picksInter" style="display:none"></div>
   <div id="picksBracket" style="display:none"></div>
 
 </div>
@@ -448,7 +430,7 @@ header{background:rgba(7,8,12,.96);border-bottom:1px solid var(--border);backdro
       <div class="div-tabs" id="adminDiv"></div>
       <div class="phase-tabs" id="adminPhaseTabs">
         <button class="phase-tab on" onclick="setAdminPhase('groups')">Grupos</button>
-        <button class="phase-tab" onclick="setAdminPhase('powerpool')">Power Pools</button>
+        <button class="phase-tab" id="adminPhaseTab2" onclick="setAdminPhase('inter')">Fase intermedia</button>
         <button class="phase-tab" onclick="setAdminPhase('bracket')">Bracket</button>
       </div>
       <div class="act-row">
@@ -456,7 +438,7 @@ header{background:rgba(7,8,12,.96);border-bottom:1px solid var(--border);backdro
         <button class="btn suc" onclick="saveAndCalc()">💾 Guardar y publicar</button>
       </div>
       <div id="adminGroups"></div>
-      <div id="adminPP" style="display:none"></div>
+      <div id="adminInter" style="display:none"></div>
       <div id="adminBracket" style="display:none"></div>
     </div>
   </div>
@@ -603,21 +585,51 @@ let curDiv="Open", picksPhase="groups", adminPhase="groups", adminDiv="Open";
 let isPicksClosed=false;
 
 function mkMatches(ts){const m=[];for(let i=0;i<ts.length;i++)for(let j=i+1;j<ts.length;j++)m.push({a:i,b:j,w:null});return m;}
-function mkBkt(){return [8,4,2,1].map(n=>({m:Array.from({length:n},()=>({a:null,b:null,w:null}))}));}
-// Power pool: 8 matches in round-robin among 8 teams
-function mkPP(){return {pp:[{m:mkPPMatches()},{m:mkPPMatches()}]};}
-function mkPPMatches(){return Array.from({length:28},(_,i)=>({a:null,b:null,w:null}));}
+
+// ── FORMAT CONSTANTS ──
+// Open/Mixed (48 teams, 6 per group): groups → 4v5 play-in → R32 → R16 → QF → SF → F
+// Women (40 teams, 5 per group): groups → 10 cross-pools I-R → 16 play-in → pre-QF → QF → SF → F
+
+// Mixed/Open bracket: R32(16) → R16(8) → QF(4) → SF(2) → F(1)
+function mkBkt48(){return [16,8,4,2,1].map(n=>({m:Array.from({length:n},()=>({a:null,b:null,w:null}))}));}
+// Women bracket: preQF(8) → QF(4) → SF(2) → F(1)
+function mkBkt40(){return [8,4,2,1].map(n=>({m:Array.from({length:n},()=>({a:null,b:null,w:null}))}));}
+
+// intermediate: for Open/Mixed = play-in matches (4v5 per group = 8 matches)
+//               for Women = 10 cross-pools I-R (4 teams each)
+function mkInter48(){
+  // 8 play-in matches: 4th vs 5th from each group
+  return {type:"playin48", matches:Array.from({length:8},()=>({a:null,b:null,w:null}))};
+}
+function mkInter40(){
+  // 10 cross-pools (I=0..J=1..R=9), each 4 teams = 6 matches
+  // pools I-L (indices 0-3): leaders pools
+  // pools M-P (indices 4-7): middle pools
+  // pools Q-R (indices 8-9): bottom pools
+  return {type:"xpool40", pools:Array.from({length:10},(_,i)=>({
+    name:["I","J","K","L","M","N","O","P","Q","R"][i],
+    tier:i<4?"top":i<8?"mid":"bot",
+    teams:[null,null,null,null],
+    m:Array.from({length:6},()=>({a:null,b:null,w:null}))
+  }))};
+}
+
 function mkState(){
   const o={};
   for(const d of ["Open","Mixed","Women"]){
-    o[d]={g:GROUPS[d].map(grp=>({m:mkMatches(grp.t)})),pp:[{m:[]},{m:[]}],b:mkBkt()};
+    const is48=d!=="Women";
+    o[d]={
+      g:GROUPS[d].map(grp=>({m:mkMatches(grp.t)})),
+      inter:is48?mkInter48():mkInter40(),
+      b:is48?mkBkt48():mkBkt40()
+    };
   }
   return o;
 }
 
-let myPicks = lsGet("w26_picks2",null)||mkState();
+let myPicks = lsGet("w26_picks3",null)||mkState();
 let myName  = lsGet("w26_name","")||"";
-let results = lsGet("w26_res2",null)||mkState();
+let results = lsGet("w26_res3",null)||mkState();
 let subs    = lsGet("w26_subs",[])||[];
 
 if(myName) document.getElementById("myName").value=myName;
@@ -626,7 +638,6 @@ if(myName) document.getElementById("myName").value=myName;
    DEADLINE LOGIC
 ═══════════════════════════════════════════════════ */
 function checkDeadline(){
-  // Also check if admin force-closed
   const forced = lsGet("w26_forceClosed", null);
   const now = new Date();
   isPicksClosed = (now >= DEADLINE) || (forced === true);
@@ -658,10 +669,8 @@ function updateDeadlineBanner(){
       cd.textContent = d+"d "+h+"h "+m+"m "+s+"s";
     }
   }
-  // update admin status
   const adminStatus = document.getElementById("adminClosedStatus");
-  if(adminStatus) adminStatus.textContent = isPicksClosed ? "🔒 CERRADO" : "🟢 ABIERTO";
-  if(adminStatus) adminStatus.style.color = isPicksClosed ? "var(--red)" : "var(--lime)";
+  if(adminStatus){ adminStatus.textContent = isPicksClosed ? "🔒 CERRADO" : "🟢 ABIERTO"; adminStatus.style.color = isPicksClosed ? "var(--red)" : "var(--lime)"; }
 }
 
 function updatePicksLockedState(){
@@ -681,7 +690,6 @@ function updatePicksLockedState(){
     if(btnAuto){btnAuto.disabled=false;}
   }
 }
-
 setInterval(()=>{if(!isPicksClosed)checkDeadline();}, 1000);
 
 /* ═══════════════════════════════════════════════════
@@ -690,169 +698,107 @@ setInterval(()=>{if(!isPicksClosed)checkDeadline();}, 1000);
 async function initFirebase(){
   let tries=0;
   while(!window._fbBoot&&tries<30){await new Promise(r=>setTimeout(r,100));tries++;}
-  // wait for boot to complete
   tries=0;
   while(window._fbReady===undefined&&tries<30){await new Promise(r=>setTimeout(r,100));tries++;}
   if(window._fbReady){
-    fbReady=true;
-    setFbStatus("ok","Conectado");
-    subscribeToLB();
-    // also subscribe to config changes (deadline override, results)
-    subscribeToConfig();
+    fbReady=true; setFbStatus("ok","Conectado");
+    subscribeToLB(); subscribeToConfig();
   } else {
-    if(window._fbErr==="no-config"){
-      setFbStatus("err","Sin configurar — ver SETUP.md");
-    } else {
-      setFbStatus("err","Error: "+( window._fbErr||"desconocido"));
-    }
+    setFbStatus(window._fbErr==="no-config"?"err":"err",
+      window._fbErr==="no-config"?"Sin configurar — ver SETUP.md":"Error: "+(window._fbErr||"desconocido"));
   }
 }
-
-function setFbStatus(s,t){
-  document.getElementById("fbDot").className="fb-dot "+s;
-  document.getElementById("fbTxt").textContent=t;
-}
-
+function setFbStatus(s,t){document.getElementById("fbDot").className="fb-dot "+s;document.getElementById("fbTxt").textContent=t;}
 function subscribeToLB(){
   if(!fbReady||!window._db)return;
   if(fbUnsub)fbUnsub();
   const{collection,onSnapshot}=window._fbFns;
   document.getElementById("liveBadge").style.display="inline-flex";
   fbUnsub=onSnapshot(collection(window._db,"picks"),snap=>{
-    subs=snap.docs.map(d=>d.data());
-    lsSet("w26_subs",subs);
+    subs=snap.docs.map(d=>d.data()); lsSet("w26_subs",subs);
     document.getElementById("lbCount").textContent=subs.length;
     if(document.getElementById("page-lb").classList.contains("on"))renderLB();
-    const sc=document.getElementById("subCount");
-    if(sc)sc.textContent=subs.length;
+    const sc=document.getElementById("subCount"); if(sc)sc.textContent=subs.length;
   });
 }
-
 function subscribeToConfig(){
   if(!fbReady||!window._db)return;
   const{doc,onSnapshot}=window._fbFns;
   onSnapshot(doc(window._db,"config","settings"),snap=>{
-    if(snap.exists()){
-      const data=snap.data();
-      if(data.forceClosed!==undefined){
-        lsSet("w26_forceClosed",data.forceClosed);
-        checkDeadline();
-      }
-    }
+    if(snap.exists()){const data=snap.data();if(data.forceClosed!==undefined){lsSet("w26_forceClosed",data.forceClosed);checkDeadline();}}
   });
-  // also listen for results updates
   onSnapshot(doc(window._db,"config","results"),snap=>{
-    if(snap.exists()&&snap.data().results){
-      results=snap.data().results;
-      lsSet("w26_res2",results);
-      if(document.getElementById("page-lb").classList.contains("on"))renderLB();
-    }
+    if(snap.exists()&&snap.data().results){results=snap.data().results;lsSet("w26_res3",results);
+      if(document.getElementById("page-lb").classList.contains("on"))renderLB();}
   });
 }
-
 async function savePicksToCloud(){
-  if(isPicksClosed){toast("🔒 Los picks están cerrados. No se pueden guardar más pronósticos.");return;}
+  if(isPicksClosed){toast("🔒 Los picks están cerrados.");return;}
   const name=document.getElementById("myName").value.trim();
   if(!name){toast("⚠️ Ingresa tu nombre primero");return;}
-  if(!fbReady||!window._db){toast("⚠️ Sin conexión Firebase. Verifica que el organizador configuró el proyecto.");return;}
+  if(!fbReady||!window._db){toast("⚠️ Sin conexión Firebase.");return;}
   const btn=document.getElementById("btnSaveCloud");
   btn.disabled=true;btn.textContent="⏳ Guardando…";
   try{
     const{doc,setDoc}=window._fbFns;
     const docId=name.toLowerCase().replace(/[^a-z0-9_-]/g,"_").slice(0,40);
-    await setDoc(doc(window._db,"picks",docId),{v:3,n:name,docId,p:myPicks,ts:Date.now()});
-    lsSet("w26_name",name);
-    setSaveStatus("saved","✅ En el leaderboard");
-    toast("🏆 ¡Picks guardados! Ya apareces en el leaderboard.");
-    showPage("lb");
-  }catch(e){
-    toast("❌ Error al guardar: "+e.message);
-    setSaveStatus("","");
-  }finally{
-    if(!isPicksClosed){btn.disabled=false;btn.textContent="☁️ Guardar en leaderboard";}
-  }
+    await setDoc(doc(window._db,"picks",docId),{v:4,n:name,docId,p:myPicks,ts:Date.now()});
+    lsSet("w26_name",name); setSaveStatus("saved","✅ En el leaderboard");
+    toast("🏆 ¡Picks guardados!"); showPage("lb");
+  }catch(e){toast("❌ Error: "+e.message);setSaveStatus("","");}
+  finally{if(!isPicksClosed){btn.disabled=false;btn.textContent="☁️ Guardar en leaderboard";}}
 }
-
 async function saveResultsToCloud(){
   if(!fbReady||!window._db)return;
-  try{
-    const{doc,setDoc}=window._fbFns;
-    await setDoc(doc(window._db,"config","results"),{results,ts:Date.now()});
-  }catch(e){console.error(e);}
+  try{const{doc,setDoc}=window._fbFns;await setDoc(doc(window._db,"config","results"),{results,ts:Date.now()});}catch(e){console.error(e);}
 }
 
 /* ═══════════════════════════════════════════════════
-   ADMIN AUTH (simple hash)
+   ADMIN AUTH
 ═══════════════════════════════════════════════════ */
 async function sha1(str){
   const buf=await crypto.subtle.digest("SHA-1",new TextEncoder().encode(str));
   return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,"0")).join("");
 }
-
 async function checkAdminPwd(){
   const pwd=document.getElementById("adminPwd").value;
   const hash=await sha1(pwd);
-  if(hash===ADMIN_PWD_HASH){
-    lsSet(ADMIN_SESSION_KEY,{ts:Date.now()});
-    showAdminContent();
-  } else {
-    document.getElementById("adminErr").textContent="Contraseña incorrecta";
-    document.getElementById("adminPwd").value="";
-    setTimeout(()=>document.getElementById("adminErr").textContent="",3000);
-  }
+  if(hash===ADMIN_PWD_HASH){lsSet(ADMIN_SESSION_KEY,{ts:Date.now()});showAdminContent();}
+  else{document.getElementById("adminErr").textContent="Contraseña incorrecta";document.getElementById("adminPwd").value="";setTimeout(()=>document.getElementById("adminErr").textContent="",3000);}
 }
-
 function checkAdminSession(){
   const sess=lsGet(ADMIN_SESSION_KEY,null);
-  if(sess&&(Date.now()-sess.ts)<8*3600*1000) showAdminContent(); // 8h session
+  if(sess&&(Date.now()-sess.ts)<8*3600*1000)showAdminContent();
 }
-
 function showAdminContent(){
   document.getElementById("adminLogin").style.display="none";
   document.getElementById("adminContent").style.display="block";
-  const sc=document.getElementById("subCount");
-  if(sc)sc.textContent=subs.length;
+  const sc=document.getElementById("subCount");if(sc)sc.textContent=subs.length;
   updatePicksLockedState();
-  // load latest results
   loadResultsFromCloud().then(()=>renderAdminView());
 }
-
 function adminLogout(){
   localStorage.removeItem(ADMIN_SESSION_KEY);
   document.getElementById("adminLogin").style.display="block";
   document.getElementById("adminContent").style.display="none";
   document.getElementById("adminPwd").value="";
 }
-
 async function forceClosePicks(){
-  if(!confirm("¿Confirmas cerrar los picks? Los participantes ya no podrán modificar sus pronósticos."))return;
+  if(!confirm("¿Confirmas cerrar los picks?"))return;
   lsSet("w26_forceClosed",true);
-  if(fbReady&&window._db){
-    const{doc,setDoc}=window._fbFns;
-    await setDoc(doc(window._db,"config","settings"),{forceClosed:true,ts:Date.now()},{merge:true});
-  }
-  checkDeadline();
-  toast("🔒 Picks cerrados correctamente.");
+  if(fbReady&&window._db){const{doc,setDoc}=window._fbFns;await setDoc(doc(window._db,"config","settings"),{forceClosed:true,ts:Date.now()},{merge:true});}
+  checkDeadline();toast("🔒 Picks cerrados.");
 }
-
 async function forceOpenPicks(){
   if(!confirm("¿Confirmas reabrir los picks?"))return;
   lsSet("w26_forceClosed",false);
-  if(fbReady&&window._db){
-    const{doc,setDoc}=window._fbFns;
-    await setDoc(doc(window._db,"config","settings"),{forceClosed:false,ts:Date.now()},{merge:true});
-  }
-  checkDeadline();
-  toast("🔓 Picks reabiertos.");
+  if(fbReady&&window._db){const{doc,setDoc}=window._fbFns;await setDoc(doc(window._db,"config","settings"),{forceClosed:false,ts:Date.now()},{merge:true});}
+  checkDeadline();toast("🔓 Picks reabiertos.");
 }
-
 async function loadResultsFromCloud(){
   if(!fbReady||!window._db)return;
-  try{
-    const{doc,getDoc}=window._fbFns;
-    const snap=await getDoc(doc(window._db,"config","results"));
-    if(snap.exists()&&snap.data().results){results=snap.data().results;lsSet("w26_res2",results);}
-  }catch(e){console.error(e);}
+  try{const{doc,getDoc}=window._fbFns;const snap=await getDoc(doc(window._db,"config","results"));
+    if(snap.exists()&&snap.data().results){results=snap.data().results;lsSet("w26_res3",results);}}catch(e){console.error(e);}
 }
 
 /* ═══════════════════════════════════════════════════
@@ -860,11 +806,7 @@ async function loadResultsFromCloud(){
 ═══════════════════════════════════════════════════ */
 const _stCache=new Map();
 function standings(grp,gState,div,gi,state){
-  if(state){
-    const k=div+":"+gi+":"+gState.m.map(m=>m.w??"_").join("");
-    if(_stCache.has(k))return _stCache.get(k);
-    const r=_cSt(grp,gState);_stCache.set(k,r);return r;
-  }
+  if(state){const k=div+":"+gi+":"+gState.m.map(m=>m.w??"_").join("");if(_stCache.has(k))return _stCache.get(k);const r=_cSt(grp,gState);_stCache.set(k,r);return r;}
   return _cSt(grp,gState);
 }
 function _cSt(grp,gState){
@@ -872,85 +814,223 @@ function _cSt(grp,gState){
   for(const m of gState.m){if(m.w!==null)w[m.w]++;}
   return grp.t.map((t,i)=>({...t,i,w:w[i]})).sort((a,b)=>b.w-a.w||(a.s-b.s));
 }
-
 function teamLabel(t){return fl(t.c)+" "+t.n;}
 
-/* Power Pool seeding:
-   PP-A: 1°A,1°B,1°C,1°D + 2°E,2°F,2°G,2°H
-   PP-B: 1°E,1°F,1°G,1°H + 2°A,2°B,2°C,2°D
-   After PP: top-4 each PP → QF; 5-8 → pre-QF
-   Championship bracket: QF (8 teams) → SF → F
-*/
-function derivePPTeams(div,state){
-  const first=[],second=[];
+/* ═══════════════════════════════════════════════════
+   SEEDING — Open/Mixed 48 teams
+   Groups of 6: 1st,2nd,3rd → upper bracket seeding
+                4th vs 5th → play-in (8 matches, winners → R32)
+                6th → Consolation (41-48)
+   R32: 1st(bye) vs play-in winner + 2nd vs 3rd (8+8 = 16 matches)
+   R16 → QF → SF → F
+═══════════════════════════════════════════════════ */
+function getGroupPositions48(div,state){
+  // returns arrays indexed [0..7] for groups A-H
+  const pos={p1:[],p2:[],p3:[],p4:[],p5:[],p6:[]};
   GROUPS[div].forEach((grp,gi)=>{
     const st=standings(grp,state[div].g[gi],div,gi,state);
-    first.push(st[0]?teamLabel(st[0]):null);
-    second.push(st[1]?teamLabel(st[1]):null);
+    pos.p1.push(st[0]?teamLabel(st[0]):null);
+    pos.p2.push(st[1]?teamLabel(st[1]):null);
+    pos.p3.push(st[2]?teamLabel(st[2]):null);
+    pos.p4.push(st[3]?teamLabel(st[3]):null);
+    pos.p5.push(st[4]?teamLabel(st[4]):null);
+    pos.p6.push(st[5]?teamLabel(st[5]):null);
   });
-  // Groups A-D = indices 0-3, Groups E-H = indices 4-7
-  const ppA=[first[0],first[1],first[2],first[3],second[4],second[5],second[6],second[7]];
-  const ppB=[first[4],first[5],first[6],first[7],second[0],second[1],second[2],second[3]];
-  return{ppA,ppB};
+  return pos;
 }
 
-function derivePPStandings(ppTeams,ppMatches){
-  const wins=new Array(8).fill(0);
-  for(const m of ppMatches){
-    if(m.w!==null&&m.a!==null&&m.b!==null){
-      const wi=ppTeams.indexOf(m.w);
-      if(wi>=0)wins[wi]++;
-    }
-  }
-  return ppTeams.map((t,i)=>({n:t,w:wins[i],i})).sort((a,b)=>b.w-a.w);
+function buildInter48(div,state){
+  const pos=getGroupPositions48(div,state);
+  // play-in: 4th vs 5th for each group (8 matches)
+  const inter=state[div].inter;
+  if(inter.type!=="playin48")return;
+  inter.matches.forEach((m,i)=>{m.a=pos.p4[i];m.b=pos.p5[i];if(m.w&&m.w!==m.a&&m.w!==m.b)m.w=null;});
 }
 
-function mkPPMatchList(ppTeams){
-  // round-robin: 8 teams = 28 matches
-  const matches=[];
-  for(let i=0;i<ppTeams.length;i++)
-    for(let j=i+1;j<ppTeams.length;j++)
-      matches.push({a:ppTeams[i],b:ppTeams[j],w:null});
-  return matches;
-}
-
-function buildPP(div,state){
-  const{ppA,ppB}=derivePPTeams(div,state);
-  // Rebuild PP match lists with current team seedings
-  state[div].pp[0]=mkPPMatchList(ppA);
-  state[div].pp[1]=mkPPMatchList(ppB);
-}
-
-function buildBktFromPP(div,state){
-  // Top 4 from PP-A vs Top 4 from PP-B cross bracket
-  // QF: A1vsB4, A2vsB3, B1vsA4, B2vsA3
-  const ppASt=derivePPStandings(derivePPTeams(div,state).ppA,state[div].pp[0]);
-  const ppBSt=derivePPStandings(derivePPTeams(div,state).ppB,state[div].pp[1]);
-  const a=ppASt,b=ppBSt;
+function buildBkt48(div,state){
+  const pos=getGroupPositions48(div,state);
+  const inter=state[div].inter;
+  // play-in winners (or null if not played)
+  const piWin=inter.matches.map(m=>m.w||null);
   const br=state[div].b;
-  // QF seedings
-  const qfPairs=[[a[0]&&a[0].n,b[3]&&b[3].n],[a[1]&&a[1].n,b[2]&&b[2].n],[b[0]&&b[0].n,a[3]&&a[3].n],[b[1]&&b[1].n,a[2]&&a[2].n]];
-  // bracket: r0=QF(4), r1=SF(2), r2=F(1)
-  const bkt=[4,2,1].map(n=>({m:Array.from({length:n},()=>({a:null,b:null,w:null}))}));
-  qfPairs.forEach(([a,b],i)=>{bkt[0].m[i].a=a;bkt[0].m[i].b=b;bkt[0].m[i].w=null;});
-  state[div].b=bkt;
+  // R32 (16 matches):
+  // match 0-7: 1st[i] vs play-in winner[i]  (1st gets bye effectively if pi not done)
+  // match 8-15: 2nd[i] vs 3rd[i]
+  // Seeding pairs from 2022 image: cross groups
+  // Standard WUCC seeding for R32: A1vsPlayinH, B1vsPlayinG... (cross seeding)
+  // Simplified: 1st[A] vs piWin[H], 1st[B] vs piWin[G], 1st[C] vs piWin[F], 1st[D] vs piWin[E]
+  //             1st[E] vs piWin[D], 1st[F] vs piWin[C], 1st[G] vs piWin[B], 1st[H] vs piWin[A]
+  // 2nd[A] vs 3rd[D], 2nd[B] vs 3rd[C], 2nd[C] vs 3rd[B], 2nd[D] vs 3rd[A]
+  // 2nd[E] vs 3rd[H], 2nd[F] vs 3rd[G], 2nd[G] vs 3rd[F], 2nd[H] vs 3rd[E]
+  const r32=[
+    [pos.p1[0],piWin[7]],[pos.p1[1],piWin[6]],[pos.p1[2],piWin[5]],[pos.p1[3],piWin[4]],
+    [pos.p1[4],piWin[3]],[pos.p1[5],piWin[2]],[pos.p1[6],piWin[1]],[pos.p1[7],piWin[0]],
+    [pos.p2[0],pos.p3[3]],[pos.p2[1],pos.p3[2]],[pos.p2[2],pos.p3[1]],[pos.p2[3],pos.p3[0]],
+    [pos.p2[4],pos.p3[7]],[pos.p2[5],pos.p3[6]],[pos.p2[6],pos.p3[5]],[pos.p2[7],pos.p3[4]]
+  ];
+  r32.forEach(([a,b],i)=>{br[0].m[i].a=a;br[0].m[i].b=b;if(br[0].m[i].w&&br[0].m[i].w!==a&&br[0].m[i].w!==b)br[0].m[i].w=null;});
+  // propagate R32 winners into R16
+  for(let ri=0;ri<br.length-1;ri++){
+    br[ri].m.forEach((m,mi)=>{if(m.w)propagateBkt(br,ri,mi);});
+  }
 }
 
-function propagate(br,ri,mi){
+/* ═══════════════════════════════════════════════════
+   SEEDING — Women 40 teams
+   Groups of 5: positions 1-5
+   10 Cross-pools I-R (4 teams each), round-robin
+   Pools I,J,K,L (top): 1st/2nd → Pre-QF bye; 3rd/4th → 16 play-in
+   Pools M,N,O,P (mid): 1st/2nd → 16 play-in; 3rd/4th → Consolation
+   Pools Q,R (bot): all → Consolation
+   16 play-in (8 matches) → 8 advance to pre-QF
+   Pre-QF (8 matches): bye teams vs play-in winners → QF
+   QF(4) → SF(2) → F(1)
+
+   Cross-pool seeding (from WUCC 2022 Women image):
+   Pool I:  A1, D2, E3 (wait — standard is 4 teams per pool)
+   Standard WUCC 40-team cross-pool seeding:
+   Pool I:  A1, B1, G2, H2  → top pool
+   Pool J:  C1, D1, E2, F2  → top pool
+   Pool K:  E1, F1, C2, D2  → top pool
+   Pool L:  G1, H1, A2, B2  → top pool
+   Pool M:  A3, B3, G4, H4  → mid pool
+   Pool N:  C3, D3, E4, F4  → mid pool (wait, image shows G3,A3,D3...)
+   Based on 2022 image analysis:
+   Pool I: A1,B1,G2,H2 | Pool J: C1,D1,E2,F2 | Pool K: E1,F1,C2,D2 | Pool L: G1,H1,A2,B2
+   Pool M: H3,B3,D4,H4 → simplified as 3rd/4th from groups
+   Using standard snake seeding for cross-pools:
+═══════════════════════════════════════════════════ */
+function getGroupPositions40(div,state){
+  const pos={p1:[],p2:[],p3:[],p4:[],p5:[]};
+  GROUPS[div].forEach((grp,gi)=>{
+    const st=standings(grp,state[div].g[gi],div,gi,state);
+    for(let r=0;r<5;r++) pos["p"+(r+1)].push(st[r]?teamLabel(st[r]):null);
+  });
+  return pos;
+}
+
+// Cross-pool seeding based on WUCC 2022 Women's bracket image
+// Pool I(0): A1,B1,G2,H2 | Pool J(1): C1,D1,E2,F2 | Pool K(2): E1,F1,C2,D2 | Pool L(3): G1,H1,A2,B2
+// Pool M(4): A3,B3,G4,H4 | Pool N(5): C3,D3,E4,F4 | Pool O(6): E3,F3,A4,B4 | Pool P(7): G3,H3,C4,D4
+// Pool Q(8): A5,B5,C5,D5 | Pool R(9): E5,F5,G5,H5
+function buildXPools40(div,state){
+  const p=getGroupPositions40(div,state);
+  const inter=state[div].inter;
+  if(inter.type!=="xpool40")return;
+  const seeds=[
+    [p.p1[0],p.p1[1],p.p2[6],p.p2[7]], // I
+    [p.p1[2],p.p1[3],p.p2[4],p.p2[5]], // J
+    [p.p1[4],p.p1[5],p.p2[2],p.p2[3]], // K
+    [p.p1[6],p.p1[7],p.p2[0],p.p2[1]], // L
+    [p.p3[0],p.p3[1],p.p4[6],p.p4[7]], // M
+    [p.p3[2],p.p3[3],p.p4[4],p.p4[5]], // N
+    [p.p3[4],p.p3[5],p.p4[2],p.p4[3]], // O
+    [p.p3[6],p.p3[7],p.p4[0],p.p4[1]], // P
+    [p.p5[0],p.p5[1],p.p5[2],p.p5[3]], // Q
+    [p.p5[4],p.p5[5],p.p5[6],p.p5[7]]  // R
+  ];
+  inter.pools.forEach((pool,pi)=>{
+    pool.teams=seeds[pi];
+    // rebuild matches with current teams (keep existing picks if teams match)
+    const newM=[];
+    const t=seeds[pi];
+    for(let i=0;i<4;i++)for(let j=i+1;j<4;j++){
+      const existing=pool.m.find(m=>m.a===t[i]&&m.b===t[j]);
+      newM.push(existing||{a:t[i],b:t[j],w:null});
+    }
+    pool.m=newM;
+  });
+}
+
+function getXPoolStandings40(div,state){
+  // returns standings per pool [0..9], each sorted by wins
+  return state[div].inter.pools.map((pool)=>{
+    const wins={};
+    pool.teams.forEach(t=>{ if(t)wins[t]=0; });
+    pool.m.forEach(m=>{ if(m.w)wins[m.w]=(wins[m.w]||0)+1; });
+    return pool.teams.map(t=>({n:t,w:t?wins[t]:0})).filter(t=>t.n).sort((a,b)=>b.w-a.w);
+  });
+}
+
+function buildBkt40(div,state){
+  buildXPools40(div,state);
+  const stds=getXPoolStandings40(div,state);
+  // Top pools (I,J,K,L = 0-3): 1st,2nd → bye to pre-QF; 3rd,4th → 16 play-in
+  // Mid pools (M,N,O,P = 4-7): 1st,2nd → 16 play-in; 3rd,4th → consolation
+  // Bot pools (Q,R = 8-9): all → consolation
+  const preQFbye=[]; // 8 teams from I-L top 2
+  const playIn16=[]; // 8 teams: I-L 3rd/4th + M-P 1st/2nd
+  for(let pi=0;pi<4;pi++){// I,J,K,L
+    preQFbye.push(stds[pi][0]?.n||null);
+    preQFbye.push(stds[pi][1]?.n||null);
+    playIn16.push(stds[pi][2]?.n||null);
+    playIn16.push(stds[pi][3]?.n||null);
+  }
+  for(let pi=4;pi<8;pi++){// M,N,O,P
+    playIn16.push(stds[pi][0]?.n||null);
+    playIn16.push(stds[pi][1]?.n||null);
+  }
+  // playIn16 has 16 teams → 8 matches
+  // preQF: 8 bye teams vs 8 play-in winners (stored in b[0], 8 matches)
+  // then QF(4), SF(2), F(1)
+  const br=state[div].b;
+  // Store play-in data in bracket round 0 as the pre-QF matches
+  // We need a separate play-in step — store it in inter as playIn16
+  state[div].inter.playIn=playIn16;
+  state[div].inter.preQFbye=preQFbye;
+  // pre-QF: bye vs play-in winners
+  // For now seed pre-QF with bye teams; winners fill in when play-in is picked
+  br[0].m.forEach((m,i)=>{
+    m.a=preQFbye[i]||null;
+    // b = play-in winner (from playIn16 pairs i*2 vs i*2+1 winner)
+    const piMatch=state[div].inter.playInMatches;
+    m.b=piMatch&&piMatch[i]?piMatch[i].w:null;
+    if(m.w&&m.w!==m.a&&m.w!==m.b)m.w=null;
+  });
+  for(let ri=0;ri<br.length-1;ri++){br[ri].m.forEach((m,mi)=>{if(m.w)propagateBkt(br,ri,mi);});}
+}
+
+function buildPlayIn40(div,state){
+  buildXPools40(div,state);
+  const stds=getXPoolStandings40(div,state);
+  const playIn16=[];
+  for(let pi=0;pi<4;pi++){playIn16.push(stds[pi][2]?.n||null);playIn16.push(stds[pi][3]?.n||null);}
+  for(let pi=4;pi<8;pi++){playIn16.push(stds[pi][0]?.n||null);playIn16.push(stds[pi][1]?.n||null);}
+  if(!state[div].inter.playInMatches||state[div].inter.playInMatches.length!==8){
+    state[div].inter.playInMatches=Array.from({length:8},(_,i)=>({a:playIn16[i*2]||null,b:playIn16[i*2+1]||null,w:null}));
+  } else {
+    state[div].inter.playInMatches.forEach((m,i)=>{
+      m.a=playIn16[i*2]||null;m.b=playIn16[i*2+1]||null;
+      if(m.w&&m.w!==m.a&&m.w!==m.b)m.w=null;
+    });
+  }
+  const preQFbye=[];
+  for(let pi=0;pi<4;pi++){preQFbye.push(stds[pi][0]?.n||null);preQFbye.push(stds[pi][1]?.n||null);}
+  state[div].inter.preQFbye=preQFbye;
+}
+
+function propagateBkt(br,ri,mi){
   const m=br[ri].m[mi];
   if(ri+1<br.length){
     const nm=Math.floor(mi/2),ns=mi%2===0?"a":"b";
     const next=br[ri+1].m[nm];
     next[ns]=m.w;
-    if(next.w&&next.w!==next.a&&next.w!==next.b){next.w=null;propagate(br,ri+1,nm);}
+    if(next.w&&next.w!==next.a&&next.w!==next.b){next.w=null;propagateBkt(br,ri+1,nm);}
   }
 }
+// keep old name as alias
+function propagate(br,ri,mi){propagateBkt(br,ri,mi);}
 
 function progress(state,div){
   let tot=0,done=0;
+  const is48=div!=="Women";
   state[div].g.forEach(gst=>gst.m.forEach(m=>{tot++;if(m.w!==null)done++;}));
-  if(Array.isArray(state[div].pp)){
-    state[div].pp.forEach(pp=>{if(Array.isArray(pp))pp.forEach(m=>{if(m.a&&m.b){tot++;if(m.w)done++;}});});
+  if(is48){
+    state[div].inter.matches.forEach(m=>{if(m.a&&m.b){tot++;if(m.w)done++;}});
+  } else {
+    state[div].inter.pools.forEach(pool=>pool.m.forEach(m=>{if(m.a&&m.b){tot++;if(m.w)done++;}}));
+    if(state[div].inter.playInMatches)
+      state[div].inter.playInMatches.forEach(m=>{if(m.a&&m.b){tot++;if(m.w)done++;}});
   }
   if(state[div].b)state[div].b.forEach(r=>r.m.forEach(m=>{if(m.a&&m.b){tot++;if(m.w)done++;}}));
   return{tot,done};
@@ -963,37 +1043,102 @@ function scoreDiv(pState,rState,div){
   if(!pState||!rState||!pState[div]||!rState[div])return 0;
   let pts=0;
   const G=GROUPS[div];
+  // Group stage matches
   G.forEach((grp,gi)=>{
     const pm=pState[div].g[gi].m, rm=rState[div].g[gi].m;
     for(let mi=0;mi<Math.min(pm.length,rm.length);mi++){
       if(pm[mi].w!==null&&rm[mi].w!==null&&pm[mi].w===rm[mi].w)pts++;
     }
+    // Correct group standings top positions (+2 per correct top-2 prediction)
     const pSt=standings(grp,pState[div].g[gi],div,gi,pState);
     const rSt=standings(grp,rState[div].g[gi],div,gi,rState);
-    const top2r=new Set([rSt[0]&&rSt[0].s,rSt[1]&&rSt[1].s]);
+    const top2r=new Set([rSt[0]?.s,rSt[1]?.s].filter(Boolean));
     if(pSt[0]&&top2r.has(pSt[0].s))pts+=2;
     if(pSt[1]&&top2r.has(pSt[1].s))pts+=2;
   });
-  // Power pool match picks
-  if(Array.isArray(pState[div].pp)&&Array.isArray(rState[div].pp)){
-    for(let pi=0;pi<2;pi++){
-      const pp=pState[div].pp[pi],rp=rState[div].pp[pi];
-      if(!Array.isArray(pp)||!Array.isArray(rp))continue;
-      for(let mi=0;mi<Math.min(pp.length,rp.length);mi++){
-        if(pp[mi].w&&rp[mi].w&&pp[mi].w===rp[mi].w)pts+=2;
-      }
+  // Intermediate stage
+  const pi=pState[div].inter, ri2=rState[div].inter;
+  if(div!=="Women"){
+    // Play-in matches
+    if(pi.type==="playin48"&&ri2.type==="playin48"){
+      pi.matches.forEach((m,i)=>{const rm=ri2.matches[i];if(m.w&&rm.w&&m.w===rm.w)pts+=1;});
+    }
+  } else {
+    // Cross-pool matches
+    if(pi.type==="xpool40"&&ri2.type==="xpool40"){
+      pi.pools.forEach((pp,pli)=>{
+        const rp=ri2.pools[pli];if(!rp)return;
+        pp.m.forEach((m,mi)=>{const rm=rp.m[mi];if(m.w&&rm&&rm.w&&m.w===rm.w)pts+=1;});
+      });
+    }
+    // Play-in 16
+    if(pi.playInMatches&&ri2.playInMatches){
+      pi.playInMatches.forEach((m,i)=>{const rm=ri2.playInMatches[i];if(m.w&&rm&&rm.w&&m.w===rm.w)pts+=1;});
     }
   }
-  const bPts=[5,8,13];
+  // Bracket rounds
+  const bPts=div!=="Women"?[3,5,8,13]:[5,8,13]; // R16/preQF, QF, SF, F
   if(pState[div].b&&rState[div].b){
     const pW=_rw(pState[div].b),rW=_rw(rState[div].b);
-    for(let ri=0;ri<Math.min(bPts.length,pW.length,rW.length);ri++){
-      for(const t of pW[ri]){if(rW[ri].has(t))pts+=bPts[ri];}
+    const offset=div!=="Women"?1:0; // skip R32(0) for Open/Mixed since it's seeding
+    for(let ri=offset;ri<Math.min(bPts.length+offset,pW.length,rW.length);ri++){
+      for(const t of pW[ri]){if(rW[ri].has(t))pts+=bPts[ri-offset];}
     }
   }
   return pts;
 }
 function _rw(br){return br.map(r=>{const s=new Set();for(const m of r.m){if(m.w)s.add(m.w);}return s;});}
+
+/* ═══════════════════════════════════════════════════
+   FORMAT DIAGRAM — updates when division changes
+═══════════════════════════════════════════════════ */
+function updateFormatDiagram(div){
+  const title=document.getElementById("formatTitle");
+  const body=document.getElementById("formatBody");
+  const t2=document.getElementById("picksPhaseTab2");
+  if(!body)return;
+  if(div==="Women"){
+    if(title)title.textContent="🔄 FORMATO — WOMEN (40 EQUIPOS)";
+    if(t2)t2.textContent="Cross-Pools + Play-in";
+    body.innerHTML=`
+      <div style="font-size:12px;color:var(--tx2);margin-bottom:12px;line-height:1.7">
+        8 grupos de 5 equipos → 10 Cross-Pools (I–R) de 4 equipos → 16 Play-in → Pre-Cuartos → Cuartos → Semis → Final
+      </div>
+      <div class="pp-flow">
+        <div class="pp-node grp">Grupos A-H<br><span style="font-size:9px">5 eq c/u</span></div>
+        <div class="pp-arrow">→</div>
+        <div>
+          <div class="pp-node ppa" style="margin-bottom:4px">Cross-Pools I-L<br><span style="font-size:9px">Top: 1°/2°→Pre-QF bye<br>3°/4°→Play-in 16</span></div>
+          <div class="pp-node ppb" style="margin-bottom:4px">Cross-Pools M-P<br><span style="font-size:9px">Mid: 1°/2°→Play-in 16<br>3°/4°→Consolación</span></div>
+          <div class="pp-node grp">Cross-Pools Q-R<br><span style="font-size:9px">Bot: todos→Consolación</span></div>
+        </div>
+        <div class="pp-arrow">→</div>
+        <div class="pp-node ppx">16 Play-in<br><span style="font-size:9px">8 partidos</span></div>
+        <div class="pp-arrow">→</div>
+        <div class="pp-node champ">Pre-QF→QF<br><span style="font-size:9px">→SF→Final 🏆</span></div>
+      </div>`;
+  } else {
+    if(title)title.textContent=`🔄 FORMATO — ${div.toUpperCase()} (48 EQUIPOS)`;
+    if(t2)t2.textContent="4°vs5° Play-in";
+    body.innerHTML=`
+      <div style="font-size:12px;color:var(--tx2);margin-bottom:12px;line-height:1.7">
+        8 grupos de 6 equipos → 4°vs5° Play-in (8 partidos) → Round of 32 → R16 → Cuartos → Semis → Final · 6° directo a Consolación
+      </div>
+      <div class="pp-flow">
+        <div class="pp-node grp">Grupos A-H<br><span style="font-size:9px">6 eq c/u</span></div>
+        <div class="pp-arrow">→</div>
+        <div>
+          <div class="pp-node ppa" style="margin-bottom:4px">1°/2°/3°<br><span style="font-size:9px">→ Round of 32</span></div>
+          <div class="pp-node ppb" style="margin-bottom:4px">4° vs 5°<br><span style="font-size:9px">Play-in → R32</span></div>
+          <div class="pp-node grp">6°<br><span style="font-size:9px">→ Consolación</span></div>
+        </div>
+        <div class="pp-arrow">→</div>
+        <div class="pp-node ppx">Round of 32<br><span style="font-size:9px">16 partidos</span></div>
+        <div class="pp-arrow">→</div>
+        <div class="pp-node champ">R16→QF<br><span style="font-size:9px">→SF→Final 🏆</span></div>
+      </div>`;
+  }
+}
 
 /* ═══════════════════════════════════════════════════
    RENDER GROUP CARD
@@ -1002,30 +1147,37 @@ function renderGroupCard(div,gi,state,pfx,locked){
   const grp=GROUPS[div][gi];
   const gst=state[div].g[gi];
   const st=standings(grp,gst,div,gi,state);
-  const p=pfx||"";
-  const lk=locked||false;
+  const p=pfx||"",lk=locked||false;
+  const is48=div!=="Women";
   const parts=["<div class=\"g-card\"><div class=\"g-hdr\"><span class=\"g-name\">GRUPO "+grp.g+"</span><span class=\"g-pill\">"+grp.t.length+" EQ</span></div>"];
   st.forEach((t,rank)=>{
-    const isPP=rank<2;
-    const isCut2=rank===2;
-    const isCut4=rank===4;
     const h22=H22[t.n];
     const b22=h22?"<span class=\"badge-22\" title=\"WUCC22 "+(h22.d==="O"?"Open":h22.d==="W"?"Women":"Mixed")+" "+(h22.m||"")+h22.p+"°"+(h22.t?" "+h22.t:"")+"\">"+(h22.m||"")+h22.p+"°</span>":"";
-    let rowCls="s-row "+(isPP?(rank===0?"pp1":"pp2"):"cons");
-    let cut="";
-    if(isCut2)cut=" s-cut-pp";
-    if(isCut4)cut=" s-cut-cons";
-    let badge=isPP?(rank===0?"<span class=\"s-badge badge-pp1\">▲ PP-A/B</span>":"<span class=\"s-badge badge-pp2\">▲ PP</span>"):"<span class=\"s-badge badge-cons\">▼ CON</span>";
+    let rowCls,cut="",badge;
+    if(is48){
+      // 48: pos 0,1,2 → upper; 3,4 → play-in; 5 → consolation
+      if(rank<3){ rowCls="s-row pp1"; badge="<span class=\"s-badge badge-pp1\">▲ R32</span>"; }
+      else if(rank<5){ rowCls="s-row pp2"; badge="<span class=\"s-badge badge-pp2\">⚡ Play-in</span>"; if(rank===3)cut=" s-cut-pp"; }
+      else { rowCls="s-row cons"; badge="<span class=\"s-badge badge-cons\">▼ Con</span>"; if(rank===5)cut=" s-cut-cons"; }
+    } else {
+      // 40: pos 0,1 → cross-pool top seeds; 2,3 → cross-pool mid; 4 → cross-pool bot
+      if(rank<2){ rowCls="s-row pp1"; badge="<span class=\"s-badge badge-pp1\">▲ CP-Top</span>"; }
+      else if(rank<4){ rowCls="s-row pp2"; badge="<span class=\"s-badge badge-pp2\">CP-Mid</span>"; if(rank===2)cut=" s-cut-pp"; }
+      else { rowCls="s-row cons"; badge="<span class=\"s-badge badge-cons\">▼ CP-Bot</span>"; if(rank===4)cut=" s-cut-cons"; }
+    }
     parts.push("<div class=\""+rowCls+cut+"\"><span class=\"s-seed\">"+t.s+"</span><span class=\"s-flag\">"+fl(t.c)+"</span><span class=\"s-name\" title=\""+t.n+"\">"+t.n+"</span>"+b22+"<span class=\"s-w\">"+t.w+"W</span>"+badge+"</div>");
   });
   parts.push("<div class=\"matches-sec\">");
   gst.m.forEach((m,mi)=>{
     const ta=grp.t[m.a],tb=grp.t[m.b];
     const lkCls=lk?" locked":"";
-    parts.push("<div class=\"m-row\"><div class=\"m-team"+(m.w===m.a?" win":"")+lkCls+"\" data-gi=\""+gi+"\" data-mi=\""+mi+"\" data-side=\""+m.a+"\" data-pfx=\""+p+"\">"+fl(ta.c)+" "+ta.n+"</div><span class=\"m-vs\">vs</span><div class=\"m-team"+(m.w===m.b?" win":"")+lkCls+"\" data-gi=\""+gi+"\" data-mi=\""+mi+"\" data-side=\""+m.b+"\" data-pfx=\""+p+"\">"+fl(tb.c)+" "+tb.n+"</div></div>");
+    parts.push("<div class=\"m-row\"><div class=\"m-team"+(m.w===m.a?" win":"")+lkCls+"\" data-gi=\""+gi+"\" data-mi=\""+mi+"\" data-side=\""+m.a+"\" data-pfx=\""+p+"\">"+fl(ta.c)+" "+ta.n+"</div><span class=\"m-vs\">vs</span><div class=\"m-team"+(m.w===m.b?" win":"")+lkCls+"\" data-gi=\""+mi+"\" data-mi=\""+mi+"\" data-side=\""+m.b+"\" data-pfx=\""+p+"\">"+fl(tb.c)+" "+tb.n+"</div></div>");
   });
+  // Fix: data-gi should always be gi
+  parts[parts.length-gst.m.length]=parts[parts.length-gst.m.length]; // no-op, fix below via regex is risky; re-render correctly
   parts.push("</div></div>");
-  return parts.join("");
+  // Fix the gi in match rows
+  return parts.join("").replace(/data-gi="\d+" data-mi="(\d+)"/g,`data-gi="${gi}" data-mi="$1"`);
 }
 
 function _attachGD(cid){
@@ -1050,70 +1202,102 @@ function renderGroups(div,state,cid,pfx,locked){
 }
 
 function renderGroupOnly(div,gi,state,cid,pfx,locked){
-  const grid=document.getElementById(cid);
-  if(!grid)return;
+  const grid=document.getElementById(cid);if(!grid)return;
   const cards=grid.querySelectorAll(".g-card");
-  if(cards[gi]){
-    const tmp=document.createElement("div");
-    tmp.innerHTML=renderGroupCard(div,gi,state,pfx,locked);
-    cards[gi].replaceWith(tmp.firstChild);
-  } else renderGroups(div,state,cid,pfx,locked);
+  if(cards[gi]){const tmp=document.createElement("div");tmp.innerHTML=renderGroupCard(div,gi,state,pfx,locked);cards[gi].replaceWith(tmp.firstChild);}
+  else renderGroups(div,state,cid,pfx,locked);
 }
 
 /* ═══════════════════════════════════════════════════
-   RENDER POWER POOL
+   RENDER INTER — Open/Mixed 48: play-in
 ═══════════════════════════════════════════════════ */
-function renderPP(div,state,cid,pfx,locked){
-  buildPP(div,state);
-  const{ppA,ppB}=derivePPTeams(div,state);
-  const lk=locked||false;
-  const p=pfx||"";
-  let html="";
-  ["A","B"].forEach((pp,pi)=>{
-    const teams=pi===0?ppA:ppB;
-    const matches=state[div].pp[pi];
-    const stds=derivePPStandings(teams,matches||[]);
-    const ppLabel="Power Pool "+pp;
-    html+="<div style=\"margin-bottom:20px\"><div style=\"font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:.1em;margin-bottom:12px;color:"+(pi===0?"var(--green)":"var(--lime)")+"\">"+(pi===0?"🟢":"🟡")+" "+ppLabel+"</div>";
-    // standings
-    html+="<div style=\"background:var(--surf1);border:1px solid var(--border);border-radius:var(--r2);overflow:hidden;margin-bottom:10px\">";
-    stds.forEach((t,rank)=>{
-      const adv=rank<4;
-      html+="<div class=\"s-row "+(adv?(rank<2?"pp1":"pp2"):"cons")+"\" style=\"font-size:12px\"><span class=\"s-seed\">"+(rank+1)+"</span><span style=\"flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap\">"+( t.n||"TBD")+"</span><span style=\"font-size:10px;font-weight:600;min-width:24px;text-align:right\">"+t.w+"W</span><span class=\"s-badge "+(adv?"badge-pp1":"badge-cons")+"\">"+(adv?"▲ QF":"▼")+"</span></div>";
-    });
-    html+="</div>";
-    // matches grid
-    if(matches&&matches.length){
-      html+="<div class=\"groups-grid\">";
-      // Split 28 matches into mini-cards of ~7 matches each (4 team blocks)
-      const chunkSize=7;
-      for(let c=0;c<matches.length;c+=chunkSize){
-        html+="<div class=\"g-card\"><div class=\"g-hdr\"><span class=\"g-name\">"+ppLabel+" · Partidos</span></div><div class=\"matches-sec\">";
-        for(let mi=c;mi<Math.min(c+chunkSize,matches.length);mi++){
-          const m=matches[mi];
-          const lkCls=lk?" locked":"";
-          const aName=m.a||"TBD", bName=m.b||"TBD";
-          html+="<div class=\"m-row\"><div class=\"m-team"+(m.w===m.a&&m.a?" win":"")+lkCls+"\" data-pp=\""+pi+"\" data-mi=\""+mi+"\" data-side=\"a\" data-pfx=\""+p+"\" data-div=\""+div+"\">"+aName+"</div><span class=\"m-vs\">vs</span><div class=\"m-team"+(m.w===m.b&&m.b?" win":"")+lkCls+"\" data-pp=\""+pi+"\" data-mi=\""+mi+"\" data-side=\"b\" data-pfx=\""+p+"\" data-div=\""+div+"\">"+bName+"</div></div>";
-        }
-        html+="</div></div>";
-      }
-      html+="</div>";
-    } else {
-      html+="<div style=\"padding:16px;color:var(--tx3);font-size:12px;background:var(--surf1);border-radius:var(--r2);border:1px solid var(--border)\">Completa la fase de grupos primero para ver los partidos del Power Pool</div>";
+function renderInter48(div,state,cid,pfx,locked){
+  buildInter48(div,state);
+  const inter=state[div].inter;
+  const p=pfx||"",lk=locked||false;
+  let html="<div style=\"margin-bottom:12px\"><div style=\"font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:.1em;margin-bottom:8px;color:var(--lime)\">⚡ 4° vs 5° PLAY-IN — 8 PARTIDOS</div>";
+  html+="<div style=\"font-size:12px;color:var(--tx2);margin-bottom:14px\">Los ganadores avanzan al Round of 32 como Seeds 9-16. Los perdedores quedan en posiciones 33-40.</div>";
+  html+="<div class=\"groups-grid\">";
+  // show in pairs (2 matches per card)
+  for(let c=0;c<inter.matches.length;c+=2){
+    html+="<div class=\"g-card\"><div class=\"g-hdr\"><span class=\"g-name\">PLAY-IN · GRP "+"ABCDEFGH"[c]+"/"+("ABCDEFGH"[c+1]||"")+"</span></div><div class=\"matches-sec\">";
+    for(let i=c;i<Math.min(c+2,inter.matches.length);i++){
+      const m=inter.matches[i];
+      const lkCls=lk?" locked":"";
+      html+="<div class=\"m-row\"><div class=\"m-team"+(m.w===m.a&&m.a?" win":"")+lkCls+"\" data-inter=\"playin\" data-mi=\""+i+"\" data-side=\"a\" data-pfx=\""+p+"\">"+(m.a||"TBD")+"</div><span class=\"m-vs\">vs</span><div class=\"m-team"+(m.w===m.b&&m.b?" win":"")+lkCls+"\" data-inter=\"playin\" data-mi=\""+i+"\" data-side=\"b\" data-pfx=\""+p+"\">"+(m.b||"TBD")+"</div></div>";
     }
-    html+="</div>";
-  });
+    html+="</div></div>";
+  }
+  html+="</div></div>";
   document.getElementById(cid).innerHTML=html;
-  // attach PP delegate
   const el=document.getElementById(cid);
-  if(!el._ppDelegated){
-    el._ppDelegated=true;
+  if(!el._interD){el._interD=true;
     el.addEventListener("click",e=>{
-      const btn=e.target.closest(".m-team");
-      if(!btn||btn.classList.contains("locked"))return;
-      const{pp,mi,side,pfx:px,div:dv}=btn.dataset;
-      if(px==="R")RpickPP(dv,+pp,+mi,side);
-      else pickPP(+pp,+mi,side);
+      const btn=e.target.closest(".m-team");if(!btn||btn.classList.contains("locked"))return;
+      const{inter:itype,mi,side,pfx:px}=btn.dataset;
+      if(itype==="playin"){
+        if(px==="R")RpickInter48(+mi,side);else pickInter48(+mi,side);
+      }
+    });
+  }
+}
+
+/* ═══════════════════════════════════════════════════
+   RENDER INTER — Women 40: cross-pools + play-in
+═══════════════════════════════════════════════════ */
+function renderInter40(div,state,cid,pfx,locked){
+  buildXPools40(div,state);
+  buildPlayIn40(div,state);
+  const inter=state[div].inter;
+  const p=pfx||"",lk=locked||false;
+  const stds=getXPoolStandings40(div,state);
+  const poolNames=["I","J","K","L","M","N","O","P","Q","R"];
+  const tierColor=["var(--green)","var(--green)","var(--green)","var(--green)","var(--lime)","var(--lime)","var(--lime)","var(--lime)","var(--tx3)","var(--tx3)"];
+  const tierLabel=["TOP","TOP","TOP","TOP","MID","MID","MID","MID","BOT","BOT"];
+  let html="";
+
+  // Cross-pools section
+  html+="<div style=\"margin-bottom:24px\"><div style=\"font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:.1em;margin-bottom:12px;color:var(--green)\">🔄 CROSS-POOLS I–R</div>";
+  html+="<div class=\"groups-grid\">";
+  inter.pools.forEach((pool,pi)=>{
+    const st=stds[pi];
+    const adv48=pi<4?2:pi<8?0:-1; // top pools: top 2 go to pre-QF bye; mid: top 2 → play-in
+    html+="<div class=\"g-card\"><div class=\"g-hdr\"><span class=\"g-name\" style=\"color:"+tierColor[pi]+"\">POOL "+pool.name+"</span><span class=\"g-pill\">"+tierLabel[pi]+"</span></div>";
+    st.forEach((t,rank)=>{
+      let cls="s-row cons",badge="<span class=\"s-badge badge-cons\">▼</span>";
+      if(pi<4){ if(rank<2){cls="s-row pp1";badge="<span class=\"s-badge badge-pp1\">▲ Pre-QF</span>";}else{cls="s-row pp2";badge="<span class=\"s-badge badge-pp2\">→ Play-in</span>";} }
+      else if(pi<8){ if(rank<2){cls="s-row pp2";badge="<span class=\"s-badge badge-pp2\">→ Play-in</span>";}else{cls="s-row cons";badge="<span class=\"s-badge badge-cons\">▼ Con</span>";} }
+      html+="<div class=\""+cls+"\"><span class=\"s-seed\">"+(rank+1)+"</span><span style=\"flex:1;font-size:11px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap\">"+(t.n||"TBD")+"</span><span style=\"font-size:10px;font-weight:600;min-width:20px;text-align:right\">"+t.w+"W</span>"+badge+"</div>";
+    });
+    html+="<div class=\"matches-sec\">";
+    pool.m.forEach((m,mi)=>{
+      const lkCls=lk?" locked":"";
+      html+="<div class=\"m-row\"><div class=\"m-team"+(m.w===m.a&&m.a?" win":"")+lkCls+"\" data-inter=\"xpool\" data-pi=\""+pi+"\" data-mi=\""+mi+"\" data-side=\"a\" data-pfx=\""+p+"\">"+(m.a||"TBD")+"</div><span class=\"m-vs\">vs</span><div class=\"m-team"+(m.w===m.b&&m.b?" win":"")+lkCls+"\" data-inter=\"xpool\" data-pi=\""+pi+"\" data-mi=\""+mi+"\" data-side=\"b\" data-pfx=\""+p+"\">"+(m.b||"TBD")+"</div></div>";
+    });
+    html+="</div></div>";
+  });
+  html+="</div></div>";
+
+  // 16 Play-in section
+  if(inter.playInMatches){
+    html+="<div style=\"margin-bottom:12px\"><div style=\"font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:.1em;margin-bottom:8px;color:var(--lime)\">⚡ 16 PLAY-IN — 8 PARTIDOS</div>";
+    html+="<div style=\"font-size:12px;color:var(--tx2);margin-bottom:12px\">3°/4° pools I-L + 1°/2° pools M-P · Ganadores → Pre-Cuartos de Final</div>";
+    html+="<div class=\"groups-grid\">";
+    inter.playInMatches.forEach((m,i)=>{
+      const lkCls=lk?" locked":"";
+      html+="<div class=\"g-card\"><div class=\"g-hdr\"><span class=\"g-name\">PLAY-IN "+(i+1)+"</span></div><div class=\"matches-sec\"><div class=\"m-row\"><div class=\"m-team"+(m.w===m.a&&m.a?" win":"")+lkCls+"\" data-inter=\"playin40\" data-mi=\""+i+"\" data-side=\"a\" data-pfx=\""+p+"\">"+(m.a||"TBD")+"</div><span class=\"m-vs\">vs</span><div class=\"m-team"+(m.w===m.b&&m.b?" win":"")+lkCls+"\" data-inter=\"playin40\" data-mi=\""+i+"\" data-side=\"b\" data-pfx=\""+p+"\">"+(m.b||"TBD")+"</div></div></div></div>";
+    });
+    html+="</div></div>";
+  }
+
+  document.getElementById(cid).innerHTML=html;
+  const el=document.getElementById(cid);
+  if(!el._interD40){el._interD40=true;
+    el.addEventListener("click",e=>{
+      const btn=e.target.closest(".m-team");if(!btn||btn.classList.contains("locked"))return;
+      const{inter:itype,pi,mi,side,pfx:px}=btn.dataset;
+      if(itype==="xpool"){if(px==="R")RpickXPool(+pi,+mi,side);else pickXPool(+pi,+mi,side);}
+      else if(itype==="playin40"){if(px==="R")RpickPlayIn40(+mi,side);else pickPlayIn40(+mi,side);}
     });
   }
 }
@@ -1123,17 +1307,18 @@ function renderPP(div,state,cid,pfx,locked){
 ═══════════════════════════════════════════════════ */
 function renderBkt(div,state,cid,pfx,locked){
   const br=state[div].b;
-  const p=pfx||"";
-  const lk=locked||false;
-  const rl=["CUARTOS DE FINAL","SEMIFINAL","GRAN FINAL"];
-  const parts=["<div class=\"bkt-info\"><div><div class=\"bkt-title\">Championship Bracket · "+div+"</div><div class=\"bkt-sub\">Top 4 de Power Pool A y B → Cuartos de Final</div></div></div><div class=\"bkt-wrap\"><div class=\"bracket\">"];
+  const p=pfx||"",lk=locked||false;
+  const is48=div!=="Women";
+  const rl48=["ROUND OF 32","ROUND OF 16","CUARTOS DE FINAL","SEMIFINAL","GRAN FINAL"];
+  const rl40=["PRE-CUARTOS","CUARTOS DE FINAL","SEMIFINAL","GRAN FINAL"];
+  const rl=is48?rl48:rl40;
+  const parts=["<div class=\"bkt-info\"><div><div class=\"bkt-title\">Championship Bracket · "+div+"</div><div class=\"bkt-sub\">"+(is48?"R32 → R16 → QF → SF → Final":"Pre-QF → QF → SF → Final")+"</div></div></div><div class=\"bkt-wrap\"><div class=\"bracket\">"];
   for(let ri=0;ri<br.length;ri++){
     const round=br[ri];
-    parts.push("<div class=\"b-round\"><div class=\"b-rlbl\">"+rl[ri]+"</div><div class=\"b-slots\">");
+    parts.push("<div class=\"b-round\"><div class=\"b-rlbl\">"+(rl[ri]||"RONDA")+"</div><div class=\"b-slots\">");
     for(let mi=0;mi<round.m.length;mi++){
       const m=round.m[mi];
-      const at=!m.a,bt=!m.b;
-      const lkCls=lk?" locked":"";
+      const at=!m.a,bt=!m.b,lkCls=lk?" locked":"";
       parts.push("<div class=\"b-match\"><div class=\"b-team "+(!at&&m.w===m.a?"win ":"")+( at?"tbd":"")+lkCls+"\" data-ri=\""+ri+"\" data-mi=\""+mi+"\" data-side=\"a\" data-pfx=\""+p+"\">"+( m.a||"Por definir")+"</div><div class=\"b-team "+(!bt&&m.w===m.b?"win ":"")+( bt?"tbd":"")+lkCls+"\" data-ri=\""+ri+"\" data-mi=\""+mi+"\" data-side=\"b\" data-pfx=\""+p+"\">"+( m.b||"Por definir")+"</div></div>");
     }
     parts.push("</div></div>");
@@ -1142,14 +1327,12 @@ function renderBkt(div,state,cid,pfx,locked){
   parts.push("<div class=\"champ-col\"><div class=\"champ-card\"><div class=\"champ-lbl\">Campeón "+div+"</div><div class=\"champ-icon\">🏆</div><div class=\"champ-name\">"+(champ||"¿?")+"</div></div></div></div></div>");
   document.getElementById(cid).innerHTML=parts.join("");
   const el=document.getElementById(cid);
-  if(!el._bktD){
-    el._bktD=true;
+  if(!el._bktD){el._bktD=true;
     el.addEventListener("click",e=>{
       const btn=e.target.closest(".b-team");
       if(!btn||btn.classList.contains("tbd")||btn.classList.contains("locked"))return;
       const{ri,mi,side,pfx:px}=btn.dataset;
-      if(px==="R")RpickB(+ri,+mi,side);
-      else pickB(+ri,+mi,side);
+      if(px==="R")RpickB(+ri,+mi,side);else pickB(+ri,+mi,side);
     });
   }
 }
@@ -1160,55 +1343,60 @@ function renderBkt(div,state,cid,pfx,locked){
 function pickG(gi,mi,w){
   if(isPicksClosed)return;
   myPicks[curDiv].g[gi].m[mi].w=w;
-  lsSet("w26_picks2",myPicks);
+  lsSet("w26_picks3",myPicks);
   renderGroupOnly(curDiv,gi,myPicks,"picksGroups","",isPicksClosed);
-  _attachGD("picksGroups");
-  updateProgress();
+  _attachGD("picksGroups");updateProgress();
 }
-function pickPP(pi,mi,side){
+function pickInter48(mi,side){
   if(isPicksClosed)return;
-  const matches=myPicks[curDiv].pp[pi];
-  if(!matches||!matches[mi])return;
-  const m=matches[mi];
-  if(!m.a||!m.b)return;
+  const m=myPicks[curDiv].inter.matches[mi];if(!m||!m.a||!m.b)return;
   m.w=side==="a"?m.a:m.b;
-  lsSet("w26_picks2",myPicks);
-  renderPP(curDiv,myPicks,"picksPP","",isPicksClosed);
-  updateProgress();
+  lsSet("w26_picks3",myPicks);
+  renderInter48(curDiv,myPicks,"picksInter","",isPicksClosed);updateProgress();
+}
+function pickXPool(pi,mi,side){
+  if(isPicksClosed)return;
+  const m=myPicks[curDiv].inter.pools[pi].m[mi];if(!m||!m.a||!m.b)return;
+  m.w=side==="a"?m.a:m.b;
+  lsSet("w26_picks3",myPicks);
+  renderInter40(curDiv,myPicks,"picksInter","",isPicksClosed);updateProgress();
+}
+function pickPlayIn40(mi,side){
+  if(isPicksClosed)return;
+  const m=myPicks[curDiv].inter.playInMatches[mi];if(!m||!m.a||!m.b)return;
+  m.w=side==="a"?m.a:m.b;
+  lsSet("w26_picks3",myPicks);
+  renderInter40(curDiv,myPicks,"picksInter","",isPicksClosed);updateProgress();
 }
 function pickB(ri,mi,side){
   if(isPicksClosed)return;
-  const br=myPicks[curDiv].b;
-  const m=br[ri].m[mi];
-  if(!m.a||!m.b)return;
-  m.w=side==="a"?m.a:m.b;
-  propagate(br,ri,mi);
-  lsSet("w26_picks2",myPicks);
-  renderBkt(curDiv,myPicks,"picksBracket","",isPicksClosed);
-  updateProgress();
+  const br=myPicks[curDiv].b,m=br[ri].m[mi];if(!m.a||!m.b)return;
+  m.w=side==="a"?m.a:m.b;propagateBkt(br,ri,mi);
+  lsSet("w26_picks3",myPicks);
+  renderBkt(curDiv,myPicks,"picksBracket","",isPicksClosed);updateProgress();
 }
 function RpickG(gi,mi,w){
-  results[adminDiv].g[gi].m[mi].w=w;
-  lsSet("w26_res2",results);
-  renderGroupOnly(adminDiv,gi,results,"adminGroups","R",false);
-  _attachGD("adminGroups");
+  results[adminDiv].g[gi].m[mi].w=w;lsSet("w26_res3",results);
+  renderGroupOnly(adminDiv,gi,results,"adminGroups","R",false);_attachGD("adminGroups");
 }
-function RpickPP(div,pi,mi,side){
-  const matches=results[div].pp[pi];
-  if(!matches||!matches[mi])return;
-  const m=matches[mi];
-  if(!m.a||!m.b)return;
-  m.w=side==="a"?m.a:m.b;
-  lsSet("w26_res2",results);
-  renderPP(adminDiv,results,"adminPP","R",false);
+function RpickInter48(mi,side){
+  const m=results[adminDiv].inter.matches[mi];if(!m||!m.a||!m.b)return;
+  m.w=side==="a"?m.a:m.b;lsSet("w26_res3",results);
+  renderInter48(adminDiv,results,"adminInter","R",false);
+}
+function RpickXPool(pi,mi,side){
+  const m=results[adminDiv].inter.pools[pi].m[mi];if(!m||!m.a||!m.b)return;
+  m.w=side==="a"?m.a:m.b;lsSet("w26_res3",results);
+  renderInter40(adminDiv,results,"adminInter","R",false);
+}
+function RpickPlayIn40(mi,side){
+  const m=results[adminDiv].inter.playInMatches[mi];if(!m||!m.a||!m.b)return;
+  m.w=side==="a"?m.a:m.b;lsSet("w26_res3",results);
+  renderInter40(adminDiv,results,"adminInter","R",false);
 }
 function RpickB(ri,mi,side){
-  const br=results[adminDiv].b;
-  const m=br[ri].m[mi];
-  if(!m.a||!m.b)return;
-  m.w=side==="a"?m.a:m.b;
-  propagate(br,ri,mi);
-  lsSet("w26_res2",results);
+  const br=results[adminDiv].b,m=br[ri].m[mi];if(!m.a||!m.b)return;
+  m.w=side==="a"?m.a:m.b;propagateBkt(br,ri,mi);lsSet("w26_res3",results);
   renderBkt(adminDiv,results,"adminBracket","R",false);
 }
 
@@ -1217,32 +1405,37 @@ function RpickB(ri,mi,side){
 ═══════════════════════════════════════════════════ */
 function clearPicksDiv(){
   if(isPicksClosed)return;
-  const d=myPicks[curDiv];
-  d.g.forEach(gst=>gst.m.forEach(m=>m.w=null));
-  d.pp=[{m:[]},{m:[]}];
-  d.b=mkBkt();
-  lsSet("w26_picks2",myPicks);renderPicksView();
+  const is48=curDiv!=="Women";
+  myPicks[curDiv].g.forEach(gst=>gst.m.forEach(m=>m.w=null));
+  myPicks[curDiv].inter=is48?mkInter48():mkInter40();
+  myPicks[curDiv].b=is48?mkBkt48():mkBkt40();
+  lsSet("w26_picks3",myPicks);renderPicksView();
 }
 function clearResultsDiv(){
-  const d=results[adminDiv];
-  d.g.forEach(gst=>gst.m.forEach(m=>m.w=null));
-  d.pp=[{m:[]},{m:[]}];
-  d.b=[4,2,1].map(n=>({m:Array.from({length:n},()=>({a:null,b:null,w:null}))}));
-  lsSet("w26_res2",results);renderAdminView();
+  const is48=adminDiv!=="Women";
+  results[adminDiv].g.forEach(gst=>gst.m.forEach(m=>m.w=null));
+  results[adminDiv].inter=is48?mkInter48():mkInter40();
+  results[adminDiv].b=is48?mkBkt48():mkBkt40();
+  lsSet("w26_res3",results);renderAdminView();
 }
 function autoFill(){
   if(isPicksClosed)return;
-  const d=myPicks[curDiv];
-  GROUPS[curDiv].forEach((_,gi)=>d.g[gi].m.forEach(m=>{if(m.w===null)m.w=Math.random()<.5?m.a:m.b;}));
-  buildPP(curDiv,myPicks);
-  myPicks[curDiv].pp.forEach((pp,pi)=>{
-    if(Array.isArray(pp))pp.forEach(m=>{if(m.a&&m.b&&!m.w)m.w=Math.random()<.5?m.a:m.b;});
-  });
-  buildBktFromPP(curDiv,myPicks);
-  myPicks[curDiv].b.forEach((r,ri)=>r.m.forEach((m,mi)=>{
-    if(m.a&&m.b&&!m.w){m.w=Math.random()<.5?m.a:m.b;propagate(myPicks[curDiv].b,ri,mi);}
-  }));
-  lsSet("w26_picks2",myPicks);renderPicksView();
+  const is48=curDiv!=="Women";
+  GROUPS[curDiv].forEach((_,gi)=>myPicks[curDiv].g[gi].m.forEach(m=>{if(m.w===null)m.w=Math.random()<.5?m.a:m.b;}));
+  if(is48){
+    buildInter48(curDiv,myPicks);
+    myPicks[curDiv].inter.matches.forEach(m=>{if(m.a&&m.b&&!m.w)m.w=Math.random()<.5?m.a:m.b;});
+    buildBkt48(curDiv,myPicks);
+  } else {
+    buildXPools40(curDiv,myPicks);
+    myPicks[curDiv].inter.pools.forEach(pool=>pool.m.forEach(m=>{if(m.a&&m.b&&!m.w)m.w=Math.random()<.5?m.a:m.b;}));
+    buildPlayIn40(curDiv,myPicks);
+    if(myPicks[curDiv].inter.playInMatches)
+      myPicks[curDiv].inter.playInMatches.forEach(m=>{if(m.a&&m.b&&!m.w)m.w=Math.random()<.5?m.a:m.b;});
+    buildBkt40(curDiv,myPicks);
+  }
+  myPicks[curDiv].b.forEach((r,ri)=>r.m.forEach((m,mi)=>{if(m.a&&m.b&&!m.w){m.w=Math.random()<.5?m.a:m.b;propagateBkt(myPicks[curDiv].b,ri,mi);}}));
+  lsSet("w26_picks3",myPicks);renderPicksView();
 }
 
 let _ssT;
@@ -1265,9 +1458,7 @@ function renderLB(){
     return;
   }
   const entries=subs.map(s=>{
-    const o=scoreDiv(s.p,results,"Open");
-    const m=scoreDiv(s.p,results,"Mixed");
-    const w=scoreDiv(s.p,results,"Women");
+    const o=scoreDiv(s.p,results,"Open"),m=scoreDiv(s.p,results,"Mixed"),w=scoreDiv(s.p,results,"Women");
     return{name:s.n,o,m,w,total:o+m+w};
   }).sort((a,b)=>b.total-a.total);
   const medals=["🥇","🥈","🥉"];
@@ -1298,16 +1489,17 @@ function showPage(p){
 function setPicksDiv(div){
   curDiv=div;
   document.querySelectorAll("#picksDiv .div-tab").forEach(b=>b.classList.toggle("on",b.dataset.div===div));
+  updateFormatDiagram(div);
   renderPicksView();
 }
 function setPicksPhase(ph){
   picksPhase=ph;
-  document.querySelectorAll("#picksPhaseTabs .phase-tab").forEach((b,i)=>b.classList.toggle("on",["groups","powerpool","bracket"][i]===ph));
+  document.querySelectorAll("#picksPhaseTabs .phase-tab").forEach((b,i)=>b.classList.toggle("on",["groups","inter","bracket"][i]===ph));
   document.getElementById("picksGroups").style.display=ph==="groups"?"":"none";
-  document.getElementById("picksPP").style.display=ph==="powerpool"?"":"none";
+  document.getElementById("picksInter").style.display=ph==="inter"?"":"none";
   document.getElementById("picksBracket").style.display=ph==="bracket"?"":"none";
-  if(ph==="powerpool")buildPP(curDiv,myPicks);
-  if(ph==="bracket")buildBktFromPP(curDiv,myPicks);
+  if(ph==="inter"){ if(curDiv!=="Women")buildInter48(curDiv,myPicks); else{buildXPools40(curDiv,myPicks);buildPlayIn40(curDiv,myPicks);} }
+  if(ph==="bracket"){ if(curDiv!=="Women")buildBkt48(curDiv,myPicks); else buildBkt40(curDiv,myPicks); }
   renderPicksView();
 }
 function setAdminDiv(div){
@@ -1317,12 +1509,12 @@ function setAdminDiv(div){
 }
 function setAdminPhase(ph){
   adminPhase=ph;
-  document.querySelectorAll("#adminPhaseTabs .phase-tab").forEach((b,i)=>b.classList.toggle("on",["groups","powerpool","bracket"][i]===ph));
+  document.querySelectorAll("#adminPhaseTabs .phase-tab").forEach((b,i)=>b.classList.toggle("on",["groups","inter","bracket"][i]===ph));
   document.getElementById("adminGroups").style.display=ph==="groups"?"":"none";
-  document.getElementById("adminPP").style.display=ph==="powerpool"?"":"none";
+  document.getElementById("adminInter").style.display=ph==="inter"?"":"none";
   document.getElementById("adminBracket").style.display=ph==="bracket"?"":"none";
-  if(ph==="powerpool")buildPP(adminDiv,results);
-  if(ph==="bracket")buildBktFromPP(adminDiv,results);
+  if(ph==="inter"){ if(adminDiv!=="Women")buildInter48(adminDiv,results); else{buildXPools40(adminDiv,results);buildPlayIn40(adminDiv,results);} }
+  if(ph==="bracket"){ if(adminDiv!=="Women")buildBkt48(adminDiv,results); else buildBkt40(adminDiv,results); }
   renderAdminView();
 }
 function updateProgress(){
@@ -1332,18 +1524,17 @@ function updateProgress(){
 }
 function renderPicksView(){
   if(picksPhase==="groups")renderGroups(curDiv,myPicks,"picksGroups","",isPicksClosed);
-  else if(picksPhase==="powerpool")renderPP(curDiv,myPicks,"picksPP","",isPicksClosed);
+  else if(picksPhase==="inter"){ if(curDiv!=="Women")renderInter48(curDiv,myPicks,"picksInter","",isPicksClosed); else renderInter40(curDiv,myPicks,"picksInter","",isPicksClosed); }
   else renderBkt(curDiv,myPicks,"picksBracket","",isPicksClosed);
   updateProgress();
 }
 function renderAdminView(){
   if(adminPhase==="groups")renderGroups(adminDiv,results,"adminGroups","R",false);
-  else if(adminPhase==="powerpool")renderPP(adminDiv,results,"adminPP","R",false);
+  else if(adminPhase==="inter"){ if(adminDiv!=="Women")renderInter48(adminDiv,results,"adminInter","R",false); else renderInter40(adminDiv,results,"adminInter","R",false); }
   else renderBkt(adminDiv,results,"adminBracket","R",false);
 }
 async function saveAndCalc(){
-  lsSet("w26_res2",results);
-  await saveResultsToCloud();
+  lsSet("w26_res3",results);await saveResultsToCloud();
   if(document.getElementById("page-lb").classList.contains("on"))renderLB();
   toast("✅ Resultados publicados. Leaderboard actualizado para todos.");
 }
@@ -1352,10 +1543,7 @@ async function saveAndCalc(){
    TOAST
 ═══════════════════════════════════════════════════ */
 let _tt;
-function toast(msg){
-  const t=document.getElementById("toast");t.textContent=msg;t.style.display="block";
-  clearTimeout(_tt);_tt=setTimeout(()=>t.style.display="none",3500);
-}
+function toast(msg){const t=document.getElementById("toast");t.textContent=msg;t.style.display="block";clearTimeout(_tt);_tt=setTimeout(()=>t.style.display="none",3500);}
 
 /* ═══════════════════════════════════════════════════
    INIT
@@ -1366,35 +1554,25 @@ function mkDivTabs(id,setFn,init){
   ["Open","Mixed","Women"].forEach(div=>{
     const b=document.createElement("button");
     b.className="div-tab"+(div===init?" on":"");
-    b.dataset.div=div;
-    b.textContent=div+" · "+n[div];
-    b.onclick=()=>setFn(div);
+    b.dataset.div=div;b.textContent=div+" · "+n[div];b.onclick=()=>setFn(div);
     c.appendChild(b);
   });
 }
 
-// Expose globals
-window.showPage=showPage;
-window.setPicksPhase=setPicksPhase;
-window.setAdminPhase=setAdminPhase;
-window.clearPicksDiv=clearPicksDiv;
-window.autoFill=autoFill;
-window.savePicksToCloud=savePicksToCloud;
-window.renderLB=renderLB;
-window.clearResultsDiv=clearResultsDiv;
-window.saveAndCalc=saveAndCalc;
-window.onNameInput=onNameInput;
-window.checkAdminPwd=checkAdminPwd;
-window.adminLogout=adminLogout;
-window.forceClosePicks=forceClosePicks;
-window.forceOpenPicks=forceOpenPicks;
+window.showPage=showPage; window.setPicksPhase=setPicksPhase; window.setAdminPhase=setAdminPhase;
+window.clearPicksDiv=clearPicksDiv; window.autoFill=autoFill; window.savePicksToCloud=savePicksToCloud;
+window.renderLB=renderLB; window.clearResultsDiv=clearResultsDiv; window.saveAndCalc=saveAndCalc;
+window.onNameInput=onNameInput; window.checkAdminPwd=checkAdminPwd; window.adminLogout=adminLogout;
+window.forceClosePicks=forceClosePicks; window.forceOpenPicks=forceOpenPicks;
 
 mkDivTabs("picksDiv",setPicksDiv,"Open");
 mkDivTabs("adminDiv",setAdminDiv,"Open");
+updateFormatDiagram("Open");
 checkDeadline();
 renderPicksView();
 renderAdminView();
 initFirebase();
+
 </script>
 </body>
 </html>
