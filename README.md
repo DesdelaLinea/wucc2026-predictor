@@ -10,7 +10,7 @@ Una app de pronósticos en tiempo real para el WUCC 2026 con leaderboard en vivo
 
 ## 🌐 Live App / App en Vivo
 
-👉 **[desdelalinea.github.io/wucc2026](https://desdelalinea.github.io/wucc2026)**
+👉 **[desdelalinea.github.io/wucc2026-predictor](https://desdelalinea.github.io/wucc2026-predictor)**
 
 ---
 
