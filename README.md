@@ -114,21 +114,6 @@ Picks auto-close on **August 15, 2026 at 9:00 AM Ireland time (UTC+1)** — when
 
 ---
 
-## 🛠️ Setup para desarrolladores / Developer Setup
-
-Ver **[SETUP.md](SETUP.md)** para instrucciones completas.
-
-### Resumen rápido / Quick summary
-
-1. Crea un proyecto en [Firebase](https://console.firebase.google.com)
-2. Abre `index.html` y busca `REEMPLAZA_CON_TU_API_KEY`
-3. Pega tus 6 credenciales de Firebase
-4. Cambia la contraseña admin (ver SETUP.md)
-5. Sube a GitHub → activa GitHub Pages
-6. ¡Listo! Los usuarios no necesitan configurar nada
-
----
-
 ## 📁 Estructura del repositorio / Repo structure
 
 ```
