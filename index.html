@@ -754,25 +754,23 @@ body[data-div="Women"] .prog-fill{background:linear-gradient(90deg,#bf3060,var(-
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
 import { getFirestore, doc, setDoc, getDoc, onSnapshot, collection } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 
-// ── HARDCODED CONFIG — users never see this ──
-// Replace these values with your Firebase project credentials
-const FIREBASE_CONFIG = {
-  apiKey:            "AIzaSyAPhggKAQxklGDmarci0Ij3tlm84RKG5Po",
-  authDomain:        "wucc2026-pronostico.firebaseapp.com",
-  projectId:         "wucc2026-pronostico",
-  storageBucket:     "wucc2026-pronostico.firebasestorage.app",
+// ═══════════════════════════════════════════════════
+// ADMIN: reemplaza estos valores con tu Firebase config
+// Ve a: console.firebase.google.com → tu proyecto →
+// ⚙️ Configuración → Tus apps → </> → firebaseConfig
+// ═══════════════════════════════════════════════════
+const firebaseConfig = {
+  apiKey: "AIzaSyAPhggKAQxklGDmarci0Ij3tlm84RKG5Po",
+  authDomain: "wucc2026-pronostico.firebaseapp.com",
+  projectId: "wucc2026-pronostico",
+  storageBucket: "wucc2026-pronostico.firebasestorage.app",
   messagingSenderId: "433959575984",
-  appId:             "1:433959575984:web:d5d5a29fe103d988893675"
+  appId: "1:433959575984:web:d5d5a29fe103d988893675"
 };
 
-window._fbBoot = async () => {
+window._fbConnect = async (cfg) => {
   try {
-    if(FIREBASE_CONFIG.apiKey === "REPLACE_API_KEY"){
-      window._fbReady = false;
-      window._fbErr = "no-config";
-      return;
-    }
-    const app = initializeApp(FIREBASE_CONFIG);
+    const app = initializeApp(cfg);
     const db = getFirestore(app);
     await getDoc(doc(db,'_ping','test')).catch(()=>{});
     window._db = db;
@@ -784,7 +782,16 @@ window._fbBoot = async () => {
     window._fbErr = e.message;
   }
 };
-window._fbBoot();
+
+// Auto-connect with hardcoded config
+(async () => {
+  if(FIREBASE_CONFIG.apiKey.startsWith("REEMPLAZA")){
+    window._fbReady = false;
+    window._fbErr = 'no-config';
+    return;
+  }
+  await window._fbConnect(FIREBASE_CONFIG);
+})();
 </script>
 
 <script>
@@ -993,16 +1000,21 @@ setInterval(()=>{if(!isPicksClosed)checkDeadline();}, 1000);
    FIREBASE INIT
 ═══════════════════════════════════════════════════ */
 async function initFirebase(){
+  // Wait for auto-connect (max 4 seconds)
   let tries=0;
-  while(!window._fbBoot&&tries<30){await new Promise(r=>setTimeout(r,100));tries++;}
-  tries=0;
-  while(window._fbReady===undefined&&tries<30){await new Promise(r=>setTimeout(r,100));tries++;}
+  while(window._fbReady===undefined && tries<40){await new Promise(r=>setTimeout(r,100));tries++;}
   if(window._fbReady){
-    fbReady=true; setFbStatus("ok","Conectado");
+    fbReady=true;
+    setFbStatus("ok","Conectado ✓");
     subscribeToLB(); subscribeToConfig(); subscribeToSponsors();
   } else {
-    setFbStatus(window._fbErr==="no-config"?"err":"err",
-      window._fbErr==="no-config"?"Sin configurar — ver SETUP.md":"Error: "+(window._fbErr||"desconocido"));
+    if(window._fbErr==="no-config"){
+      setFbStatus("err","Sin configurar");
+      console.warn("Firebase: edita FIREBASE_CONFIG en index.html con tus credenciales.");
+    } else {
+      setFbStatus("err","Error Firebase");
+      console.error("Firebase error:", window._fbErr);
+    }
   }
 }
 
@@ -1886,6 +1898,8 @@ function mkDivTabs(id,setFn,init){
   });
 }
 
+window.connectFirebase=undefined;
+window.toggleFbPanel=undefined;
 window.showPage=showPage; window.setPicksPhase=setPicksPhase; window.setAdminPhase=setAdminPhase;
 window.clearPicksDiv=clearPicksDiv; window.autoFill=autoFill; window.savePicksToCloud=savePicksToCloud;
 window.renderLB=renderLB; window.clearResultsDiv=clearResultsDiv; window.saveAndCalc=saveAndCalc;

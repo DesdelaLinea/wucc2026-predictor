@@ -1,90 +1,160 @@
-# 🥏 WUCC 2026 — Predictor & Apuestas / Bracket Predictor
+<div align="center">
 
-> **Desde La Línea** · Limerick, Ireland · August 15–22, 2026
+# 🥏 WUCC 2026 — Predictor & Leaderboard
 
-A real-time bracket prediction app for WUCC 2026 with a live leaderboard. Pick group stage winners, build your championship bracket, and compete against friends.
+**Desde La Línea** · Limerick, Ireland · August 15–22, 2026
 
-Una app de pronósticos en tiempo real para el WUCC 2026 con leaderboard en vivo. Elige ganadores en la fase de grupos, arma tu bracket y compite contra amigos.
+[![Live App](https://img.shields.io/badge/🌐_App_en_vivo-desdelalinea.github.io-C4F135?style=for-the-badge&labelColor=07080C)](https://desdelalinea.github.io/wucc2026-predictor/)
 
----
-
-## 🌐 Live App / App en Vivo
-
-👉 **[desdelalinea.github.io/wucc2026](https://desdelalinea.github.io/wucc2026-predictor)**
+</div>
 
 ---
 
-## ✨ Features / Funcionalidades
+## ¿Qué es? / What is it?
 
-| Feature | Descripción |
-|---|---|
-| 🎯 Group stage picks | Pick winners for every round-robin match / Elige ganadores en fase de grupos |
-| 🏆 Championship bracket | Full 16-team knockout bracket / Bracket eliminatorio de 16 equipos |
-| ☁️ Real-time leaderboard | Powered by Firebase — updates live for everyone / En vivo para todos |
-| 📊 Scoring system | Points for correct picks, advancement, and deep runs / Puntos por aciertos y avance |
-| 📱 Mobile-friendly | Works on any device / Funciona en cualquier dispositivo |
-| 3️⃣ Divisions | Open (48), Mixed (48), Women (40) |
+Una app de pronósticos en tiempo real para el **WUCC 2026** con leaderboard en vivo. Los participantes eligen ganadores en las 3 divisiones — grupos, fase intermedia y bracket championship — y compiten entre sí por puntos.
+
+A real-time bracket prediction app for **WUCC 2026** with a live leaderboard. Participants pick winners across 3 divisions — groups, intermediate round, and championship bracket — and compete for points.
 
 ---
 
-## 🎯 Scoring System / Sistema de Puntaje
+## 🌐 App en vivo / Live App
 
-| Event | Points |
-|---|---|
-| Correct group match result | +1 pt |
-| Team advances to Championship | +2 pts |
-| Correct Round of 16 winner | +3 pts |
-| Correct Quarterfinal winner | +5 pts |
-| Correct Semifinal winner | +8 pts |
-| Correct Champion | +13 pts |
-| **Max total** | **635 pts** |
+### 👉 [desdelalinea.github.io/wucc2026-predictor](https://desdelalinea.github.io/wucc2026-predictor/)
 
 ---
 
-## 🚀 How to Use / Cómo Usar
+## ✨ Funcionalidades / Features
 
-### For Players / Para Participantes
-
-1. **Open the app** at the link above / Abre la app en el enlace de arriba
-2. **Enter your name** — this is your leaderboard ID / Escribe tu nombre — es tu ID en el leaderboard
-3. **Make your picks** for all 3 divisions (groups + bracket) / Haz tus picks en las 3 divisiones
-4. **Click "☁️ Guardar en leaderboard"** — you appear live on the leaderboard / Apareces en vivo en el leaderboard
-5. **Watch the results** update in real time as the tournament progresses / Sigue los resultados en tiempo real
-
-### For the Admin / Para el Organizador
-
-1. Open the **⚙️ Admin** tab / Abre la pestaña Admin
-2. Enter official results match by match / Ingresa los resultados oficiales partido a partido
-3. Click **"💾 Guardar y publicar resultados"** — scores recalculate automatically for everyone / Los puntajes se recalculan para todos automáticamente
+| | Español | English |
+|---|---|---|
+| 🥏 | 3 divisiones: Open (48), Mixed (48), Women's (40) | 3 divisions with correct team counts |
+| 🎯 | Picks en grupos, fase intermedia y bracket | Group, intermediate & bracket picks |
+| 🔄 | Formato real WUCC con Cross-Pools y Play-in | Accurate WUCC format with Cross-Pools & Play-ins |
+| ☁️ | Leaderboard en vivo con Firebase | Real-time leaderboard powered by Firebase |
+| 🔒 | Picks se bloquean al inicio del torneo | Picks locked automatically at tournament start |
+| 🏆 | Sistema de puntaje progresivo | Progressive scoring system |
+| 🌙 | Modo oscuro / claro | Dark / Light mode |
+| 📱 | Responsive, funciona en cualquier dispositivo | Works on any device |
+| 🤝 | Sección de sponsors sincronizada | Synchronized sponsors section |
+| 🔐 | Panel admin protegido con contraseña | Password-protected admin panel |
 
 ---
 
-## 📁 Repository Structure / Estructura del Repositorio
+## 🔄 Formato del torneo / Tournament Format
+
+### Open & Mixed — 48 equipos / teams
 
 ```
-wucc2026/
-├── index.html          # Main app / App principal
-├── README.md           # This file / Este archivo
-├── SETUP.md            # Detailed Firebase setup guide / Guía detallada Firebase
-└── .github/
-    └── CODEOWNERS      # Repo ownership
+8 grupos de 6 equipos
+        ↓
+4° vs 5° Play-in (8 partidos)       →  Perdedor: 33°–40°
+1°/2°/3° + ganador play-in           →  Round of 32 (16 partidos)
+        ↓
+Round of 16 → Cuartos → Semis → Final 🏆
+        ↓ (perdedores)
+6° directo a Consolación 41°–48°
+```
+
+### Women's — 40 equipos / teams
+
+```
+8 grupos de 5 equipos
+        ↓
+10 Cross-Pools I–R (round-robin de 4 equipos)
+  Pools I-L (Top):  1°/2° → Pre-QF bye   |  3°/4° → 16 Play-in
+  Pools M-P (Mid):  1°/2° → 16 Play-in   |  3°/4° → Consolación
+  Pools Q-R (Bot):  todos → Consolación
+        ↓
+16 Play-in (8 partidos)  →  Pre-Cuartos → Cuartos → Semis → Final 🏆
 ```
 
 ---
 
-## 🏅 About / Acerca de
+## 📊 Sistema de puntaje / Scoring System
 
-Built by **Desde La Línea** for the Ultimate community.  
-Construido por **Desde La Línea** para la comunidad del Ultimate.
-
-- 📺 [desdelalinea.com](https://desdelalinea.com)
-- 📧 desdelalinea.tv@gmail.com
-
-Official tournament results published at **results.wucc2026.com** after finals on August 22.  
-Los resultados oficiales se publican en **results.wucc2026.com** después de las finales el 22 de agosto.
+| Evento | Puntos |
+|---|---|
+| Partido correcto (grupo / play-in / cross-pool) | +1 pt |
+| Equipo avanza a siguiente fase | +2 pts |
+| Round of 16 / Pre-Cuartos correcto | +3 pts |
+| Cuartos de Final correcto | +5 pts |
+| Semifinal correcta | +8 pts |
+| Campeón correcto | +13 pts |
+| **Máximo total** | **635 pts** |
 
 ---
 
-## 📄 License
+## ⏰ Fecha límite / Deadline
 
-MIT — Not free to use and adapt / No esta Libre para usar y adaptar.
+Los picks se cierran automáticamente el **15 de agosto de 2026 a las 9:00 AM hora de Irlanda (UTC+1)** — al inicio del primer partido del torneo.
+
+Picks auto-close on **August 15, 2026 at 9:00 AM Ireland time (UTC+1)** — when the first match begins.
+
+---
+
+## 🚀 Cómo usar / How to use
+
+### Para participantes / For participants
+
+1. Abre la app → escribe tu nombre
+2. Selecciona una división (Open 🔵 / Mixed 🟣 / Women's 🌸)
+3. Elige ganadores en Grupos → Fase intermedia → Championship
+4. Repite para las 3 divisiones
+5. Haz clic en **☁️ Guardar en leaderboard**
+6. ¡Apareces en el ranking en tiempo real!
+
+### Para el admin / For the admin
+
+1. Pestaña **⚙️ Admin** → contraseña
+2. Ingresa resultados partido a partido
+3. Guarda → el leaderboard se actualiza para todos en vivo
+4. Gestiona sponsors desde el panel Admin
+5. Controla el cierre de picks manualmente si es necesario
+
+---
+
+## 🛠️ Setup para desarrolladores / Developer Setup
+
+Ver **[SETUP.md](SETUP.md)** para instrucciones completas.
+
+### Resumen rápido / Quick summary
+
+1. Crea un proyecto en [Firebase](https://console.firebase.google.com)
+2. Abre `index.html` y busca `REEMPLAZA_CON_TU_API_KEY`
+3. Pega tus 6 credenciales de Firebase
+4. Cambia la contraseña admin (ver SETUP.md)
+5. Sube a GitHub → activa GitHub Pages
+6. ¡Listo! Los usuarios no necesitan configurar nada
+
+---
+
+## 📁 Estructura del repositorio / Repo structure
+
+```
+wucc2026-predictor/
+├── index.html          ← App completa (todo en un archivo)
+├── README.md           ← Este archivo
+├── SETUP.md            ← Guía de configuración para el admin
+├── HOW-TO-PLAY.html    ← Página de instrucciones para compartir
+├── CONTRIBUTING.md     ← Cómo reportar bugs
+├── LICENSE             ← MIT
+└── .nojekyll           ← Necesario para GitHub Pages
+```
+
+---
+
+## 📞 Contacto / Contact
+
+**Desde La Línea** — Medio de Ultimate Frisbee en español
+
+📧 [desdelalinea.tv@gmail.com](mailto:desdelalinea.tv@gmail.com)
+🌐 [desdelalinea.github.io/wucc2026-predictor](https://desdelalinea.github.io/wucc2026-predictor/)
+
+Resultados oficiales / Official results: **results.wucc2026.com** — 22 agosto / August 22, 2026
+
+---
+
+## 📄 Licencia / License
+
+MIT — libre para usar y adaptar / free to use and adapt.
