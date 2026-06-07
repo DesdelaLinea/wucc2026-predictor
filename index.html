@@ -303,6 +303,118 @@ body.light .b-team.win{background:rgba(0,180,100,.08);border-color:var(--green)}
 body.light .toast{background:var(--surf1);color:var(--tx1)}
 body.light .admin-login{background:var(--surf1)}
 body.light .cfg-input,.light .name-input,.light .import-ta{background:var(--surf2)}
+
+/* ── FIREBASE SETUP PANEL ── */
+.fb-setup{
+  background:var(--surf1);border:1px solid rgba(196,241,53,.25);
+  border-radius:var(--r3);padding:20px 24px;margin:20px 0;
+  position:relative;overflow:hidden;
+}
+.fb-setup::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,transparent,var(--lime),transparent)}
+.fb-setup-title{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:1px;
+  color:var(--lime);margin-bottom:4px}
+.fb-setup-sub{font-size:12px;color:var(--tx2);margin-bottom:16px;line-height:1.6}
+.fb-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
+.fb-field{display:flex;flex-direction:column;gap:4px}
+.fb-field label{font-size:10px;color:var(--tx3);letter-spacing:.08em;text-transform:uppercase}
+.fb-field input{background:var(--bg);border:1px solid var(--borderl);border-radius:var(--r);
+  padding:8px 12px;color:var(--tx1);font-family:'JetBrains Mono',monospace;font-size:11px;
+  outline:none;transition:border .15s}
+.fb-field input:focus{border-color:var(--lime)}
+.fb-field input::placeholder{color:var(--tx3);font-family:'DM Sans',sans-serif;font-size:11px}
+.fb-steps{background:rgba(196,241,53,.05);border:1px solid rgba(196,241,53,.1);
+  border-radius:var(--r);padding:10px 14px;margin-bottom:14px;font-size:11px;color:var(--tx2);line-height:1.8}
+.fb-steps strong{color:var(--lime)}
+.fb-steps code{font-family:'JetBrains Mono',monospace;color:var(--lime);
+  background:rgba(196,241,53,.08);padding:1px 5px;border-radius:3px;font-size:10px}
+@media(max-width:600px){.fb-grid{grid-template-columns:1fr}}
+
+/* ── DIVISION COLORS ── */
+:root{
+  --open:#3B9EFF;--open-dim:rgba(59,158,255,.12);--open-border:rgba(59,158,255,.3);
+  --mixed:#B47CFF;--mixed-dim:rgba(180,124,255,.12);--mixed-border:rgba(180,124,255,.3);
+  --women:#FF6B9E;--women-dim:rgba(255,107,158,.12);--women-border:rgba(255,107,158,.3);
+}
+
+/* Division hero cards */
+.div-hero-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:20px}
+.div-hero{
+  border-radius:var(--r2);padding:14px 16px;cursor:pointer;
+  transition:all .2s;border:2px solid transparent;position:relative;overflow:hidden;
+}
+.div-hero::before{content:'';position:absolute;inset:0;opacity:.08;transition:opacity .2s}
+.div-hero:hover::before{opacity:.16}
+.div-hero.on{border-width:2px}
+.div-hero-icon{font-size:22px;margin-bottom:4px}
+.div-hero-name{font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:.08em}
+.div-hero-count{font-size:10px;opacity:.7;margin-top:1px}
+.div-hero-flag{font-size:10px;opacity:.6;margin-top:4px;line-height:1.4;min-height:28px}
+
+.div-hero.open{background:var(--open-dim);border-color:var(--open-border)}
+.div-hero.open::before{background:var(--open)}
+.div-hero.open .div-hero-name{color:var(--open)}
+.div-hero.open.on{border-color:var(--open);box-shadow:0 0 20px rgba(59,158,255,.2)}
+
+.div-hero.mixed{background:var(--mixed-dim);border-color:var(--mixed-border)}
+.div-hero.mixed::before{background:var(--mixed)}
+.div-hero.mixed .div-hero-name{color:var(--mixed)}
+.div-hero.mixed.on{border-color:var(--mixed);box-shadow:0 0 20px rgba(180,124,255,.2)}
+
+.div-hero.women{background:var(--women-dim);border-color:var(--women-border)}
+.div-hero.women::before{background:var(--women)}
+.div-hero.women .div-hero-name{color:var(--women)}
+.div-hero.women.on{border-color:var(--women);box-shadow:0 0 20px rgba(255,107,158,.2)}
+
+/* Color the phase tabs per division */
+.picks-phasebar{display:flex;gap:3px;margin-bottom:18px;background:var(--surf1);
+  border-radius:var(--r);padding:4px;width:fit-content;border:1px solid var(--border)}
+.picks-phasebar .phase-tab.on{font-weight:600}
+body[data-div="Open"] .picks-phasebar .phase-tab.on{background:var(--open);color:#fff}
+body[data-div="Mixed"] .picks-phasebar .phase-tab.on{background:var(--mixed);color:#fff}
+body[data-div="Women"] .picks-phasebar .phase-tab.on{background:var(--women);color:#fff}
+
+/* Color the progress bar */
+body[data-div="Open"] .prog-fill{background:linear-gradient(90deg,#1a6ebf,var(--open))}
+body[data-div="Mixed"] .prog-fill{background:linear-gradient(90deg,#7a3fbf,var(--mixed))}
+body[data-div="Women"] .prog-fill{background:linear-gradient(90deg,#bf3060,var(--women))}
+
+/* Admin div tabs with colors */
+#adminDiv .div-tab[data-div="Open"].on{border-color:var(--open);color:var(--open)}
+#adminDiv .div-tab[data-div="Mixed"].on{border-color:var(--mixed);color:var(--mixed)}
+#adminDiv .div-tab[data-div="Women"].on{border-color:var(--women);color:var(--women)}
+
+@media(max-width:500px){.div-hero-row{grid-template-columns:1fr}.div-hero{display:flex;gap:12px;align-items:center}.div-hero-icon{font-size:28px;margin:0}.div-hero-flag{display:none}}
+
+/* ── HELP ACCORDION ── */
+.help-panel{background:var(--surf1);border:1px solid var(--border);border-radius:var(--r2);margin-bottom:18px;overflow:hidden}
+.help-toggle{width:100%;background:none;border:none;padding:12px 18px;
+  display:flex;align-items:center;justify-content:space-between;cursor:pointer;
+  color:var(--tx2);font-size:12px;font-family:'DM Sans',sans-serif;transition:background .15s}
+.help-toggle:hover{background:var(--surf2)}
+.help-toggle span:first-child{display:flex;align-items:center;gap:8px;font-weight:500}
+.help-toggle .help-chevron{transition:transform .2s;font-size:10px}
+.help-toggle.open .help-chevron{transform:rotate(180deg)}
+.help-body{display:none;padding:0 18px 16px}
+.help-toggle.open + .help-body{display:block}
+.help-cols{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:12px}
+.help-col h4{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;margin-bottom:8px}
+.help-col.es h4{color:var(--lime)}
+.help-col.en h4{color:var(--open)}
+.help-steps-list{list-style:none;display:flex;flex-direction:column;gap:6px}
+.help-steps-list li{font-size:11px;color:var(--tx2);line-height:1.6;display:flex;gap:8px}
+.help-steps-list li span.hs-n{
+  min-width:20px;height:20px;border-radius:50%;
+  background:rgba(196,241,53,.1);color:var(--lime);
+  display:flex;align-items:center;justify-content:center;
+  font-size:10px;font-weight:700;flex-shrink:0;margin-top:1px;
+}
+.help-col.en .help-steps-list li span.hs-n{background:rgba(59,158,255,.1);color:var(--open)}
+.help-scoring{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:10px}
+.hs-row{display:flex;justify-content:space-between;font-size:11px;color:var(--tx2);
+  background:var(--surf2);border-radius:5px;padding:5px 10px}
+.hs-row b{color:var(--lime)}
+@media(max-width:600px){.help-cols{grid-template-columns:1fr}.help-scoring{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -346,6 +458,7 @@ body.light .cfg-input,.light .name-input,.light .import-ta{background:var(--surf
     </div>
     <div class="dl-countdown" id="dlCountdown"></div>
   </div>
+
 
   <!-- 2022 Results -->
   <div style="background:var(--surf1);border:1px solid var(--border);border-radius:var(--r2);padding:16px 20px;margin-bottom:20px">
@@ -403,14 +516,80 @@ body.light .cfg-input,.light .name-input,.light .import-ta{background:var(--surf
     <span class="save-status" id="saveStatus">Necesario para participar</span>
   </div>
 
-  <!-- Div Tabs -->
-  <div class="div-tabs" id="picksDiv"></div>
+
+  <!-- Help accordion -->
+  <div class="help-panel">
+    <button class="help-toggle" onclick="this.classList.toggle('open')">
+      <span>❓ ¿Cómo participar? / How to play?</span>
+      <span class="help-chevron">▼</span>
+    </button>
+    <div class="help-body">
+      <div class="help-cols">
+        <div class="help-col es">
+          <h4>🇨🇴 Cómo participar</h4>
+          <ul class="help-steps-list">
+            <li><span class="hs-n">1</span><span>Escribe tu nombre arriba — será tu ID en el leaderboard.</span></li>
+            <li><span class="hs-n">2</span><span>Selecciona una división (Open, Mixed o Women's) con los botones de arriba.</span></li>
+            <li><span class="hs-n">3</span><span><strong>Grupos:</strong> en cada partido, haz clic en el equipo que crees que ganará.</span></li>
+            <li><span class="hs-n">4</span><span><strong>Fase intermedia:</strong> Open/Mixed tienen Play-in 4°vs5°. Women's tiene 10 Cross-Pools.</span></li>
+            <li><span class="hs-n">5</span><span><strong>Championship:</strong> arma tu bracket hasta el campeón.</span></li>
+            <li><span class="hs-n">6</span><span>Repite para las 3 divisiones y haz clic en <strong>☁️ Guardar en leaderboard</strong>.</span></li>
+            <li><span class="hs-n">7</span><span>Tienes hasta el <strong>15 de agosto 9:00 AM hora Irlanda</strong> para guardar.</span></li>
+          </ul>
+        </div>
+        <div class="help-col en">
+          <h4>🇬🇧 How to play</h4>
+          <ul class="help-steps-list">
+            <li><span class="hs-n">1</span><span>Enter your name above — it's your leaderboard identity.</span></li>
+            <li><span class="hs-n">2</span><span>Select a division (Open, Mixed or Women's) using the cards above.</span></li>
+            <li><span class="hs-n">3</span><span><strong>Groups:</strong> click the team you think will win each match.</span></li>
+            <li><span class="hs-n">4</span><span><strong>Intermediate:</strong> Open/Mixed have 4v5 Play-in. Women's has 10 Cross-Pools.</span></li>
+            <li><span class="hs-n">5</span><span><strong>Championship:</strong> build your bracket to the champion.</span></li>
+            <li><span class="hs-n">6</span><span>Repeat for all 3 divisions and click <strong>☁️ Guardar en leaderboard</strong>.</span></li>
+            <li><span class="hs-n">7</span><span>Deadline: <strong>August 15, 9:00 AM Ireland time</strong>.</span></li>
+          </ul>
+        </div>
+      </div>
+      <div style="margin-top:14px;font-size:11px;font-weight:600;color:var(--tx3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px">📊 Puntaje / Scoring</div>
+      <div class="help-scoring">
+        <div class="hs-row"><span>Partido (grupo/play-in/PP)</span><b>+1 pt</b></div>
+        <div class="hs-row"><span>Avanza a siguiente fase</span><b>+2 pts</b></div>
+        <div class="hs-row"><span>Round of 16 / Pre-QF</span><b>+3 pts</b></div>
+        <div class="hs-row"><span>Cuartos / Quarterfinals</span><b>+5 pts</b></div>
+        <div class="hs-row"><span>Semis / Semifinals</span><b>+8 pts</b></div>
+        <div class="hs-row"><span>Campeón / Champion</span><b>+13 pts</b></div>
+        <div class="hs-row" style="background:rgba(196,241,53,.06)"><span style="color:var(--tx1);font-weight:600">Máximo total / Max total</span><b style="font-size:14px">635 pts</b></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Division Hero Cards -->
+  <div class="div-hero-row" id="picksDivHero">
+    <div class="div-hero open on" onclick="setPicksDiv('Open')" id="heroOpen">
+      <div class="div-hero-icon">🥏</div>
+      <div class="div-hero-name">OPEN</div>
+      <div class="div-hero-count">48 equipos · 8 grupos de 6</div>
+      <div class="div-hero-flag" id="heroOpenFlag"></div>
+    </div>
+    <div class="div-hero mixed" onclick="setPicksDiv('Mixed')" id="heroMixed">
+      <div class="div-hero-icon">🥏</div>
+      <div class="div-hero-name">MIXED</div>
+      <div class="div-hero-count">48 equipos · 8 grupos de 6</div>
+      <div class="div-hero-flag" id="heroMixedFlag"></div>
+    </div>
+    <div class="div-hero women" onclick="setPicksDiv('Women')" id="heroWomen">
+      <div class="div-hero-icon">🥏</div>
+      <div class="div-hero-name">WOMEN'S</div>
+      <div class="div-hero-count">40 equipos · 8 grupos de 5</div>
+      <div class="div-hero-flag" id="heroWomenFlag"></div>
+    </div>
+  </div>
 
   <!-- Phase Tabs -->
-  <div class="phase-tabs" id="picksPhaseTabs">
-    <button class="phase-tab on" onclick="setPicksPhase('groups')">Grupos</button>
-    <button class="phase-tab" id="picksPhaseTab2" onclick="setPicksPhase('inter')">Fase intermedia</button>
-    <button class="phase-tab" onclick="setPicksPhase('bracket')">Championship</button>
+  <div class="picks-phasebar phase-tabs" id="picksPhaseTabs">
+    <button class="phase-tab on" onclick="setPicksPhase('groups')">📊 Grupos</button>
+    <button class="phase-tab" id="picksPhaseTab2" onclick="setPicksPhase('inter')">⚡ Fase intermedia</button>
+    <button class="phase-tab" onclick="setPicksPhase('bracket')">🏆 Championship</button>
   </div>
 
   <!-- Actions -->
@@ -575,8 +754,11 @@ body.light .cfg-input,.light .name-input,.light .import-ta{background:var(--surf
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
 import { getFirestore, doc, setDoc, getDoc, onSnapshot, collection } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 
-// ── HARDCODED CONFIG — users never see this ──
-// Replace these values with your Firebase project credentials
+// ═══════════════════════════════════════════════════
+// ADMIN: reemplaza estos valores con tu Firebase config
+// Ve a: console.firebase.google.com → tu proyecto →
+// ⚙️ Configuración → Tus apps → </> → firebaseConfig
+// ═══════════════════════════════════════════════════
 const FIREBASE_CONFIG = {
   apiKey:            "AIzaSyAPhggKAQxklGDmarci0Ij3tlm84RKG5Po",
   authDomain:        "wucc2026-pronostico.firebaseapp.com",
@@ -586,14 +768,9 @@ const FIREBASE_CONFIG = {
   appId:             "1:433959575984:web:d5d5a29fe103d988893675"
 };
 
-window._fbBoot = async () => {
+window._fbConnect = async (cfg) => {
   try {
-    if(FIREBASE_CONFIG.apiKey === "REPLACE_API_KEY"){
-      window._fbReady = false;
-      window._fbErr = "no-config";
-      return;
-    }
-    const app = initializeApp(FIREBASE_CONFIG);
+    const app = initializeApp(cfg);
     const db = getFirestore(app);
     await getDoc(doc(db,'_ping','test')).catch(()=>{});
     window._db = db;
@@ -605,7 +782,16 @@ window._fbBoot = async () => {
     window._fbErr = e.message;
   }
 };
-window._fbBoot();
+
+// Auto-connect with hardcoded config
+(async () => {
+  if(FIREBASE_CONFIG.apiKey.startsWith("REEMPLAZA")){
+    window._fbReady = false;
+    window._fbErr = 'no-config';
+    return;
+  }
+  await window._fbConnect(FIREBASE_CONFIG);
+})();
 </script>
 
 <script>
@@ -814,18 +1000,25 @@ setInterval(()=>{if(!isPicksClosed)checkDeadline();}, 1000);
    FIREBASE INIT
 ═══════════════════════════════════════════════════ */
 async function initFirebase(){
+  // Wait for auto-connect (max 4 seconds)
   let tries=0;
-  while(!window._fbBoot&&tries<30){await new Promise(r=>setTimeout(r,100));tries++;}
-  tries=0;
-  while(window._fbReady===undefined&&tries<30){await new Promise(r=>setTimeout(r,100));tries++;}
+  while(window._fbReady===undefined && tries<40){await new Promise(r=>setTimeout(r,100));tries++;}
   if(window._fbReady){
-    fbReady=true; setFbStatus("ok","Conectado");
+    fbReady=true;
+    setFbStatus("ok","Conectado ✓");
     subscribeToLB(); subscribeToConfig(); subscribeToSponsors();
   } else {
-    setFbStatus(window._fbErr==="no-config"?"err":"err",
-      window._fbErr==="no-config"?"Sin configurar — ver SETUP.md":"Error: "+(window._fbErr||"desconocido"));
+    if(window._fbErr==="no-config"){
+      setFbStatus("err","Sin configurar");
+      console.warn("Firebase: edita FIREBASE_CONFIG en index.html con tus credenciales.");
+    } else {
+      setFbStatus("err","Error Firebase");
+      console.error("Firebase error:", window._fbErr);
+    }
   }
 }
+
+function toggleFbPanel(){}
 function setFbStatus(s,t){document.getElementById("fbDot").className="fb-dot "+s;document.getElementById("fbTxt").textContent=t;}
 function subscribeToLB(){
   if(!fbReady||!window._db)return;
@@ -1610,9 +1803,33 @@ function showPage(p){
 }
 function setPicksDiv(div){
   curDiv=div;
-  document.querySelectorAll("#picksDiv .div-tab").forEach(b=>b.classList.toggle("on",b.dataset.div===div));
+  document.body.setAttribute("data-div",div);
+  // Update hero cards
+  document.querySelectorAll(".div-hero").forEach(c=>{
+    const cDiv=c.classList.contains("open")?"Open":c.classList.contains("mixed")?"Mixed":"Women";
+    c.classList.toggle("on",cDiv===div);
+  });
   updateFormatDiagram(div);
+  updateDivHeroFlags(div);
   renderPicksView();
+}
+
+function updateDivHeroFlags(div){
+  // Show top 3 seeds of each division in the hero cards as a teaser
+  const flags={Open:[],Mixed:[],Women:[]};
+  ["Open","Mixed","Women"].forEach(d=>{
+    if(GROUPS[d]&&GROUPS[d].length){
+      // seeds 1,2,3 (first teams of first 3 groups)
+      const topSeeds=GROUPS[d].slice(0,3).map(g=>fl(g.t[0].c)+" "+g.t[0].n);
+      flags[d]=topSeeds;
+    }
+  });
+  const openEl=document.getElementById("heroOpenFlag");
+  const mixedEl=document.getElementById("heroMixedFlag");
+  const womenEl=document.getElementById("heroWomenFlag");
+  if(openEl)openEl.textContent=flags.Open.join(" · ");
+  if(mixedEl)mixedEl.textContent=flags.Mixed.join(" · ");
+  if(womenEl)womenEl.textContent=flags.Women.join(" · ");
 }
 function setPicksPhase(ph){
   picksPhase=ph;
@@ -1681,15 +1898,18 @@ function mkDivTabs(id,setFn,init){
   });
 }
 
+window.connectFirebase=undefined;
+window.toggleFbPanel=undefined;
 window.showPage=showPage; window.setPicksPhase=setPicksPhase; window.setAdminPhase=setAdminPhase;
 window.clearPicksDiv=clearPicksDiv; window.autoFill=autoFill; window.savePicksToCloud=savePicksToCloud;
 window.renderLB=renderLB; window.clearResultsDiv=clearResultsDiv; window.saveAndCalc=saveAndCalc;
 window.onNameInput=onNameInput; window.checkAdminPwd=checkAdminPwd; window.adminLogout=adminLogout;
 window.forceClosePicks=forceClosePicks; window.forceOpenPicks=forceOpenPicks;
 
-mkDivTabs("picksDiv",setPicksDiv,"Open");
 mkDivTabs("adminDiv",setAdminDiv,"Open");
 updateFormatDiagram("Open");
+document.body.setAttribute("data-div","Open");
+updateDivHeroFlags("Open");
 checkDeadline();
 renderPicksView();
 renderAdminView();
