@@ -759,13 +759,13 @@ import { getFirestore, doc, setDoc, getDoc, onSnapshot, collection } from 'https
 // Ve a: console.firebase.google.com → tu proyecto →
 // ⚙️ Configuración → Tus apps → </> → firebaseConfig
 // ═══════════════════════════════════════════════════
-const FIREBASE_CONFIG = {
-  apiKey:            "AIzaSyAPhggKAQxklGDmarci0Ij3tlm84RKG5Po",
-  authDomain:        "wucc2026-pronostico.firebaseapp.com",
-  projectId:         "wucc2026-pronostico",
-  storageBucket:     "wucc2026-pronostico.firebasestorage.app",
+const firebaseConfig = {
+  apiKey: "AIzaSyAPhggKAQxklGDmarci0Ij3tlm84RKG5Po",
+  authDomain: "wucc2026-pronostico.firebaseapp.com",
+  projectId: "wucc2026-pronostico",
+  storageBucket: "wucc2026-pronostico.firebasestorage.app",
   messagingSenderId: "433959575984",
-  appId:             "1:433959575984:web:d5d5a29fe103d988893675"
+  appId: "1:433959575984:web:d5d5a29fe103d988893675"
 };
 
 window._fbConnect = async (cfg) => {
