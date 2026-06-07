@@ -28,7 +28,7 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 header{background:rgba(7,8,12,.96);border-bottom:1px solid var(--border);backdrop-filter:blur(20px);position:sticky;top:0;z-index:100}
 .hdr-inner{display:flex;align-items:center;gap:16px;padding:10px 0;flex-wrap:wrap}
 .logo{display:flex;align-items:center;gap:12px;flex-shrink:0;text-decoration:none}
-.logo-img{height:38px;width:auto;filter:invert(0) brightness(1.1);opacity:.92;transition:opacity .2s}
+.logo-img{height:38px;width:auto;filter:invert(1) brightness(1.1);opacity:.92;transition:opacity .2s}
 .logo:hover .logo-img{opacity:1}
 .logo-sep{width:1px;height:32px;background:var(--border)}
 .logo-text{line-height:1.1}
@@ -759,7 +759,7 @@ import { getFirestore, doc, setDoc, getDoc, onSnapshot, collection } from 'https
 // Ve a: console.firebase.google.com → tu proyecto →
 // ⚙️ Configuración → Tus apps → </> → firebaseConfig
 // ═══════════════════════════════════════════════════
-const firebaseConfig = {
+const FIREBASE_CONFIG = {
   apiKey: "AIzaSyAPhggKAQxklGDmarci0Ij3tlm84RKG5Po",
   authDomain: "wucc2026-pronostico.firebaseapp.com",
   projectId: "wucc2026-pronostico",
@@ -1906,15 +1906,6 @@ window.renderLB=renderLB; window.clearResultsDiv=clearResultsDiv; window.saveAnd
 window.onNameInput=onNameInput; window.checkAdminPwd=checkAdminPwd; window.adminLogout=adminLogout;
 window.forceClosePicks=forceClosePicks; window.forceOpenPicks=forceOpenPicks;
 
-mkDivTabs("adminDiv",setAdminDiv,"Open");
-updateFormatDiagram("Open");
-document.body.setAttribute("data-div","Open");
-updateDivHeroFlags("Open");
-checkDeadline();
-renderPicksView();
-renderAdminView();
-renderSponsorsPublic();
-
 /* ── THEME TOGGLE ── */
 function toggleTheme(){
   const body=document.body;
@@ -1929,7 +1920,6 @@ function toggleTheme(){
     lsSet("w26_theme","light");
   }
 }
-// Apply saved theme on load
 (function(){
   if(lsGet("w26_theme","dark")==="light"){
     document.body.classList.add("light");
@@ -2053,6 +2043,18 @@ window.handleSponsorFiles=handleSponsorFiles;
 window.deleteSponsor=deleteSponsor;
 window.saveSponsors=saveSponsors;
 window.renderSponsorAdmin=renderSponsorAdmin;
+
+/* ═══════════════════════════════════════════════════
+   INIT — all functions defined above, safe to call
+═══════════════════════════════════════════════════ */
+mkDivTabs("adminDiv",setAdminDiv,"Open");
+updateFormatDiagram("Open");
+document.body.setAttribute("data-div","Open");
+updateDivHeroFlags("Open");
+checkDeadline();
+renderPicksView();
+renderAdminView();
+renderSponsorsPublic();
 
 initFirebase();
 
