@@ -97,14 +97,6 @@ Picks bloqueados automáticamente. El admin también puede forzar cierre/apertur
 
 ---
 
-## 🛠️ Setup para el admin
-
-Ver **[SETUP.md](SETUP.md)** — guía completa paso a paso.
-
-**Resumen:** abre `index.html`, busca `REEMPLAZA_CON_TU_API_KEY` y pega tus 6 credenciales de Firebase. Sube a GitHub → activa GitHub Pages. Los usuarios no configuran nada.
-
----
-
 ## 📁 Archivos del repo
 
 ```
