@@ -386,6 +386,79 @@ body[data-div="Women"] .prog-fill{background:linear-gradient(90deg,#bf3060,var(-
 
 @media(max-width:500px){.div-hero-row{grid-template-columns:1fr}.div-hero{display:flex;gap:12px;align-items:center}.div-hero-icon{font-size:28px;margin:0}.div-hero-flag{display:none}}
 
+/* ── FEATURE 1: Division progress bars ── */
+.div-hero-prog{margin-top:6px;height:3px;background:rgba(255,255,255,.1);border-radius:3px;overflow:hidden}
+.div-hero-prog-fill{height:100%;border-radius:3px;transition:width .4s ease}
+.open .div-hero-prog-fill{background:var(--open)}
+.mixed .div-hero-prog-fill{background:var(--mixed)}
+.women .div-hero-prog-fill{background:var(--women)}
+.div-hero-prog-txt{font-size:9px;opacity:.55;margin-top:3px}
+
+/* ── FEATURE 2: Duplicate name warning ── */
+.name-warning{font-size:11px;color:var(--orange);display:none;margin-top:6px;
+  padding:8px 12px;background:rgba(255,140,66,.08);border-radius:var(--r);
+  border:1px solid rgba(255,140,66,.2);line-height:1.5}
+
+/* ── FEATURE 3: Confirm save modal ── */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:500;
+  display:none;align-items:center;justify-content:center;padding:20px;
+  backdrop-filter:blur(6px)}
+.modal-overlay.open{display:flex}
+.modal-box{background:var(--surf2);border:1px solid var(--borderl);border-radius:var(--r3);
+  padding:28px;max-width:440px;width:100%;box-shadow:0 24px 80px rgba(0,0,0,.5)}
+.modal-title{font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:1px;margin-bottom:10px}
+.modal-body{font-size:13px;color:var(--tx2);line-height:1.6;margin-bottom:20px}
+.modal-body strong{color:var(--tx1)}
+.modal-actions{display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap}
+
+/* ── FEATURE 4: LB picks count + pre-results ── */
+.lb-picks-badge{font-size:10px;color:var(--tx3);margin-left:6px;font-weight:400}
+.lb-picks-badge.complete{color:var(--green)}
+.lb-pre-results{padding:20px 18px;border-bottom:1px solid var(--border)}
+.lb-pre-count{font-family:'Bebas Neue',sans-serif;font-size:36px;color:var(--lime);line-height:1;margin-bottom:4px}
+.lb-pre-sub{font-size:12px;color:var(--tx3);line-height:1.6}
+.lb-pre-row{display:flex;align-items:center;gap:10px;padding:8px 18px;
+  border-bottom:1px solid var(--border);font-size:13px}
+.lb-pre-row.mine{background:rgba(196,241,53,.04);border-left:2px solid var(--lime)}
+.lb-pre-name{flex:1;font-weight:500}
+.lb-pre-divs{font-size:10px;color:var(--tx3);display:flex;gap:8px}
+.lb-pre-div{padding:2px 7px;border-radius:4px;border:1px solid var(--border)}
+
+/* ── FEATURE 5: MVR page ── */
+.mvr-score-bar{display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap}
+.mvr-score-card{flex:1;min-width:110px;background:var(--surf1);border:1px solid var(--border);
+  border-radius:var(--r2);padding:14px;text-align:center}
+.mvr-score-val{font-family:'Bebas Neue',sans-serif;font-size:36px;color:var(--lime);line-height:1}
+.mvr-score-lbl{font-size:10px;color:var(--tx3);text-transform:uppercase;letter-spacing:.08em;margin-top:4px}
+.mvr-score-sub{font-size:11px;color:var(--tx2);margin-top:2px}
+.mvr-section{margin-bottom:20px}
+.mvr-section-title{font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:.12em;
+  color:var(--tx3);padding:6px 0;margin-bottom:8px;border-bottom:1px solid var(--border)}
+.mvr-match{display:flex;align-items:center;gap:8px;padding:7px 12px;border-radius:var(--r);
+  margin-bottom:3px;font-size:12px;background:var(--surf1);border:1px solid var(--border)}
+.mvr-match.hit{border-color:rgba(0,229,140,.35);background:rgba(0,229,140,.05)}
+.mvr-match.miss{border-color:rgba(255,90,90,.25);background:rgba(255,90,90,.04)}
+.mvr-match.pending{opacity:.55}
+.mvr-teams{flex:1;color:var(--tx3)}
+.mvr-pick{flex:1;text-align:center;font-weight:500}
+.mvr-result{flex:1;text-align:right;color:var(--tx3)}
+.mvr-icon{font-size:15px;min-width:22px;text-align:center}
+
+/* ── FEATURE 6: Share button ── */
+.share-btn{display:inline-flex;align-items:center;gap:8px;padding:9px 18px;
+  border-radius:var(--r2);border:1px solid var(--borderl);background:var(--surf2);
+  color:var(--tx1);font-size:13px;font-weight:600;cursor:pointer;transition:all .15s;
+  font-family:'DM Sans',sans-serif}
+.share-btn:hover{background:var(--lime);color:var(--bg);border-color:var(--lime)}
+#shareCanvas{display:none}
+
+/* ── FEATURE 7: Export buttons ── */
+.export-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;margin-bottom:4px}
+
+/* light mode additions */
+body.light .mvr-match{background:var(--surf1)}
+body.light .modal-box{background:var(--surf1)}
+
 /* ── HELP ACCORDION ── */
 .help-panel{background:var(--surf1);border:1px solid var(--border);border-radius:var(--r2);margin-bottom:18px;overflow:hidden}
 .help-toggle{width:100%;background:none;border:none;padding:12px 18px;
@@ -439,6 +512,7 @@ body[data-div="Women"] .prog-fill{background:linear-gradient(90deg,#bf3060,var(-
         <div id="fb-status"><div class="fb-dot cfg" id="fbDot"></div><span id="fbTxt">Conectando…</span></div>
         <button class="nav-btn on" onclick="showPage('picks')">🎯 Mis Picks</button>
         <button class="nav-btn" onclick="showPage('lb')">🏆 Leaderboard</button>
+        <button class="nav-btn" onclick="showPage('myvsr')">📊 Mis vs Resultados</button>
         <button class="nav-btn" onclick="showPage('admin')">⚙️ Admin</button>
       </div>
     </div>
@@ -517,6 +591,21 @@ body[data-div="Women"] .prog-fill{background:linear-gradient(90deg,#bf3060,var(-
   </div>
 
 
+  <!-- Name duplicate warning -->
+  <div class="name-warning" id="nameWarning">⚠️ Este nombre ya existe. Si eres tú, tus picks se actualizarán. Si no, usa un nombre diferente. · This name already exists. If it's you, your picks will update. If not, use a different name.</div>
+
+  <!-- Confirm Save Modal -->
+  <div class="modal-overlay" id="confirmModal">
+    <div class="modal-box">
+      <div class="modal-title">💾 Confirmar pronósticos</div>
+      <div class="modal-body" id="confirmModalBody"></div>
+      <div class="modal-actions">
+        <button class="btn" onclick="closeConfirmModal()">Cancelar</button>
+        <button class="btn pri" onclick="doSavePicks()">✓ Confirmar y guardar</button>
+      </div>
+    </div>
+  </div>
+
   <!-- Help accordion -->
   <div class="help-panel">
     <button class="help-toggle" onclick="this.classList.toggle('open')">
@@ -570,18 +659,24 @@ body[data-div="Women"] .prog-fill{background:linear-gradient(90deg,#bf3060,var(-
       <div class="div-hero-name">OPEN</div>
       <div class="div-hero-count">48 equipos · 8 grupos de 6</div>
       <div class="div-hero-flag" id="heroOpenFlag"></div>
+      <div class="div-hero-prog"><div class="div-hero-prog-fill" id="progBarOpen" style="width:0%"></div></div>
+      <div class="div-hero-prog-txt" id="progTxtOpen">0% completado</div>
     </div>
     <div class="div-hero mixed" onclick="setPicksDiv('Mixed')" id="heroMixed">
       <div class="div-hero-icon">🥏</div>
       <div class="div-hero-name">MIXED</div>
       <div class="div-hero-count">48 equipos · 8 grupos de 6</div>
       <div class="div-hero-flag" id="heroMixedFlag"></div>
+      <div class="div-hero-prog"><div class="div-hero-prog-fill" id="progBarMixed" style="width:0%"></div></div>
+      <div class="div-hero-prog-txt" id="progTxtMixed">0% completado</div>
     </div>
     <div class="div-hero women" onclick="setPicksDiv('Women')" id="heroWomen">
       <div class="div-hero-icon">🥏</div>
       <div class="div-hero-name">WOMEN'S</div>
       <div class="div-hero-count">40 equipos · 8 grupos de 5</div>
       <div class="div-hero-flag" id="heroWomenFlag"></div>
+      <div class="div-hero-prog"><div class="div-hero-prog-fill" id="progBarWomen" style="width:0%"></div></div>
+      <div class="div-hero-prog-txt" id="progTxtWomen">0% completado</div>
     </div>
   </div>
 
@@ -596,7 +691,7 @@ body[data-div="Women"] .prog-fill{background:linear-gradient(90deg,#bf3060,var(-
   <div class="act-row" id="picksActRow">
     <button class="btn" onclick="clearPicksDiv()" id="btnClear">✕ Limpiar</button>
     <button class="btn" onclick="autoFill()" id="btnAuto">⚡ Autocompletar</button>
-    <button class="btn pri" onclick="savePicksToCloud()" id="btnSaveCloud">☁️ Guardar en leaderboard</button>
+    <button class="btn pri" onclick="openConfirmModal()" id="btnSaveCloud">☁️ Guardar en leaderboard</button>
   </div>
 
   <!-- Progress -->
@@ -626,7 +721,11 @@ body[data-div="Women"] .prog-fill{background:linear-gradient(90deg,#bf3060,var(-
       </div>
       <p style="font-size:12px;color:var(--tx2)">Ranking en tiempo real · Los puntos se calculan automáticamente cuando el admin ingresa resultados</p>
     </div>
-    <button class="btn suc" onclick="renderLB()">↺ Actualizar</button>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="btn suc" onclick="renderLB()">↺ Actualizar</button>
+      <button class="share-btn" onclick="shareMyPrediction()">📤 Compartir mi predicción</button>
+    </div>
+    <canvas id="shareCanvas" width="1080" height="1080"></canvas>
   </div>
   <div class="score-pills" style="margin-bottom:20px">
     <div class="s-pill">Open máx <b>225</b></div>
@@ -646,6 +745,25 @@ body[data-div="Women"] .prog-fill{background:linear-gradient(90deg,#bf3060,var(-
     <div id="lbBody"><div class="lb-empty">Conectando…</div></div>
   </div>
   <div class="lb-note">Los puntos reflejan los resultados oficiales ingresados por el admin.</div>
+</div>
+</div>
+
+<!-- PAGE: MIS PICKS VS RESULTADOS -->
+<div class="page" id="page-myvsr">
+<div class="container" style="padding-top:28px">
+  <div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:20px">
+    <div>
+      <h2 style="font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:1px;line-height:1;margin-bottom:6px">📊 MIS PICKS VS RESULTADOS</h2>
+      <p style="font-size:12px;color:var(--tx2)">Compara tus pronósticos con los resultados oficiales partido a partido · Compare your predictions with official results match by match</p>
+    </div>
+    <button class="btn suc" onclick="renderMVR()">↺ Actualizar</button>
+  </div>
+  <div class="div-tabs" id="mvsrDiv"></div>
+  <div id="mvsrBody">
+    <div style="padding:48px;text-align:center;color:var(--tx3);font-size:14px;line-height:1.8">
+      Selecciona una división arriba · Select a division above
+    </div>
+  </div>
 </div>
 </div>
 
@@ -705,7 +823,12 @@ body[data-div="Women"] .prog-fill{background:linear-gradient(90deg,#bf3060,var(-
 
     <div class="admin-section">
       <div style="font-size:16px;font-weight:600;margin-bottom:4px">📋 Resultados oficiales</div>
-      <div style="font-size:12px;color:var(--tx2);margin-bottom:16px">Ingresa los resultados partido a partido. Al guardar, el leaderboard se actualiza en tiempo real para todos los participantes.</div>
+      <div style="font-size:12px;color:var(--tx2);margin-bottom:10px">Ingresa los resultados partido a partido. Al guardar, el leaderboard se actualiza en tiempo real para todos los participantes.</div>
+      <div class="export-row">
+        <button class="btn" onclick="exportData('results')">⬇️ Exportar resultados JSON</button>
+        <button class="btn" onclick="exportData('picks')">⬇️ Exportar picks CSV</button>
+        <button class="btn" onclick="exportData('lb')">⬇️ Exportar leaderboard CSV</button>
+      </div>
       <div class="div-tabs" id="adminDiv"></div>
       <div class="phase-tabs" id="adminPhaseTabs">
         <button class="phase-tab on" onclick="setAdminPhase('groups')">Grupos</button>
@@ -1760,7 +1883,19 @@ function onNameInput(){
   myName=document.getElementById("myName").value;
   clearTimeout(_ssT);setSaveStatus("saving","Escribe nombre…");
   _ssT=setTimeout(()=>{lsSet("w26_name",myName);setSaveStatus("","Necesario para guardar");},500);
+  // Feature 2: duplicate name check
+  clearTimeout(_nameCheckT);
+  _nameCheckT=setTimeout(()=>{
+    const warn=document.getElementById("nameWarning");
+    if(!warn)return;
+    const name=document.getElementById("myName").value.trim();
+    if(!name||!subs.length){warn.style.display="none";return;}
+    const docId=name.toLowerCase().replace(/[^a-z0-9_-]/g,"_").slice(0,40);
+    const exists=subs.some(s=>s.docId===docId);
+    warn.style.display=exists?"block":"none";
+  },700);
 }
+let _nameCheckT;
 
 /* ═══════════════════════════════════════════════════
    LEADERBOARD
@@ -1769,14 +1904,50 @@ function renderLB(){
   const myN=(document.getElementById("myName").value||"").trim();
   document.getElementById("lbCount").textContent=subs.length;
   if(!subs.length){
-    document.getElementById("lbBody").innerHTML="<div class=\"lb-empty\">"+(fbReady?"Aún no hay participantes.<br>Haz tus picks y guárdalos en el leaderboard.":"Conectando con Firebase…<br>Si persiste, contacta al organizador.")+"</div>";
+    document.getElementById("lbBody").innerHTML="<div class=\"lb-empty\">"+(fbReady?"Aún no hay participantes.<br>Haz tus picks y guárdalos en el leaderboard.":"Conectando con Firebase…")+"</div>";
     return;
   }
+  // Feature 4: detect if any real results have been entered
+  const anyResults=["Open","Mixed","Women"].some(d=>results[d]&&results[d].g.some(g=>g.m.some(m=>m.w!==null)));
+  if(!anyResults){
+    // Feature 4: pre-results state — show participants with pick completion
+    const myN2=myN.toLowerCase();
+    let html=`<div class="lb-pre-results">
+      <div class="lb-pre-count">${subs.length}</div>
+      <div class="lb-pre-sub">participante${subs.length!==1?"s":""} registrado${subs.length!==1?"s":""}  ·  ${subs.length} participant${subs.length!==1?"s":""} registered<br>
+      Los puntos aparecerán cuando el admin ingrese resultados · Points appear once the admin enters results</div>
+    </div>`;
+    subs.forEach(s=>{
+      const isMe=s.n&&s.n.toLowerCase()===myN2;
+      const divPills=["Open","Mixed","Women"].map(d=>{
+        if(!s.p||!s.p[d])return`<span class="lb-pre-div">${d[0]} 0%</span>`;
+        const tot=s.p[d].g.reduce((a,g)=>a+g.m.length,0);
+        const done=s.p[d].g.reduce((a,g)=>a+g.m.filter(m=>m.w!==null).length,0);
+        const pct=tot?Math.round(done/tot*100):0;
+        const col=pct===100?"var(--green)":pct>0?"var(--lime)":"var(--tx3)";
+        return`<span class="lb-pre-div" style="color:${col};border-color:${col}33">${d[0]} ${pct}%</span>`;
+      }).join("");
+      html+=`<div class="lb-pre-row${isMe?" mine":""}">
+        <div class="lb-pre-name">${s.n}${isMe?` <span class="lb-name-you">TÚ</span>`:""}</div>
+        <div class="lb-pre-divs">${divPills}</div>
+      </div>`;
+    });
+    document.getElementById("lbBody").innerHTML=html;
+    return;
+  }
+  const medals=["🥇","🥈","🥉"];
   const entries=subs.map(s=>{
     const o=scoreDiv(s.p,results,"Open"),m=scoreDiv(s.p,results,"Mixed"),w=scoreDiv(s.p,results,"Women");
-    return{name:s.n,o,m,w,total:o+m+w};
+    const totalDone=["Open","Mixed","Women"].reduce((acc,d)=>{
+      if(!s.p||!s.p[d])return acc;
+      return acc+s.p[d].g.reduce((a,g)=>a+g.m.filter(mm=>mm.w!==null).length,0);
+    },0);
+    const totalPoss=["Open","Mixed","Women"].reduce((acc,d)=>{
+      if(!s.p||!s.p[d])return acc;
+      return acc+s.p[d].g.reduce((a,g)=>a+g.m.length,0);
+    },0);
+    return{name:s.n,o,m,w,total:o+m+w,done:totalDone,poss:totalPoss};
   }).sort((a,b)=>b.total-a.total);
-  const medals=["🥇","🥈","🥉"];
   const frag=document.createDocumentFragment();
   entries.forEach((e,i)=>{
     const row=document.createElement("div");
@@ -1784,7 +1955,12 @@ function renderLB(){
     row.className="lb-row"+(i===0?" top1":"")+(isMe?" mine":"");
     const pc=i===0?"g":i===1?"s":i===2?"b":"";
     const you=isMe?"<span class=\"lb-name-you\">TÚ</span>":"";
-    row.innerHTML="<div class=\"lb-pos "+pc+"\">"+( medals[i]||i+1)+"</div><div class=\"lb-name\">"+e.name+you+"</div><div class=\"lb-div\">"+e.o+"</div><div class=\"lb-div\">"+e.m+"</div><div class=\"lb-div\">"+e.w+"</div><div class=\"lb-total\">"+e.total+"</div>";
+    const pct=e.poss?Math.round(e.done/e.poss*100):0;
+    const pickCol=pct===100?"var(--green)":pct>50?"var(--lime)":"var(--tx3)";
+    row.innerHTML=`<div class="lb-pos ${pc}">${medals[i]||i+1}</div>
+      <div class="lb-name">${e.name}${you}<span class="lb-picks-badge${pct===100?" complete":""}" style="color:${pickCol}">${e.done}/${e.poss} picks</span></div>
+      <div class="lb-div">${e.o}</div><div class="lb-div">${e.m}</div><div class="lb-div">${e.w}</div>
+      <div class="lb-total">${e.total}</div>`;
     frag.appendChild(row);
   });
   const body=document.getElementById("lbBody");
@@ -1797,8 +1973,22 @@ function renderLB(){
 function showPage(p){
   document.querySelectorAll(".page").forEach(el=>el.classList.remove("on"));
   document.getElementById("page-"+p).classList.add("on");
-  document.querySelectorAll(".nav-btn").forEach((b,i)=>b.classList.toggle("on",["picks","lb","admin"][i]===p));
+  document.querySelectorAll(".nav-btn").forEach((b,i)=>b.classList.toggle("on",["picks","lb","myvsr","admin"][i]===p));
   if(p==="lb")renderLB();
+  if(p==="myvsr"){
+    if(!window._mvsrDiv)window._mvsrDiv="Open";
+    const mvsrDiv=document.getElementById("mvsrDiv");
+    if(!mvsrDiv.children.length){
+      ["Open","Mixed","Women"].forEach(div=>{
+        const b=document.createElement("button");
+        b.className="div-tab"+(div==="Open"?" on":"");
+        b.dataset.div=div;b.textContent=div;
+        b.onclick=()=>setMVSRDiv(div);
+        mvsrDiv.appendChild(b);
+      });
+    }
+    renderMVR();
+  }
   if(p==="admin"){checkAdminSession();if(fbReady)loadResultsFromCloud().then(()=>renderAdminView());}
 }
 function setPicksDiv(div){
@@ -1860,6 +2050,15 @@ function updateProgress(){
   const{tot,done}=progress(myPicks,curDiv);
   document.getElementById("progTxt").textContent=done+" / "+tot;
   document.getElementById("progFill").style.width=tot?Math.round(done/tot*100)+"%":"0%";
+  // Feature 1: update all three hero card progress bars
+  ["Open","Mixed","Women"].forEach(d=>{
+    const{tot:t,done:dn}=progress(myPicks,d);
+    const pct=t?Math.round(dn/t*100):0;
+    const bar=document.getElementById("progBar"+d);
+    const txt=document.getElementById("progTxt"+d);
+    if(bar)bar.style.width=pct+"%";
+    if(txt)txt.textContent=pct+"% completado · "+dn+"/"+t;
+  });
 }
 function renderPicksView(){
   if(picksPhase==="groups")renderGroups(curDiv,myPicks,"picksGroups","",isPicksClosed);
@@ -2045,6 +2244,252 @@ window.saveSponsors=saveSponsors;
 window.renderSponsorAdmin=renderSponsorAdmin;
 
 /* ═══════════════════════════════════════════════════
+   FEATURE 3: CONFIRM MODAL
+═══════════════════════════════════════════════════ */
+function openConfirmModal(){
+  if(isPicksClosed){toast("🔒 Los picks están cerrados.");return;}
+  const name=document.getElementById("myName").value.trim();
+  if(!name){toast("⚠️ Ingresa tu nombre primero");return;}
+  const rows=["Open","Mixed","Women"].map(d=>{
+    const{tot,done}=progress(myPicks,d);
+    const pct=tot?Math.round(done/tot*100):0;
+    const col=pct===100?"var(--green)":pct>0?"var(--lime)":"var(--orange)";
+    return`<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border);font-size:12px">
+      <span style="color:var(--tx2)">${d}</span>
+      <span style="color:${col};font-weight:600">${done}/${tot} (${pct}%)</span></div>`;
+  }).join("");
+  document.getElementById("confirmModalBody").innerHTML=`
+    <div style="margin-bottom:12px">Picks de <strong>${name}</strong> — estado actual:</div>
+    ${rows}
+    <div style="margin-top:10px;font-size:11px;color:var(--tx3)">Puedes actualizar antes del <strong style="color:var(--tx1)">15 agosto 9:00 AM Irlanda</strong>.<br>You can update until <strong style="color:var(--tx1)">Aug 15 9:00 AM Ireland time</strong>.</div>`;
+  document.getElementById("confirmModal").classList.add("open");
+}
+function closeConfirmModal(){document.getElementById("confirmModal").classList.remove("open");}
+document.addEventListener("keydown",e=>{if(e.key==="Escape")closeConfirmModal();});
+document.getElementById("confirmModal").addEventListener("click",e=>{if(e.target===e.currentTarget)closeConfirmModal();});
+
+async function doSavePicks(){
+  closeConfirmModal();
+  const name=document.getElementById("myName").value.trim();
+  if(!fbReady||!window._db){toast("⚠️ Sin conexión Firebase.");return;}
+  const btn=document.getElementById("btnSaveCloud");
+  btn.disabled=true;btn.textContent="⏳ Guardando…";
+  try{
+    const{doc,setDoc}=window._fbFns;
+    const docId=name.toLowerCase().replace(/[^a-z0-9_-]/g,"_").slice(0,40);
+    await setDoc(doc(window._db,"picks",docId),{v:4,n:name,docId,p:myPicks,ts:Date.now()});
+    lsSet("w26_name",name);setSaveStatus("saved","✅ En el leaderboard");
+    toast("🏆 ¡Picks guardados!");showPage("lb");
+  }catch(e){toast("❌ Error: "+e.message);setSaveStatus("","");}
+  finally{if(!isPicksClosed){btn.disabled=false;btn.textContent="☁️ Guardar en leaderboard";}}
+}
+
+/* ═══════════════════════════════════════════════════
+   FEATURE 5: MIS PICKS VS RESULTADOS
+═══════════════════════════════════════════════════ */
+function setMVSRDiv(div){
+  window._mvsrDiv=div;
+  document.querySelectorAll("#mvsrDiv .div-tab").forEach(b=>b.classList.toggle("on",b.dataset.div===div));
+  renderMVR();
+}
+
+function renderMVR(){
+  const div=window._mvsrDiv||"Open";
+  const body=document.getElementById("mvsrBody");
+  if(!body)return;
+  const o=scoreDiv(myPicks,results,"Open"),m=scoreDiv(myPicks,results,"Mixed"),w=scoreDiv(myPicks,results,"Women");
+  const anyRes=["Open","Mixed","Women"].some(d=>results[d]&&results[d].g.some(g=>g.m.some(mm=>mm.w!==null)));
+
+  let html=`<div class="mvr-score-bar">
+    <div class="mvr-score-card" style="border-color:rgba(59,158,255,.3)">
+      <div class="mvr-score-val" style="color:var(--open)">${o}</div>
+      <div class="mvr-score-lbl">Open</div><div class="mvr-score-sub">/ 225 pts</div></div>
+    <div class="mvr-score-card" style="border-color:rgba(180,124,255,.3)">
+      <div class="mvr-score-val" style="color:var(--mixed)">${m}</div>
+      <div class="mvr-score-lbl">Mixed</div><div class="mvr-score-sub">/ 225 pts</div></div>
+    <div class="mvr-score-card" style="border-color:rgba(255,107,158,.3)">
+      <div class="mvr-score-val" style="color:var(--women)">${w}</div>
+      <div class="mvr-score-lbl">Women's</div><div class="mvr-score-sub">/ 185 pts</div></div>
+    <div class="mvr-score-card" style="border-color:rgba(196,241,53,.3);background:rgba(196,241,53,.04)">
+      <div class="mvr-score-val">${o+m+w}</div>
+      <div class="mvr-score-lbl">Total</div><div class="mvr-score-sub">/ 635 pts</div></div>
+  </div>`;
+
+  if(!anyRes){
+    html+=`<div style="padding:24px;text-align:center;color:var(--tx3);background:var(--surf1);border-radius:var(--r2);border:1px solid var(--border);line-height:1.8">
+      El admin aún no ha ingresado resultados. Vuelve aquí durante el torneo.<br>
+      <span style="font-size:11px">No official results yet. Check back during the tournament.</span></div>`;
+    body.innerHTML=html;return;
+  }
+
+  const G=GROUPS[div];
+  G.forEach((grp,gi)=>{
+    if(!myPicks[div]||!results[div])return;
+    const pGst=myPicks[div].g[gi], rGst=results[div].g[gi];
+    html+=`<div class="mvr-section"><div class="mvr-section-title">GRUPO ${grp.g}</div>`;
+    pGst.m.forEach((pm,mi)=>{
+      const rm=rGst.m[mi];
+      if(!rm)return;
+      const ta=grp.t[pm.a],tb=grp.t[pm.b];
+      const pWin=pm.w!==null?(pm.w===pm.a?ta.n:tb.n):null;
+      const rWin=rm.w!==null?(rm.w===rm.a?ta.n:tb.n):null;
+      const hit=pWin&&rWin&&pWin===rWin;
+      const pending=!rWin;
+      html+=`<div class="mvr-match ${pending?"pending":hit?"hit":"miss"}">
+        <span class="mvr-teams">${fl(ta.c)} ${ta.n} <span style="color:var(--tx3)">vs</span> ${fl(tb.c)} ${tb.n}</span>
+        <span class="mvr-pick" style="color:${pending?"var(--tx3)":hit?"var(--green)":"var(--lime)"}">→ ${pWin||"Sin pick"}</span>
+        <span class="mvr-result">${pending?"⏳ Pendiente":`<strong style="color:${hit?"var(--green)":"var(--red)"}">${rWin}</strong>`}</span>
+        <span class="mvr-icon">${pending?"⬜":hit?"✅":"❌"}</span>
+      </div>`;
+    });
+    html+=`</div>`;
+  });
+  body.innerHTML=html;
+}
+
+/* ═══════════════════════════════════════════════════
+   FEATURE 6: SHARE IMAGE GENERATOR
+═══════════════════════════════════════════════════ */
+function shareMyPrediction(){
+  const name=(document.getElementById("myName").value||"Participante").trim();
+  const canvas=document.getElementById("shareCanvas");
+  const ctx=canvas.getContext("2d");
+  const W=1080,H=1080;
+  canvas.width=W;canvas.height=H;
+
+  // BG
+  ctx.fillStyle="#07080C";ctx.fillRect(0,0,W,H);
+  const g=ctx.createRadialGradient(W,0,0,W,0,W*.8);
+  g.addColorStop(0,"rgba(196,241,53,.09)");g.addColorStop(1,"rgba(0,0,0,0)");
+  ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
+
+  // Top bar
+  ctx.fillStyle="#C4F135";ctx.fillRect(0,0,W,5);
+
+  // Header
+  ctx.fillStyle="#C4F135";ctx.font="bold 26px sans-serif";ctx.fillText("DESDE LA LÍNEA",60,70);
+  ctx.fillStyle="#E8EAF2";ctx.font="bold 76px sans-serif";ctx.fillText("WUCC 2026",60,165);
+  ctx.fillStyle="#7B7E9A";ctx.font="22px sans-serif";ctx.fillText("PREDICTOR · LIMERICK, IRLANDA · 15–22 AGOSTO",60,205);
+
+  // Divider
+  ctx.strokeStyle="#1F2333";ctx.lineWidth=1;
+  ctx.beginPath();ctx.moveTo(60,225);ctx.lineTo(W-60,225);ctx.stroke();
+
+  // Name
+  ctx.fillStyle="#E8EAF2";ctx.font="bold 52px sans-serif";ctx.fillText(name,60,300);
+  ctx.fillStyle="#7B7E9A";ctx.font="22px sans-serif";ctx.fillText("MIS PRONÓSTICOS / MY PREDICTIONS",60,338);
+
+  // Score cards
+  const scores=[
+    {lbl:"OPEN",pts:scoreDiv(myPicks,results,"Open"),max:225,col:"#3B9EFF"},
+    {lbl:"MIXED",pts:scoreDiv(myPicks,results,"Mixed"),max:225,col:"#B47CFF"},
+    {lbl:"WOMEN'S",pts:scoreDiv(myPicks,results,"Women"),max:185,col:"#FF6B9E"},
+    {lbl:"TOTAL",pts:scoreDiv(myPicks,results,"Open")+scoreDiv(myPicks,results,"Mixed")+scoreDiv(myPicks,results,"Women"),max:635,col:"#C4F135"},
+  ];
+  const cw=215,ch=175,gap=18,cx=60,cy=375;
+  scores.forEach((c,i)=>{
+    const x=cx+i*(cw+gap),y=cy;
+    ctx.fillStyle=c.col+"18";
+    _rr(ctx,x,y,cw,ch,12,true,false);
+    ctx.strokeStyle=c.col+"55";ctx.lineWidth=1.5;
+    _rr(ctx,x,y,cw,ch,12,false,true);
+    ctx.fillStyle=c.col;ctx.font="bold 62px sans-serif";ctx.textAlign="center";
+    ctx.fillText(c.pts,x+cw/2,y+85);
+    ctx.fillStyle="#7B7E9A";ctx.font="16px sans-serif";
+    ctx.fillText(c.lbl,x+cw/2,y+115);
+    ctx.fillText("/ "+c.max+" pts",x+cw/2,y+140);
+    ctx.textAlign="left";
+  });
+
+  // Champions
+  let yc=625;
+  ctx.fillStyle="#3D4060";ctx.font="bold 18px sans-serif";
+  ctx.fillText("CAMPEONES PRONOSTICADOS / PREDICTED CHAMPIONS",60,yc);yc+=36;
+  [{div:"Open",col:"#3B9EFF"},{div:"Mixed",col:"#B47CFF"},{div:"Women",col:"#FF6B9E"}].forEach(({div,col})=>{
+    const br=myPicks[div]?.b;
+    const champ=br&&br[br.length-1]?.m[0]?.w;
+    ctx.fillStyle=col;ctx.font="bold 20px sans-serif";ctx.fillText(div,60,yc);
+    ctx.fillStyle="#E8EAF2";ctx.font="20px sans-serif";ctx.fillText(champ||"Sin selección / No pick",220,yc);
+    yc+=40;
+  });
+
+  // Bottom
+  ctx.strokeStyle="#1F2333";ctx.lineWidth=1;
+  ctx.beginPath();ctx.moveTo(60,yc+10);ctx.lineTo(W-60,yc+10);ctx.stroke();
+  ctx.fillStyle="#3D4060";ctx.font="19px sans-serif";
+  ctx.fillText("desdelalinea.github.io/wucc2026-predictor",60,yc+42);
+
+  // Download
+  const a=document.createElement("a");
+  a.download="wucc2026-prediccion-"+name.replace(/\s+/g,"-").toLowerCase()+".png";
+  a.href=canvas.toDataURL("image/png");a.click();
+  toast("📤 Imagen descargada. ¡Compártela!");
+}
+function _rr(ctx,x,y,w,h,r,fill,stroke){
+  ctx.beginPath();ctx.moveTo(x+r,y);ctx.lineTo(x+w-r,y);
+  ctx.quadraticCurveTo(x+w,y,x+w,y+r);ctx.lineTo(x+w,y+h-r);
+  ctx.quadraticCurveTo(x+w,y+h,x+w-r,y+h);ctx.lineTo(x+r,y+h);
+  ctx.quadraticCurveTo(x,y+h,x,y+h-r);ctx.lineTo(x,y+r);
+  ctx.quadraticCurveTo(x,y,x+r,y);ctx.closePath();
+  if(fill)ctx.fill();if(stroke)ctx.stroke();
+}
+
+/* ═══════════════════════════════════════════════════
+   FEATURE 7: DATA EXPORT (BACKUP)
+═══════════════════════════════════════════════════ */
+function exportData(type){
+  let content,filename,mime;
+  if(type==="results"){
+    content=JSON.stringify(results,null,2);
+    filename="wucc2026-resultados-"+new Date().toISOString().slice(0,10)+".json";
+    mime="application/json";
+  } else if(type==="picks"){
+    const rows=[["Nombre","Division","Grupo","TeamA","TeamB","Pick","Timestamp"]];
+    subs.forEach(s=>{
+      ["Open","Mixed","Women"].forEach(div=>{
+        if(!s.p||!s.p[div])return;
+        GROUPS[div].forEach((grp,gi)=>{
+          if(!s.p[div].g[gi])return;
+          s.p[div].g[gi].m.forEach(mm=>{
+            const ta=grp.t[mm.a]?.n||"?",tb=grp.t[mm.b]?.n||"?";
+            const pick=mm.w!==null?(mm.w===mm.a?ta:tb):"Sin pick";
+            rows.push([s.n,div,"Grupo "+grp.g,ta,tb,pick,new Date(s.ts||0).toISOString()]);
+          });
+        });
+      });
+    });
+    content=rows.map(r=>r.map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(",")).join("\n");
+    filename="wucc2026-picks-"+new Date().toISOString().slice(0,10)+".csv";
+    mime="text/csv";
+  } else if(type==="lb"){
+    const rows=[["Posicion","Nombre","Open","Mixed","Women","Total","Picks_completados","Picks_posibles"]];
+    subs.map(s=>{
+      const o=scoreDiv(s.p,results,"Open"),m=scoreDiv(s.p,results,"Mixed"),w=scoreDiv(s.p,results,"Women");
+      const done=["Open","Mixed","Women"].reduce((acc,d)=>acc+(s.p&&s.p[d]?s.p[d].g.reduce((a,g)=>a+g.m.filter(mm=>mm.w!==null).length,0):0),0);
+      const poss=["Open","Mixed","Women"].reduce((acc,d)=>acc+(s.p&&s.p[d]?s.p[d].g.reduce((a,g)=>a+g.m.length,0):0),0);
+      return[s.n,o,m,w,o+m+w,done,poss];
+    }).sort((a,b)=>b[4]-a[4]).forEach((e,i)=>rows.push([i+1,...e]));
+    content=rows.map(r=>r.map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(",")).join("\n");
+    filename="wucc2026-leaderboard-"+new Date().toISOString().slice(0,10)+".csv";
+    mime="text/csv";
+  }
+  const blob=new Blob([content],{type:mime});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement("a");a.href=url;a.download=filename;a.click();
+  URL.revokeObjectURL(url);
+  toast("✅ Descargado: "+filename);
+}
+
+/* ── Expose all new functions ── */
+window.openConfirmModal=openConfirmModal;
+window.closeConfirmModal=closeConfirmModal;
+window.doSavePicks=doSavePicks;
+window.shareMyPrediction=shareMyPrediction;
+window.exportData=exportData;
+window.renderMVR=renderMVR;
+window.setMVSRDiv=setMVSRDiv;
+
+/* ═══════════════════════════════════════════════════
    INIT — all functions defined above, safe to call
 ═══════════════════════════════════════════════════ */
 mkDivTabs("adminDiv",setAdminDiv,"Open");
@@ -2055,6 +2500,7 @@ checkDeadline();
 renderPicksView();
 renderAdminView();
 renderSponsorsPublic();
+updateProgress(); // init hero bars
 
 initFirebase();
 
