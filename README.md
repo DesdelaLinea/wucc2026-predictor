@@ -116,14 +116,6 @@ Picks bloqueados automáticamente. El admin también puede forzar cierre/apertur
 
 ---
 
-## 🛠️ Setup para el admin
-
-Ver **[SETUP.md](SETUP.md)** — guía completa.
-
-**Único paso:** abre `index.html`, busca `REEMPLAZA_CON_TU_API_KEY` y pega tus 6 credenciales de Firebase. Los usuarios no configuran nada.
-
----
-
 ## 💰 Modelo de monetización / Monetization
 
 La app es **gratuita para usuarios** y se monetiza por el back:
