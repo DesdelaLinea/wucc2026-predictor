@@ -595,6 +595,33 @@ body.light .modal-box{background:var(--surf1)}
   padding:6px 0;text-align:center;font-size:11px;color:var(--tx3);display:none}
 .sponsor-banner.on{display:block}
 .sponsor-banner a{color:var(--lime);text-decoration:none;font-weight:600}
+
+/* ── LANGUAGE SELECTOR ── */
+.lang-wrap{position:relative}
+.lang-btn{
+  padding:6px 11px;border-radius:var(--r);border:1px solid var(--border);
+  background:transparent;color:var(--tx2);font-size:12px;font-family:'DM Sans',sans-serif;
+  cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:5px;white-space:nowrap;
+}
+.lang-btn:hover{border-color:var(--borderl);color:var(--tx1);background:var(--surf1)}
+.lang-chevron{font-size:8px;opacity:.5;transition:transform .15s}
+.lang-dropdown{
+  position:absolute;top:calc(100% + 6px);right:0;
+  background:var(--surf2);border:1px solid var(--borderl);border-radius:var(--r2);
+  overflow:hidden;z-index:300;min-width:136px;
+  box-shadow:0 8px 32px rgba(0,0,0,.45);display:none;
+}
+.lang-dropdown.open{display:block}
+.lang-opt{
+  display:flex;align-items:center;gap:8px;padding:8px 14px;
+  font-size:12px;color:var(--tx2);cursor:pointer;transition:background .1s;
+  border:none;background:transparent;width:100%;text-align:left;
+  font-family:'DM Sans',sans-serif;
+}
+.lang-opt:hover{background:var(--surf3);color:var(--tx1)}
+.lang-opt.on{color:var(--lime);font-weight:600}
+body.light .lang-dropdown{background:var(--surf1)}
+body.light .lang-opt:hover{background:var(--surf2)}
 </style>
 </head>
 <body>
@@ -617,10 +644,27 @@ body.light .modal-box{background:var(--surf1)}
       <div class="hdr-nav">
         <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" title="Cambiar tema">🌙</button>
         <div id="fb-status"><div class="fb-dot cfg" id="fbDot"></div><span id="fbTxt">Conectando…</span></div>
-        <button class="nav-btn on" onclick="showPage('picks')">🎯 Mis Picks</button>
-        <button class="nav-btn" onclick="showPage('lb')">🏆 Leaderboard</button>
-        <button class="nav-btn" onclick="showPage('myvsr')">📊 Mis vs Resultados</button>
-        <button class="nav-btn" onclick="showPage('admin')">⚙️ Admin</button>
+        <!-- Language Selector -->
+        <div class="lang-wrap" id="langWrap">
+          <button class="lang-btn" id="langBtn" onclick="toggleLangMenu()">
+            <span id="langFlag">🇪🇸</span>
+            <span id="langCode">ES</span>
+            <span class="lang-chevron">▼</span>
+          </button>
+          <div class="lang-dropdown" id="langDropdown">
+            <button class="lang-opt on" onclick="setLang('es')">🇪🇸 Español</button>
+            <button class="lang-opt" onclick="setLang('en')">🇬🇧 English</button>
+            <button class="lang-opt" onclick="setLang('fr')">🇫🇷 Français</button>
+            <button class="lang-opt" onclick="setLang('de')">🇩🇪 Deutsch</button>
+            <button class="lang-opt" onclick="setLang('pt')">🇧🇷 Português</button>
+            <button class="lang-opt" onclick="setLang('zh')">🇨🇳 中文</button>
+            <button class="lang-opt" onclick="setLang('ja')">🇯🇵 日本語</button>
+          </div>
+        </div>
+        <button class="nav-btn on" data-page="picks" onclick="showPage('picks')">🎯 Mis Picks</button>
+        <button class="nav-btn" data-page="lb" onclick="showPage('lb')">🏆 Leaderboard</button>
+        <button class="nav-btn" data-page="myvsr" onclick="showPage('myvsr')">📊 Mis vs Resultados</button>
+        <button class="nav-btn" data-page="admin" onclick="showPage('admin')">⚙️ Admin</button>
       </div>
     </div>
   </div>
@@ -908,7 +952,7 @@ body.light .modal-box{background:var(--surf1)}
     <div class="s-pill">Mixed máx <b>225</b></div>
     <div class="s-pill">Women máx <b>185</b></div>
     <div class="s-pill">Total máx <b>635</b></div>
-    <div class="s-pill">Participantes <b id="lbCount">0</b></div>
+    <div class="s-pill"><span id="lbParticipantsLabel">Participantes</span> <b id="lbCount">0</b></div>
   </div>
   <div class="lb-filter-row" id="lbFilterRow">
     <button class="lb-filter-btn on" onclick="setLBFilter('general')" id="lbf-general">🌍 General</button>
@@ -920,15 +964,15 @@ body.light .modal-box{background:var(--surf1)}
   </div>
   <div class="lb-wrap">
     <div class="lb-hdr">
-      <div>#</div><div>Participante</div>
+      <div id="lbHdrPos">#</div><div id="lbHdrName">Participante</div>
       <div style="text-align:right">Open</div>
       <div style="text-align:right">Mixed</div>
       <div style="text-align:right">Women</div>
-      <div style="text-align:right">Total</div>
+      <div style="text-align:right" id="lbHdrTotal">Total</div>
     </div>
     <div id="lbBody"><div class="lb-empty">Conectando…</div></div>
   </div>
-  <div class="lb-note">Los puntos reflejan los resultados oficiales ingresados por el admin.</div>
+  <div class="lb-note" id="lbNote">Los puntos reflejan los resultados oficiales ingresados por el admin.</div>
 </div>
 </div>
 
@@ -1103,26 +1147,313 @@ body.light .modal-box{background:var(--surf1)}
 <div class="success-overlay" id="successModal">
   <div class="success-box">
     <div class="success-icon">🏆</div>
-    <div class="success-title">¡PICKS GUARDADOS!</div>
+    <div class="success-title" id="successTitle">¡PICKS GUARDADOS!</div>
     <div class="success-name" id="successName"></div>
     <div class="success-sponsor" id="successSponsorBlock">
-      <div class="success-sponsor-by">PATROCINADO POR</div>
+      <div class="success-sponsor-by" id="successSponsorBy">PATROCINADO POR</div>
       <div class="success-sponsor-name" id="successSponsorName">DESDE LA LÍNEA</div>
       <div class="success-sponsor-msg" id="successSponsorMsg">¡Gracias por participar! Usa este código para obtener un descuento exclusivo:</div>
       <div class="success-code" id="successCode" onclick="copyCode(this)">WUCC2026</div>
-      <div class="success-code-hint">Clic para copiar · Click to copy</div>
+      <div class="success-code-hint" id="successCodeHint">Clic para copiar · Click to copy</div>
     </div>
     <a class="success-cta" id="successCTA" href="#" target="_blank">🛒 Ver oferta del sponsor</a>
     <div class="success-actions">
-      <button class="btn suc" onclick="closeSuccessModal();showPage('lb')">🏆 Ver leaderboard</button>
-      <button class="share-btn" onclick="closeSuccessModal();shareMyPrediction()">📤 Compartir</button>
-      <button class="btn" onclick="closeSuccessModal()">Cerrar</button>
+      <button class="btn suc" id="successBtnLB" onclick="closeSuccessModal();showPage('lb')">🏆 Ver leaderboard</button>
+      <button class="share-btn" id="successBtnShare" onclick="closeSuccessModal();shareMyPrediction()">📤 Compartir</button>
+      <button class="btn" id="successBtnClose" onclick="closeSuccessModal()">Cerrar</button>
     </div>
   </div>
 </div>
 
 </div><!-- /wrap -->
 <div class="toast" id="toast"></div>
+
+<!-- I18N SYSTEM -->
+<script>
+/* ═══════════════════════════════════════════════════
+   LANGUAGE / I18N — 7 languages
+═══════════════════════════════════════════════════ */
+const LANGS={
+  es:{flag:'🇪🇸',code:'ES',
+    nav:{picks:'🎯 Mis Picks',lb:'🏆 Leaderboard',myvsr:'📊 Mis vs Resultados',admin:'⚙️ Admin'},
+    fb:{connecting:'Conectando…',connected:'Conectado ✓',noConfig:'Sin configurar',error:'Error Firebase'},
+    deadline:{open:'Picks abiertos — cierre automático al inicio del torneo',
+      openSub:'Cierre: 15 de agosto 2026, 9:00 AM hora Irlanda (UTC+1)',
+      closed:'Picks cerrados — no se aceptan más pronósticos',
+      closedSub:'Los picks válidos son los guardados antes del inicio del torneo'},
+    name:{label:'Tu nombre',ph:'Escribe tu nombre para el leaderboard…',required:'Necesario para participar',
+      typing:'Escribe nombre…',needSave:'Necesario para guardar',inLB:'✅ En el leaderboard'},
+    tabs:{groups:'📊 Grupos',inter:'⚡ Fase intermedia',bracket:'🏆 Championship',spirit:'🕊️ Spirit'},
+    btn:{clear:'✕ Limpiar',save:'☁️ Guardar en leaderboard',closed:'🔒 Picks cerrados',
+      saving:'⏳ Guardando…',confirm:'✓ Confirmar y guardar'},
+    lb:{participants:'Participantes',pos:'#',name:'Participante',total:'Total',
+      empty:'Aún no hay participantes.<br>Haz tus picks y guárdalos en el leaderboard.',
+      connecting:'Conectando…',note:'Los puntos reflejan los resultados oficiales ingresados por el admin.',
+      general:'🌍 General',latam:'🌎 LATAM',country:'🏳️ Por país'},
+    toast:{closed:'🔒 Los picks están cerrados.',noName:'⚠️ Ingresa tu nombre primero',
+      noFB:'⚠️ Sin conexión Firebase.',saved:'🏆 ¡Picks guardados!',
+      adminClosed:'🔒 Picks cerrados.',adminOpen:'🔓 Picks reabiertos.',
+      resultsOK:'✅ Resultados publicados. Leaderboard actualizado para todos.',
+      imgDL:'📤 Imagen descargada. ¡Compártela!',errPrefix:'❌ Error: '},
+    modal:{successTitle:'¡PICKS GUARDADOS!',sponsorBy:'PATROCINADO POR',
+      sponsorMsg:'¡Gracias por participar! Usa este código para obtener un descuento exclusivo:',
+      codeHint:'Clic para copiar · Click to copy',cta:'🛒 Ver oferta del sponsor',
+      viewLB:'🏆 Ver leaderboard',share:'📤 Compartir',close:'Cerrar'},
+    consolation:'CONSOLACIÓN'},
+  en:{flag:'🇬🇧',code:'EN',
+    nav:{picks:'🎯 My Picks',lb:'🏆 Leaderboard',myvsr:'📊 My Picks vs Results',admin:'⚙️ Admin'},
+    fb:{connecting:'Connecting…',connected:'Connected ✓',noConfig:'Not configured',error:'Firebase error'},
+    deadline:{open:'Picks open — auto-close at tournament start',
+      openSub:'Deadline: August 15, 2026, 9:00 AM Ireland time (UTC+1)',
+      closed:'Picks closed — no more predictions accepted',
+      closedSub:'Valid picks are those saved before the tournament start'},
+    name:{label:'Your name',ph:'Enter your name for the leaderboard…',required:'Required to participate',
+      typing:'Type name…',needSave:'Required to save',inLB:'✅ On the leaderboard'},
+    tabs:{groups:'📊 Groups',inter:'⚡ Intermediate',bracket:'🏆 Championship',spirit:'🕊️ Spirit'},
+    btn:{clear:'✕ Clear',save:'☁️ Save to leaderboard',closed:'🔒 Picks closed',
+      saving:'⏳ Saving…',confirm:'✓ Confirm & save'},
+    lb:{participants:'Participants',pos:'#',name:'Participant',total:'Total',
+      empty:'No participants yet.<br>Make your picks and save them to the leaderboard.',
+      connecting:'Connecting…',note:'Points reflect official results entered by the admin.',
+      general:'🌍 General',latam:'🌎 LATAM',country:'🏳️ By country'},
+    toast:{closed:'🔒 Picks are closed.',noName:'⚠️ Enter your name first',
+      noFB:'⚠️ No Firebase connection.',saved:'🏆 Picks saved!',
+      adminClosed:'🔒 Picks closed.',adminOpen:'🔓 Picks reopened.',
+      resultsOK:'✅ Results published. Leaderboard updated for all.',
+      imgDL:'📤 Image downloaded. Share it!',errPrefix:'❌ Error: '},
+    modal:{successTitle:'PICKS SAVED!',sponsorBy:'SPONSORED BY',
+      sponsorMsg:'Thanks for participating! Use this code for an exclusive discount:',
+      codeHint:'Click to copy',cta:'🛒 See sponsor offer',
+      viewLB:'🏆 View leaderboard',share:'📤 Share',close:'Close'},
+    consolation:'CONSOLATION'},
+  fr:{flag:'🇫🇷',code:'FR',
+    nav:{picks:'🎯 Mes Picks',lb:'🏆 Classement',myvsr:'📊 Picks vs Résultats',admin:'⚙️ Admin'},
+    fb:{connecting:'Connexion…',connected:'Connecté ✓',noConfig:'Non configuré',error:'Erreur Firebase'},
+    deadline:{open:'Picks ouverts — fermeture auto au début du tournoi',
+      openSub:'Date limite: 15 août 2026, 9h00 (heure Irlande · UTC+1)',
+      closed:'Picks fermés — plus de pronostics acceptés',
+      closedSub:'Seuls les picks sauvegardés avant le tournoi sont valides'},
+    name:{label:'Votre nom',ph:'Entrez votre nom pour le classement…',required:'Requis pour participer',
+      typing:'Saisir nom…',needSave:'Requis pour sauvegarder',inLB:'✅ Dans le classement'},
+    tabs:{groups:'📊 Groupes',inter:'⚡ Phase intermédiaire',bracket:'🏆 Championship',spirit:'🕊️ Spirit'},
+    btn:{clear:'✕ Effacer',save:'☁️ Sauvegarder au classement',closed:'🔒 Picks fermés',
+      saving:'⏳ Sauvegarde…',confirm:'✓ Confirmer & sauvegarder'},
+    lb:{participants:'Participants',pos:'#',name:'Participant',total:'Total',
+      empty:'Pas encore de participants.<br>Faites vos picks et sauvegardez-les.',
+      connecting:'Connexion…',note:"Les points reflètent les résultats officiels saisis par l'admin.",
+      general:'🌍 Général',latam:'🌎 LATAM',country:'🏳️ Par pays'},
+    toast:{closed:'🔒 Les picks sont fermés.',noName:"⚠️ Entrez d'abord votre nom",
+      noFB:'⚠️ Pas de connexion Firebase.',saved:'🏆 Picks sauvegardés!',
+      adminClosed:'🔒 Picks fermés.',adminOpen:'🔓 Picks rouverts.',
+      resultsOK:'✅ Résultats publiés. Classement mis à jour.',
+      imgDL:'📤 Image téléchargée. Partagez-la!',errPrefix:'❌ Erreur: '},
+    modal:{successTitle:'PICKS SAUVEGARDÉS!',sponsorBy:'SPONSORISÉ PAR',
+      sponsorMsg:'Merci de participer! Utilisez ce code pour une réduction exclusive:',
+      codeHint:'Cliquez pour copier',cta:"🛒 Voir l'offre sponsor",
+      viewLB:'🏆 Voir le classement',share:'📤 Partager',close:'Fermer'},
+    consolation:'CONSOLATION'},
+  de:{flag:'🇩🇪',code:'DE',
+    nav:{picks:'🎯 Meine Picks',lb:'🏆 Rangliste',myvsr:'📊 Picks vs Ergebnisse',admin:'⚙️ Admin'},
+    fb:{connecting:'Verbindung…',connected:'Verbunden ✓',noConfig:'Nicht konfiguriert',error:'Firebase-Fehler'},
+    deadline:{open:'Picks offen — automatisch beim Turnierstart',
+      openSub:'Frist: 15. August 2026, 9:00 Uhr (Irland · UTC+1)',
+      closed:'Picks geschlossen — keine Vorhersagen mehr',
+      closedSub:'Gültige Picks wurden vor Turnierbeginn gespeichert'},
+    name:{label:'Dein Name',ph:'Namen für die Rangliste eingeben…',required:'Für Teilnahme erforderlich',
+      typing:'Name eingeben…',needSave:'Zum Speichern erforderlich',inLB:'✅ In der Rangliste'},
+    tabs:{groups:'📊 Gruppen',inter:'⚡ Zwischenrunde',bracket:'🏆 Championship',spirit:'🕊️ Spirit'},
+    btn:{clear:'✕ Löschen',save:'☁️ In Rangliste speichern',closed:'🔒 Picks geschlossen',
+      saving:'⏳ Speichern…',confirm:'✓ Bestätigen & speichern'},
+    lb:{participants:'Teilnehmer',pos:'#',name:'Teilnehmer',total:'Gesamt',
+      empty:'Noch keine Teilnehmer.<br>Erstelle Picks und speichere sie in der Rangliste.',
+      connecting:'Verbindung…',note:'Punkte spiegeln die offiziellen Ergebnisse wider.',
+      general:'🌍 Allgemein',latam:'🌎 LATAM',country:'🏳️ Nach Land'},
+    toast:{closed:'🔒 Picks sind geschlossen.',noName:'⚠️ Zuerst Namen eingeben',
+      noFB:'⚠️ Keine Firebase-Verbindung.',saved:'🏆 Picks gespeichert!',
+      adminClosed:'🔒 Picks geschlossen.',adminOpen:'🔓 Picks wieder geöffnet.',
+      resultsOK:'✅ Ergebnisse veröffentlicht. Rangliste aktualisiert.',
+      imgDL:'📤 Bild heruntergeladen. Teile es!',errPrefix:'❌ Fehler: '},
+    modal:{successTitle:'PICKS GESPEICHERT!',sponsorBy:'GESPONSERT VON',
+      sponsorMsg:'Danke für die Teilnahme! Nutze diesen Code für einen Rabatt:',
+      codeHint:'Klicken zum Kopieren',cta:'🛒 Sponsor-Angebot ansehen',
+      viewLB:'🏆 Rangliste anzeigen',share:'📤 Teilen',close:'Schließen'},
+    consolation:'TROST'},
+  pt:{flag:'🇧🇷',code:'PT',
+    nav:{picks:'🎯 Meus Picks',lb:'🏆 Classificação',myvsr:'📊 Picks vs Resultados',admin:'⚙️ Admin'},
+    fb:{connecting:'Conectando…',connected:'Conectado ✓',noConfig:'Não configurado',error:'Erro Firebase'},
+    deadline:{open:'Picks abertos — fechamento automático no início do torneio',
+      openSub:'Prazo: 15 de agosto de 2026, 9:00 (Irlanda · UTC+1)',
+      closed:'Picks fechados — não são aceitos mais palpites',
+      closedSub:'Picks válidos são os salvos antes do início do torneio'},
+    name:{label:'Seu nome',ph:'Digite seu nome para a classificação…',required:'Necessário para participar',
+      typing:'Digite o nome…',needSave:'Necessário para salvar',inLB:'✅ Na classificação'},
+    tabs:{groups:'📊 Grupos',inter:'⚡ Fase intermediária',bracket:'🏆 Championship',spirit:'🕊️ Spirit'},
+    btn:{clear:'✕ Limpar',save:'☁️ Salvar na classificação',closed:'🔒 Picks fechados',
+      saving:'⏳ Salvando…',confirm:'✓ Confirmar e salvar'},
+    lb:{participants:'Participantes',pos:'#',name:'Participante',total:'Total',
+      empty:'Ainda não há participantes.<br>Faça seus picks e salve na classificação.',
+      connecting:'Conectando…',note:'Os pontos refletem os resultados oficiais inseridos pelo admin.',
+      general:'🌍 Geral',latam:'🌎 LATAM',country:'🏳️ Por país'},
+    toast:{closed:'🔒 Os picks estão fechados.',noName:'⚠️ Digite seu nome primeiro',
+      noFB:'⚠️ Sem conexão Firebase.',saved:'🏆 Picks salvos!',
+      adminClosed:'🔒 Picks fechados.',adminOpen:'🔓 Picks reabertos.',
+      resultsOK:'✅ Resultados publicados. Classificação atualizada.',
+      imgDL:'📤 Imagem baixada. Compartilhe!',errPrefix:'❌ Erro: '},
+    modal:{successTitle:'PICKS SALVOS!',sponsorBy:'PATROCINADO POR',
+      sponsorMsg:'Obrigado por participar! Use este código para um desconto exclusivo:',
+      codeHint:'Clique para copiar',cta:'🛒 Ver oferta do patrocinador',
+      viewLB:'🏆 Ver classificação',share:'📤 Compartilhar',close:'Fechar'},
+    consolation:'CONSOLAÇÃO'},
+  zh:{flag:'🇨🇳',code:'ZH',
+    nav:{picks:'🎯 我的预测',lb:'🏆 排行榜',myvsr:'📊 预测 vs 结果',admin:'⚙️ 管理'},
+    fb:{connecting:'连接中…',connected:'已连接 ✓',noConfig:'未配置',error:'Firebase错误'},
+    deadline:{open:'预测开放中 — 赛事开始时自动关闭',
+      openSub:'截止时间：2026年8月15日 9:00（爱尔兰时间 · UTC+1）',
+      closed:'预测已关闭 — 不再接受预测',
+      closedSub:'有效预测为赛事开始前保存的预测'},
+    name:{label:'您的名称',ph:'输入排行榜名称…',required:'参与所必需',
+      typing:'输入名称…',needSave:'保存所必需',inLB:'✅ 已在排行榜'},
+    tabs:{groups:'📊 小组',inter:'⚡ 中间阶段',bracket:'🏆 锦标赛',spirit:'🕊️ 精神奖'},
+    btn:{clear:'✕ 清除',save:'☁️ 保存至排行榜',closed:'🔒 预测已关闭',
+      saving:'⏳ 保存中…',confirm:'✓ 确认并保存'},
+    lb:{participants:'参与者',pos:'#',name:'参与者',total:'总分',
+      empty:'暂无参与者。<br>完成预测并保存至排行榜。',
+      connecting:'连接中…',note:'积分反映管理员输入的官方结果。',
+      general:'🌍 总体',latam:'🌎 拉美',country:'🏳️ 按国家'},
+    toast:{closed:'🔒 预测已关闭。',noName:'⚠️ 请先输入名称',
+      noFB:'⚠️ 无Firebase连接。',saved:'🏆 预测已保存！',
+      adminClosed:'🔒 预测已关闭。',adminOpen:'🔓 预测已重新开放。',
+      resultsOK:'✅ 结果已发布。排行榜已更新。',
+      imgDL:'📤 图片已下载。分享它！',errPrefix:'❌ 错误：'},
+    modal:{successTitle:'预测已保存！',sponsorBy:'赞助商',
+      sponsorMsg:'感谢参与！使用此代码获得专属折扣：',
+      codeHint:'点击复制',cta:'🛒 查看赞助商优惠',
+      viewLB:'🏆 查看排行榜',share:'📤 分享',close:'关闭'},
+    consolation:'安慰赛'},
+  ja:{flag:'🇯🇵',code:'JA',
+    nav:{picks:'🎯 マイピック',lb:'🏆 リーダーボード',myvsr:'📊 ピック vs 結果',admin:'⚙️ 管理'},
+    fb:{connecting:'接続中…',connected:'接続済み ✓',noConfig:'未設定',error:'Firebaseエラー'},
+    deadline:{open:'ピック受付中 — 大会開始時に自動締切',
+      openSub:'締切: 2026年8月15日 9:00（アイルランド時間 · UTC+1）',
+      closed:'ピック締切 — 予測の受付終了',
+      closedSub:'有効なピックは大会開始前に保存されたものです'},
+    name:{label:'あなたの名前',ph:'リーダーボード用の名前を入力…',required:'参加に必要',
+      typing:'名前を入力…',needSave:'保存に必要',inLB:'✅ リーダーボードに登録済み'},
+    tabs:{groups:'📊 グループ',inter:'⚡ 中間フェーズ',bracket:'🏆 チャンピオンシップ',spirit:'🕊️ スピリット'},
+    btn:{clear:'✕ クリア',save:'☁️ リーダーボードに保存',closed:'🔒 ピック締切',
+      saving:'⏳ 保存中…',confirm:'✓ 確認して保存'},
+    lb:{participants:'参加者',pos:'#',name:'参加者',total:'合計',
+      empty:'まだ参加者がいません。<br>ピックを作成してリーダーボードに保存してください。',
+      connecting:'接続中…',note:'ポイントは管理者が入力した公式結果を反映しています。',
+      general:'🌍 総合',latam:'🌎 ラテンアメリカ',country:'🏳️ 国別'},
+    toast:{closed:'🔒 ピックは締め切られています。',noName:'⚠️ まず名前を入力してください',
+      noFB:'⚠️ Firebase接続なし。',saved:'🏆 ピックが保存されました！',
+      adminClosed:'🔒 ピック締切。',adminOpen:'🔓 ピーク再開。',
+      resultsOK:'✅ 結果が公開されました。リーダーボードが更新されました。',
+      imgDL:'📤 画像をダウンロード。シェアしてください！',errPrefix:'❌ エラー: '},
+    modal:{successTitle:'ピック保存完了！',sponsorBy:'スポンサー',
+      sponsorMsg:'ご参加ありがとうございます！このコードで特別割引が受けられます：',
+      codeHint:'クリックでコピー',cta:'🛒 スポンサーのオファーを見る',
+      viewLB:'🏆 リーダーボードを見る',share:'📤 シェア',close:'閉じる'},
+    consolation:'敗者戦'},
+};
+
+let _curLang = localStorage.getItem('w26_lang') || 'es';
+function getLT(){ return LANGS[_curLang] || LANGS.es; }
+
+function toggleLangMenu(){
+  const dd=document.getElementById('langDropdown');
+  dd.classList.toggle('open');
+}
+function setLang(lang){
+  if(!LANGS[lang])return;
+  _curLang=lang;
+  localStorage.setItem('w26_lang',lang);
+  document.getElementById('langDropdown').classList.remove('open');
+  const l=LANGS[lang];
+  document.getElementById('langFlag').textContent=l.flag;
+  document.getElementById('langCode').textContent=l.code;
+  document.querySelectorAll('.lang-opt').forEach(btn=>{
+    const m=btn.getAttribute('onclick').match(/'([^']+)'/);
+    if(m)btn.classList.toggle('on',m[1]===lang);
+  });
+  applyLang();
+}
+
+function applyLang(){
+  const l=getLT();
+  // Nav buttons
+  document.querySelectorAll('.nav-btn[data-page]').forEach(btn=>{
+    const p=btn.getAttribute('data-page');
+    if(l.nav[p])btn.textContent=l.nav[p];
+  });
+  // Name placeholder
+  const nameEl=document.getElementById('myName');
+  if(nameEl)nameEl.placeholder=l.name.ph;
+  // Save status (only if not in active save/saved state)
+  const ss=document.getElementById('saveStatus');
+  if(ss&&!ss.classList.contains('saved')&&!ss.classList.contains('saving'))
+    ss.textContent=l.name.required;
+  // Phase tabs picks
+  const pt=document.querySelector('.picks-phasebar');
+  if(pt){
+    const tabs=pt.querySelectorAll('.phase-tab');
+    if(tabs[0])tabs[0].textContent=l.tabs.groups;
+    const t2=document.getElementById('picksPhaseTab2');
+    if(t2)t2.textContent=l.tabs.inter;
+    if(tabs[2])tabs[2].textContent=l.tabs.bracket;
+    if(tabs[3])tabs[3].textContent=l.tabs.spirit;
+  }
+  // Action buttons
+  const btnClear=document.getElementById('btnClear');
+  if(btnClear&&!btnClear.disabled)btnClear.textContent=l.btn.clear;
+  const btnSave=document.getElementById('btnSaveCloud');
+  if(btnSave&&!btnSave.disabled)btnSave.textContent=l.btn.save;
+  // LB filters
+  const lbfG=document.getElementById('lbf-general');if(lbfG)lbfG.textContent=l.lb.general;
+  const lbfL=document.getElementById('lbf-latam');if(lbfL)lbfL.textContent=l.lb.latam;
+  const lbfP=document.getElementById('lbf-pais');if(lbfP)lbfP.textContent=l.lb.country;
+  // LB header
+  const lbPos=document.getElementById('lbHdrPos');if(lbPos)lbPos.textContent=l.lb.pos;
+  const lbName=document.getElementById('lbHdrName');if(lbName)lbName.textContent=l.lb.name;
+  const lbTotal=document.getElementById('lbHdrTotal');if(lbTotal)lbTotal.textContent=l.lb.total;
+  // LB participants label
+  const lbPart=document.getElementById('lbParticipantsLabel');if(lbPart)lbPart.textContent=l.lb.participants;
+  // LB note
+  const lbNote=document.getElementById('lbNote');if(lbNote)lbNote.textContent=l.lb.note;
+  // Success modal
+  const sTitle=document.getElementById('successTitle');if(sTitle)sTitle.textContent=l.modal.successTitle;
+  const sBy=document.getElementById('successSponsorBy');if(sBy)sBy.textContent=l.modal.sponsorBy;
+  const sMsg=document.getElementById('successSponsorMsg');if(sMsg)sMsg.textContent=l.modal.sponsorMsg;
+  const sHint=document.getElementById('successCodeHint');if(sHint)sHint.textContent=l.modal.codeHint;
+  const sCTA=document.getElementById('successCTA');if(sCTA)sCTA.textContent=l.modal.cta;
+  const sBtnLB=document.getElementById('successBtnLB');if(sBtnLB)sBtnLB.textContent=l.modal.viewLB;
+  const sBtnShare=document.getElementById('successBtnShare');if(sBtnShare)sBtnShare.textContent=l.modal.share;
+  const sBtnClose=document.getElementById('successBtnClose');if(sBtnClose)sBtnClose.textContent=l.modal.close;
+  // CSS consolation override
+  _updateConsolationCSS();
+}
+
+function _updateConsolationCSS(){
+  const l=getLT();
+  let el=document.getElementById('_i18n_css');
+  if(!el){el=document.createElement('style');el.id='_i18n_css';document.head.appendChild(el);}
+  el.textContent=`.s-cut-cons::before{content:'${l.consolation}'!important}`;
+}
+
+// Close dropdown on outside click
+document.addEventListener('click',function(e){
+  const w=document.getElementById('langWrap');
+  if(w&&!w.contains(e.target))document.getElementById('langDropdown').classList.remove('open');
+});
+
+// Expose to module script
+window.LANGS=LANGS;
+window.getLT=getLT;
+window.setLang=setLang;
+window.toggleLangMenu=toggleLangMenu;
+window.applyLang=applyLang;
+</script>
 
 <!-- FIREBASE SDK -->
 <script type="module">
@@ -1173,7 +1504,9 @@ window._fbConnect = async (cfg) => {
 /* ═══════════════════════════════════════════════════
    CONSTANTS
 ═══════════════════════════════════════════════════ */
-const ADMIN_PWD_HASH = "8b44f376f3abdd5af3d9d8e01981a6aef6be7e1f"; 
+// Admin password hash (SHA-256 of "desdelalinea2026" — change this)
+// To change: run sha256("yourpassword") and replace below
+const ADMIN_PWD_HASH = "8b44f376f3abdd5af3d9d8e01981a6aef6be7e1f"; // SHA-1 of "desdelalinea2026"
 const ADMIN_SESSION_KEY = "w26_admin_sess";
 
 // ── Tournament deadline: Aug 15 2026 09:00 Ireland (UTC+1) ──
@@ -1182,10 +1515,10 @@ const DEADLINE = new Date("2026-08-15T08:00:00Z"); // UTC = 09:00 Dublin
 const FL={
   USA:"🇺🇸",CAN:"🇨🇦",AUS:"🇦🇺",GBR:"🇬🇧",COL:"🇨🇴",JPN:"🇯🇵",GER:"🇩🇪",
   FRA:"🇫🇷",ITA:"🇮🇹",BEL:"🇧🇪",NED:"🇳🇱",NZL:"🇳🇿",SUI:"🇨🇭",IRL:"🇮🇪",
-  ESP:"🇪🇸",ARG:"🇦🇷",MEX:"🇲🇽",CHI:"🇨🇱",RCH:"🇭🇰",AUT:"🇦🇹",NOR:"🇳🇴",
+  ESP:"🇪🇸",ARG:"🇦🇷",MEX:"🇲🇽",CHI:"🇨🇱",RCH:"🇨🇱",AUT:"🇦🇹",NOR:"🇳🇴",
   POL:"🇵🇱",DEN:"🇩🇰",SGP:"🇸🇬",IND:"🇮🇳",EST:"🇪🇪",FIN:"🇫🇮",SAF:"🇿🇦",
   CHN:"🇨🇳",VZL:"🇻🇪",ISR:"🇮🇱",URY:"🇺🇾",PAN:"🇵🇦",TRK:"🇹🇷",SVK:"🇸🇰",
-  URU:"🇺🇾",OLP:"🌍",RDM:"🇩🇴",CHR:"🇭🇰",CHZ:"🇨🇿",TWN:"🇹🇼"
+  URU:"🇺🇾",OLP:"🌍",RDM:"🇩🇴",CHR:"🇭🇰",CHZ:"🇨🇿"
 };
 const fl=c=>FL[c]||"🌍";
 
@@ -1328,17 +1661,18 @@ function updateDeadlineBanner(){
   const sub    = document.getElementById("dlSub");
   const icon   = document.getElementById("dlIcon");
   const cd     = document.getElementById("dlCountdown");
+  const l = window.getLT ? window.getLT() : {deadline:{open:'Picks abiertos — cierre automático al inicio del torneo',openSub:'Cierre: 15 de agosto 2026, 9:00 AM hora Irlanda (UTC+1)',closed:'Picks cerrados — no se aceptan más pronósticos',closedSub:'Los picks válidos son los guardados antes del inicio del torneo'}};
   if(isPicksClosed){
     banner.className = "deadline-banner closed";
     icon.textContent = "🔒";
-    title.textContent = "Picks cerrados — no se aceptan más pronósticos";
-    sub.textContent = "Los picks válidos son los guardados antes del inicio del torneo";
+    title.textContent = l.deadline.closed;
+    sub.textContent = l.deadline.closedSub;
     cd.textContent = "";
   } else {
     banner.className = "deadline-banner open";
     icon.textContent = "⏳";
-    title.textContent = "Picks abiertos — cierre al inicio del primer juego";
-    sub.textContent = "Cierre: 15 de agosto 2026, 9:00 AM hora Irlanda (UTC+1)";
+    title.textContent = l.deadline.open;
+    sub.textContent = l.deadline.openSub;
     const diff = DEADLINE - new Date();
     if(diff > 0){
       const d=Math.floor(diff/864e5), h=Math.floor((diff%864e5)/36e5),
@@ -1355,14 +1689,15 @@ function updatePicksLockedState(){
   const btnSave   = document.getElementById("btnSaveCloud");
   const btnClear  = document.getElementById("btnClear");
   const btnAuto   = document.getElementById("btnAuto");
+  const l = window.getLT ? window.getLT() : {btn:{closed:'🔒 Picks cerrados',save:'☁️ Guardar en leaderboard'}};
   if(isPicksClosed){
     if(nameInput){nameInput.disabled=true;}
-    if(btnSave){btnSave.disabled=true;btnSave.textContent="🔒 Picks cerrados";}
+    if(btnSave){btnSave.disabled=true;btnSave.textContent=l.btn.closed;}
     if(btnClear){btnClear.disabled=true;}
     if(btnAuto){btnAuto.disabled=true;}
   } else {
     if(nameInput){nameInput.disabled=false;}
-    if(btnSave){btnSave.disabled=false;btnSave.textContent="☁️ Guardar en leaderboard";}
+    if(btnSave){btnSave.disabled=false;btnSave.textContent=l.btn.save;}
     if(btnClear){btnClear.disabled=false;}
     if(btnAuto){btnAuto.disabled=false;}
   }
@@ -1376,16 +1711,17 @@ async function initFirebase(){
   // Wait for auto-connect (max 4 seconds)
   let tries=0;
   while(window._fbReady===undefined && tries<40){await new Promise(r=>setTimeout(r,100));tries++;}
+  const l = window.getLT ? window.getLT() : {fb:{connected:'Conectado ✓',noConfig:'Sin configurar',error:'Error Firebase'}};
   if(window._fbReady){
     fbReady=true;
-    setFbStatus("ok","Conectado ✓");
+    setFbStatus("ok", l.fb.connected);
     subscribeToLB(); subscribeToConfig(); subscribeToSponsors(); subscribeToSponsorConfig();
   } else {
     if(window._fbErr==="no-config"){
-      setFbStatus("err","Sin configurar");
+      setFbStatus("err", l.fb.noConfig);
       console.warn("Firebase: edita FIREBASE_CONFIG en index.html con tus credenciales.");
     } else {
-      setFbStatus("err","Error Firebase");
+      setFbStatus("err", l.fb.error);
       console.error("Firebase error:", window._fbErr);
     }
   }
@@ -1417,20 +1753,21 @@ function subscribeToConfig(){
   });
 }
 async function savePicksToCloud(){
-  if(isPicksClosed){toast("🔒 Los picks están cerrados.");return;}
+  const l=window.getLT?window.getLT():{toast:{closed:'🔒 Los picks están cerrados.',noName:'⚠️ Ingresa tu nombre primero',noFB:'⚠️ Sin conexión Firebase.',saved:'🏆 ¡Picks guardados!',errPrefix:'❌ Error: '},btn:{saving:'⏳ Guardando…',save:'☁️ Guardar en leaderboard'},name:{inLB:'✅ En el leaderboard'}};
+  if(isPicksClosed){toast(l.toast.closed);return;}
   const name=document.getElementById("myName").value.trim();
-  if(!name){toast("⚠️ Ingresa tu nombre primero");return;}
-  if(!fbReady||!window._db){toast("⚠️ Sin conexión Firebase.");return;}
+  if(!name){toast(l.toast.noName);return;}
+  if(!fbReady||!window._db){toast(l.toast.noFB);return;}
   const btn=document.getElementById("btnSaveCloud");
-  btn.disabled=true;btn.textContent="⏳ Guardando…";
+  btn.disabled=true;btn.textContent=l.btn.saving;
   try{
     const{doc,setDoc}=window._fbFns;
     const docId=name.toLowerCase().replace(/[^a-z0-9_-]/g,"_").slice(0,40);
     await setDoc(doc(window._db,"picks",docId),{v:4,n:name,docId,p:myPicks,ts:Date.now()});
-    lsSet("w26_name",name); setSaveStatus("saved","✅ En el leaderboard");
-    toast("🏆 ¡Picks guardados!"); showPage("lb");
-  }catch(e){toast("❌ Error: "+e.message);setSaveStatus("","");}
-  finally{if(!isPicksClosed){btn.disabled=false;btn.textContent="☁️ Guardar en leaderboard";}}
+    lsSet("w26_name",name); setSaveStatus("saved",l.name.inLB);
+    toast(l.toast.saved); showPage("lb");
+  }catch(e){toast(l.toast.errPrefix+e.message);setSaveStatus("","");}
+  finally{if(!isPicksClosed){btn.disabled=false;btn.textContent=l.btn.save;}}
 }
 async function saveResultsToCloud(){
   if(!fbReady||!window._db)return;
@@ -1472,13 +1809,13 @@ async function forceClosePicks(){
   if(!confirm("¿Confirmas cerrar los picks?"))return;
   lsSet("w26_forceClosed",true);
   if(fbReady&&window._db){const{doc,setDoc}=window._fbFns;await setDoc(doc(window._db,"config","settings"),{forceClosed:true,ts:Date.now()},{merge:true});}
-  checkDeadline();toast("🔒 Picks cerrados.");
+  checkDeadline();toast(window.getLT?window.getLT().toast.adminClosed:"🔒 Picks cerrados.");
 }
 async function forceOpenPicks(){
   if(!confirm("¿Confirmas reabrir los picks?"))return;
   lsSet("w26_forceClosed",false);
   if(fbReady&&window._db){const{doc,setDoc}=window._fbFns;await setDoc(doc(window._db,"config","settings"),{forceClosed:false,ts:Date.now()},{merge:true});}
-  checkDeadline();toast("🔓 Picks reabiertos.");
+  checkDeadline();toast(window.getLT?window.getLT().toast.adminOpen:"🔓 Picks reabiertos.");
 }
 async function loadResultsFromCloud(){
   if(!fbReady||!window._db)return;
@@ -2131,8 +2468,9 @@ function setSaveStatus(cls,txt){const el=document.getElementById("saveStatus");e
 function onNameInput(){
   if(isPicksClosed)return;
   myName=document.getElementById("myName").value;
-  clearTimeout(_ssT);setSaveStatus("saving","Escribe nombre…");
-  _ssT=setTimeout(()=>{lsSet("w26_name",myName);setSaveStatus("","Necesario para guardar");},500);
+  const l=window.getLT?window.getLT():{name:{typing:'Escribe nombre…',needSave:'Necesario para guardar'}};
+  clearTimeout(_ssT);setSaveStatus("saving",l.name.typing);
+  _ssT=setTimeout(()=>{lsSet("w26_name",myName);setSaveStatus("",l.name.needSave);},500);
   // Feature 2: duplicate name check
   clearTimeout(_nameCheckT);
   _nameCheckT=setTimeout(()=>{
@@ -2154,7 +2492,8 @@ function renderLB(){
   const myN=(document.getElementById("myName").value||"").trim();
   document.getElementById("lbCount").textContent=subs.length;
   if(!subs.length){
-    document.getElementById("lbBody").innerHTML="<div class=\"lb-empty\">"+(fbReady?"Aún no hay participantes.<br>Haz tus picks y guárdalos en el leaderboard.":"Conectando con Firebase…")+"</div>";
+    const l=window.getLT?window.getLT():{lb:{empty:'Aún no hay participantes.<br>Haz tus picks y guárdalos en el leaderboard.',connecting:'Conectando con Firebase…'}};
+    document.getElementById("lbBody").innerHTML="<div class=\"lb-empty\">"+(fbReady?l.lb.empty:l.lb.connecting)+"</div>";
     return;
   }
   // Handle country/division filters
@@ -2338,7 +2677,7 @@ function renderAdminView(){
 async function saveAndCalc(){
   lsSet("w26_res3",results);await saveResultsToCloud();
   if(document.getElementById("page-lb").classList.contains("on"))renderLB();
-  toast("✅ Resultados publicados. Leaderboard actualizado para todos.");
+  toast(window.getLT?window.getLT().toast.resultsOK:"✅ Resultados publicados. Leaderboard actualizado para todos.");
 }
 
 /* ═══════════════════════════════════════════════════
@@ -2511,9 +2850,10 @@ window.renderSponsorAdmin=renderSponsorAdmin;
    FEATURE 3: CONFIRM MODAL
 ═══════════════════════════════════════════════════ */
 function openConfirmModal(){
-  if(isPicksClosed){toast("🔒 Los picks están cerrados.");return;}
+  const l=window.getLT?window.getLT():{toast:{closed:'🔒 Los picks están cerrados.',noName:'⚠️ Ingresa tu nombre primero'}};
+  if(isPicksClosed){toast(l.toast.closed);return;}
   const name=document.getElementById("myName").value.trim();
-  if(!name){toast("⚠️ Ingresa tu nombre primero");return;}
+  if(!name){toast(l.toast.noName);return;}
   const rows=["Open","Mixed","Women"].map(d=>{
     const{tot,done}=progress(myPicks,d);
     const pct=tot?Math.round(done/tot*100):0;
@@ -2538,9 +2878,10 @@ async function doSavePicks(){
   const email=(document.getElementById("myEmail")||{}).value?.trim()||"";
   const country=(document.getElementById("myCountry")||{}).value||"";
   const spirit=getAllSpiritPicks();
-  if(!fbReady||!window._db){toast("⚠️ Sin conexión Firebase.");return;}
+  const l=window.getLT?window.getLT():{toast:{noFB:'⚠️ Sin conexión Firebase.',errPrefix:'❌ Error: '},btn:{saving:'⏳ Guardando…',save:'☁️ Guardar en leaderboard'},name:{inLB:'✅ En el leaderboard'}};
+  if(!fbReady||!window._db){toast(l.toast.noFB);return;}
   const btn=document.getElementById("btnSaveCloud");
-  btn.disabled=true;btn.textContent="⏳ Guardando…";
+  btn.disabled=true;btn.textContent=l.btn.saving;
   try{
     const{doc,setDoc}=window._fbFns;
     const docId=name.toLowerCase().replace(/[^a-z0-9_-]/g,"_").slice(0,40);
@@ -2551,10 +2892,10 @@ async function doSavePicks(){
     lsSet("w26_name",name);
     if(email)lsSet("w26_email",email);
     if(country)lsSet("w26_country",country);
-    setSaveStatus("saved","✅ En el leaderboard");
+    setSaveStatus("saved",l.name.inLB);
     showSuccessModal(name);
-  }catch(e){toast("❌ Error: "+e.message);setSaveStatus("","");}
-  finally{if(!isPicksClosed){btn.disabled=false;btn.textContent="☁️ Guardar en leaderboard";}}
+  }catch(e){toast(l.toast.errPrefix+e.message);setSaveStatus("","");}
+  finally{if(!isPicksClosed){btn.disabled=false;btn.textContent=l.btn.save;}}
 }
 
 /* ═══════════════════════════════════════════════════
@@ -2696,7 +3037,7 @@ function shareMyPrediction(){
   const a=document.createElement("a");
   a.download="wucc2026-prediccion-"+name.replace(/\s+/g,"-").toLowerCase()+".png";
   a.href=canvas.toDataURL("image/png");a.click();
-  toast("📤 Imagen descargada. ¡Compártela!");
+  toast(window.getLT?window.getLT().toast.imgDL:"📤 Imagen descargada. ¡Compártela!");
 }
 function _rr(ctx,x,y,w,h,r,fill,stroke){
   ctx.beginPath();ctx.moveTo(x+r,y);ctx.lineTo(x+w-r,y);
@@ -3051,6 +3392,8 @@ window.shareMyPrediction=shareMyPrediction;
 window.exportData=exportData;
 window.renderMVR=renderMVR;
 window.setMVSRDiv=setMVSRDiv;
+window.checkDeadline=checkDeadline;
+window.renderLB=renderLB;
 
 /* ═══════════════════════════════════════════════════
    INIT — all functions defined above, safe to call
@@ -3074,6 +3417,22 @@ if(savedCountry){const el=document.getElementById("myCountry");if(el)el.value=sa
 // Init spirit options + apply sponsor config
 initSpiritOptions();
 applySponsorConfig();
+
+// Apply saved language
+if(window.applyLang){
+  // Restore dropdown flag/code for saved lang
+  const _sl=localStorage.getItem('w26_lang')||'es';
+  const _ld=window.LANGS&&window.LANGS[_sl];
+  if(_ld){
+    const fEl=document.getElementById('langFlag');if(fEl)fEl.textContent=_ld.flag;
+    const cEl=document.getElementById('langCode');if(cEl)cEl.textContent=_ld.code;
+    document.querySelectorAll('.lang-opt').forEach(btn=>{
+      const m=btn.getAttribute('onclick')&&btn.getAttribute('onclick').match(/'([^']+)'/);
+      if(m)btn.classList.toggle('on',m[1]===_sl);
+    });
+  }
+  window.applyLang();
+}
 
 initFirebase();
 
