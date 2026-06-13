@@ -651,7 +651,21 @@ body.light .modal-box{background:var(--surf1)}
 .region-pills{display:flex;gap:4px;flex-wrap:wrap}
 .region-pill{padding:3px 8px;border-radius:20px;font-size:10px;cursor:pointer;border:1px solid var(--borderl);background:transparent;color:var(--tx3);transition:all .12s;font-family:'DM Sans',sans-serif}
 .region-pill:hover,.region-pill.on{background:rgba(196,241,53,.15);color:var(--lime);border-color:var(--lime)}
-.lang-wrap{position:relative}
+.lb-club{font-size:9px;color:var(--tx3);margin-top:1px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:180px}
+.lb-club span{background:rgba(196,241,53,.1);color:var(--lime);padding:1px 5px;border-radius:10px;font-size:9px;font-weight:600}
+.club-lb-wrap{margin-top:4px}
+.club-lb-row{display:grid;grid-template-columns:28px 1fr 64px 58px 58px;gap:4px;align-items:center;padding:9px 12px;border-radius:var(--r);transition:background .12s}
+.club-lb-row:hover{background:var(--surf2)}
+.club-lb-row.hdr{font-size:10px;color:var(--tx3);text-transform:uppercase;letter-spacing:.07em;padding-bottom:6px;border-bottom:1px solid var(--borderl);margin-bottom:4px}
+.club-lb-row .c-name{font-size:13px;font-weight:600;color:var(--tx1)}
+.club-lb-row .c-players{font-size:10px;color:var(--tx3);margin-top:2px}
+.club-lb-row .c-pts{text-align:right;font-size:13px;font-weight:700;color:var(--lime)}
+.club-lb-row .c-avg{text-align:right;font-size:11px;color:var(--tx2)}
+.club-lb-row .c-rank{font-size:12px;font-weight:700;color:var(--tx2);text-align:center}
+.club-lb-row.top-1 .c-name{color:var(--gold)}
+.club-lb-row.top-2 .c-name{color:#b0b8c8}
+.club-lb-row.top-3 .c-name{color:#cd7f32}
+/* ── LANGUAGE SELECTOR ── */
 .lang-btn{
   padding:6px 11px;border-radius:var(--r);border:1px solid var(--border);
   background:transparent;color:var(--tx2);font-size:12px;font-family:'DM Sans',sans-serif;
@@ -860,6 +874,16 @@ body.light .lang-opt:hover{background:var(--surf2)}
       </div>
     </div>
     <div style="font-size:10px;color:var(--tx3);margin-top:6px">🔒 Tu email solo lo ve el admin — nunca se publica ni comparte con terceros. Solo para notificarte si ganás un premio.</div>
+    <!-- Club field -->
+    <div style="margin-top:10px;display:flex;flex-direction:column;gap:5px">
+      <label style="font-size:12px;color:var(--tx2);font-weight:500">🏅 Tu club / equipo <span style="font-size:10px;color:var(--tx3);font-weight:400">(el club con más jugadores y mejor puntaje gana un premio especial)</span></label>
+      <input class="reg-input" id="myClub" placeholder="Nombre exacto de tu club / team…" oninput="lsSet('w26_club',this.value)" style="max-width:420px">
+    </div>
+    <!-- Cloud load indicator -->
+    <div id="cloudLoadBadge" style="display:none;margin-top:8px;padding:7px 12px;background:rgba(196,241,53,.1);border:1px solid rgba(196,241,53,.25);border-radius:var(--r);font-size:11px;color:var(--lime);display:none;align-items:center;gap:7px">
+      ☁️ <span id="cloudLoadMsg">Picks cargados desde la nube — edítalos y vuelve a guardar para actualizar.</span>
+      <button onclick="document.getElementById('cloudLoadBadge').style.display='none'" style="background:none;border:none;color:var(--tx3);cursor:pointer;font-size:13px;margin-left:auto">✕</button>
+    </div>
   </div>
 
 
@@ -1012,6 +1036,7 @@ body.light .lang-opt:hover{background:var(--surf2)}
     <button class="lb-filter-btn on" onclick="setLBFilter('general')" id="lbf-general">🌍 General</button>
     <button class="lb-filter-btn" onclick="setLBFilter('pais')" id="lbf-pais">🏳️ Por país</button>
     <button class="lb-filter-btn" onclick="setLBFilter('latam')" id="lbf-latam">🌎 LATAM</button>
+    <button class="lb-filter-btn" onclick="setLBFilter('club')" id="lbf-club">🏅 Por Club</button>
     <button class="lb-filter-btn" onclick="setLBFilter('open')" id="lbf-open">🔵 Open</button>
     <button class="lb-filter-btn" onclick="setLBFilter('mixed')" id="lbf-mixed">🟣 Mixed</button>
     <button class="lb-filter-btn" onclick="setLBFilter('women')" id="lbf-women">🌸 Women's</button>
@@ -2562,7 +2587,13 @@ function onNameInput(){
   myName=document.getElementById("myName").value;
   const l=window.getLT?window.getLT():{name:{typing:'Escribe nombre…',needSave:'Necesario para guardar'}};
   clearTimeout(_ssT);setSaveStatus("saving",l.name.typing);
-  _ssT=setTimeout(()=>{lsSet("w26_name",myName);setSaveStatus("",l.name.needSave);},500);
+  _ssT=setTimeout(()=>{
+    lsSet("w26_name",myName);
+    setSaveStatus("",l.name.needSave);
+    // Attempt to load existing picks from Firebase
+    const nameVal=myName.trim();
+    if(nameVal.length>=2)tryLoadPicksFromCloud(nameVal);
+  },700);
   // Feature 2: duplicate name check
   clearTimeout(_nameCheckT);
   _nameCheckT=setTimeout(()=>{
@@ -2591,6 +2622,7 @@ function renderLB(){
   // Handle country/division filters
   if(_lbFilter==="pais"){renderCountryLB(null);return;}
   if(_lbFilter==="latam"){renderCountryLB(s=>LATAM_COUNTRIES.includes(s.country));return;}
+  if(_lbFilter==="club"){renderClubLB();return;}
   // Feature 4: detect if any real results have been entered
   const anyResults=["Open","Mixed","Women"].some(d=>results[d]&&results[d].g.some(g=>g.m.some(m=>m.w!==null)));
   if(!anyResults){
@@ -2648,10 +2680,12 @@ function renderLB(){
     const pickCol=pct===100?"var(--green)":pct>50?"var(--lime)":"var(--tx3)";
     const badges=calcBadges(e.sub);
     const countryStr=e.sub.country?`<span style="font-size:10px;color:var(--tx3)">${countryFlag(e.sub.country)} ${e.sub.country}</span>`:"";
+    const clubStr=e.sub.club?`<div class="lb-club"><span>🏅 ${e.sub.club}</span></div>`:"";
     const divScore=divFilter?`<div class="lb-total" style="color:${divFilter==="Open"?"var(--open)":divFilter==="Mixed"?"var(--mixed)":"var(--women)"}">${e.sort}</div>`:`<div class="lb-div">${e.o}</div><div class="lb-div">${e.m}</div><div class="lb-div">${e.w}</div><div class="lb-total">${e.total}</div>`;
     row.innerHTML=`<div class="lb-pos ${pc}">${medals[i]||i+1}</div>
       <div class="lb-name" style="flex-direction:column;align-items:flex-start;gap:2px">
         <div style="display:flex;align-items:center;gap:6px">${e.name}${you}${countryStr}</div>
+        ${clubStr}
         ${renderBadges(badges)}
         <span class="lb-picks-badge${pct===100?" complete":""}" style="color:${pickCol}">${e.done}/${e.poss} picks</span>
       </div>
@@ -2987,6 +3021,7 @@ async function doSavePicks(){
   const name=document.getElementById("myName").value.trim();
   const email=(document.getElementById("myEmail")||{}).value?.trim()||"";
   const country=(document.getElementById("myCountry")||{}).value||"";
+  const club=(document.getElementById("myClub")||{}).value?.trim()||"";
   const spirit=getAllSpiritPicks();
   const l=window.getLT?window.getLT():{toast:{noFB:'⚠️ Sin conexión Firebase.',errPrefix:'❌ Error: '},btn:{saving:'⏳ Guardando…',save:'☁️ Guardar en leaderboard'},name:{inLB:'✅ En el leaderboard'}};
   if(!fbReady||!window._db){toast(l.toast.noFB);return;}
@@ -2997,11 +3032,12 @@ async function doSavePicks(){
     const docId=name.toLowerCase().replace(/[^a-z0-9_-]/g,"_").slice(0,40);
     await setDoc(doc(window._db,"picks",docId),{
       v:5,n:name,docId,p:myPicks,ts:Date.now(),
-      email,country,spirit
+      email,country,club,spirit
     });
     lsSet("w26_name",name);
     if(email)lsSet("w26_email",email);
     if(country)lsSet("w26_country",country);
+    if(club)lsSet("w26_club",club);
     setSaveStatus("saved",l.name.inLB);
     showSuccessModal(name);
   }catch(e){toast(l.toast.errPrefix+e.message);setSaveStatus("","");}
@@ -3167,7 +3203,7 @@ function _rr(ctx,x,y,w,h,r,fill,stroke){
 function exportData(type){
   let content,filename,mime;
   if(type==="emails"){
-    const rows=[["Nombre","Email","País","Spirit Pick","Timestamp","Picks_Open%","Picks_Mixed%","Picks_Women%"]];
+    const rows=[["Nombre","Email","País","Club","Spirit Pick","Timestamp","Picks_Open%","Picks_Mixed%","Picks_Women%"]];
     subs.forEach(s=>{
       const getDiv=(d)=>{
         if(!s.p||!s.p[d])return"0%";
@@ -3175,7 +3211,7 @@ function exportData(type){
         const done=s.p[d].g.reduce((a,g)=>a+g.m.filter(mm=>mm.w!==null).length,0);
         return tot?Math.round(done/tot*100)+"%":"0%";
       };
-      rows.push([s.n,s.email||"",s.country||"",s.spirit||"",
+      rows.push([s.n,s.email||"",s.country||"",s.club||"",s.spirit||"",
         new Date(s.ts||0).toISOString(),getDiv("Open"),getDiv("Mixed"),getDiv("Women")]);
     });
     content=rows.map(r=>r.map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(",")).join("\n");
@@ -3605,6 +3641,125 @@ function setLBFilter(f){
 }
 
 /* ═══════════════════════════════════════════════════
+   CLUB LEADERBOARD
+═══════════════════════════════════════════════════ */
+function renderClubLB(){
+  const body=document.getElementById("lbBody");
+  if(!body)return;
+  const withClub=subs.filter(s=>s.club&&s.club.trim());
+  if(!withClub.length){
+    body.innerHTML="<div class=\"lb-empty\">Ningún participante ha registrado su club aún.</div>";
+    return;
+  }
+  // Aggregate by club name (case-insensitive)
+  const clubs={};
+  withClub.forEach(s=>{
+    const key=(s.club||"").trim();
+    const keyL=key.toLowerCase();
+    if(!clubs[keyL])clubs[keyL]={name:key,players:[],total:0,best:0};
+    const pts=scoreDiv(s.p,results,"Open")+scoreSpiritDiv(s,"Open")+
+              scoreDiv(s.p,results,"Mixed")+scoreSpiritDiv(s,"Mixed")+
+              scoreDiv(s.p,results,"Women")+scoreSpiritDiv(s,"Women");
+    clubs[keyL].players.push({name:s.n,pts,country:s.country});
+    clubs[keyL].total+=pts;
+    if(pts>clubs[keyL].best)clubs[keyL].best=pts;
+  });
+  const sorted=Object.values(clubs).sort((a,b)=>b.total-a.total||b.players.length-a.players.length);
+  const medals=["🥇","🥈","🥉"];
+  const anyRes=["Open","Mixed","Women"].some(d=>results[d]&&results[d].g.some(g=>g.m.some(m=>m.w!==null)));
+  let html=`<div class="club-lb-wrap">
+    <div class="club-lb-row hdr">
+      <div>#</div>
+      <div>Club</div>
+      <div style="text-align:right">${anyRes?"Pts totales":"Jugadores"}</div>
+      <div style="text-align:right">${anyRes?"Promedio":""}</div>
+      <div style="text-align:right">${anyRes?"Mejor":""}</div>
+    </div>`;
+  sorted.forEach((cl,i)=>{
+    const topClass=i===0?" top-1":i===1?" top-2":i===2?" top-3":"";
+    const avg=cl.players.length?Math.round(cl.total/cl.players.length):0;
+    const playerList=cl.players.sort((a,b)=>b.pts-a.pts).slice(0,3).map(p=>`${countryFlag(p.country)||""}${p.name}${anyRes?` (${p.pts}pts)`:""}`).join(", ");
+    const more=cl.players.length>3?` +${cl.players.length-3} más`:"";
+    html+=`<div class="club-lb-row${topClass}">
+      <div class="c-rank">${medals[i]||i+1}</div>
+      <div>
+        <div class="c-name">🏅 ${cl.name}</div>
+        <div class="c-players">${cl.players.length} jugador${cl.players.length!==1?"es":""} · ${playerList}${more}</div>
+      </div>
+      <div class="c-pts">${anyRes?cl.total:cl.players.length}</div>
+      <div class="c-avg">${anyRes?avg:""}</div>
+      <div class="c-avg">${anyRes?cl.best:""}</div>
+    </div>`;
+  });
+  html+=`</div><div class="lb-note" style="margin-top:10px">🏆 Ranking por club: suma de puntos de todos sus jugadores registrados. El club ganador recibe el premio especial del sponsor.</div>`;
+  body.innerHTML=html;
+}
+
+/* ═══════════════════════════════════════════════════
+   CLOUD PICK LOADING — cargar picks guardados
+═══════════════════════════════════════════════════ */
+let _cloudLoadDone=new Set(); // avoid re-loading for same docId
+
+async function tryLoadPicksFromCloud(name){
+  if(!name||name.length<2)return;
+  const docId=name.toLowerCase().replace(/[^a-z0-9_-]/g,"_").slice(0,40);
+  if(_cloudLoadDone.has(docId))return; // already loaded this session
+
+  // 1. Try from subs cache first (already in memory)
+  let found=subs.find(s=>s.docId===docId);
+
+  // 2. If not in cache (Firebase may not be connected yet), query directly
+  if(!found&&fbReady&&window._db){
+    try{
+      const{doc,getDoc}=window._fbFns;
+      const snap=await getDoc(doc(window._db,"picks",docId));
+      if(snap.exists())found=snap.data();
+    }catch(e){console.warn("tryLoadPicks:",e);}
+  }
+
+  if(!found||!found.p)return; // no existing record for this name
+
+  _cloudLoadDone.add(docId);
+
+  // Load picks
+  myPicks=found.p;
+  lsSet("w26_picks3",myPicks);
+
+  // Restore registration fields (only if currently empty)
+  const emailEl=document.getElementById("myEmail");
+  const countryEl=document.getElementById("myCountry");
+  const clubEl=document.getElementById("myClub");
+  if(emailEl&&!emailEl.value&&found.email){emailEl.value=found.email;lsSet("w26_email",found.email);}
+  if(countryEl&&!countryEl.value&&found.country){countryEl.value=found.country;lsSet("w26_country",found.country);}
+  if(clubEl&&!clubEl.value&&found.club){clubEl.value=found.club;lsSet("w26_club",found.club);}
+
+  // Restore spirit picks
+  if(found.spirit&&typeof found.spirit==="object"){
+    ["Open","Mixed","Women"].forEach(div=>{
+      if(found.spirit[div]){
+        lsSet("w26_spirit_"+div,found.spirit[div]);
+      }
+    });
+  }
+
+  // Re-render picks view
+  renderPicksView();
+  initSpiritOptions();
+
+  // Show cloud-load badge
+  const badge=document.getElementById("cloudLoadBadge");
+  const msg=document.getElementById("cloudLoadMsg");
+  const l=window.getLT?window.getLT():null;
+  const txt=l?"☁️ Picks cargados desde la nube — editálos y vuelve a guardar para actualizar.":"☁️ Picks loaded from the cloud — edit them and save again to update.";
+  if(msg)msg.textContent=txt;
+  if(badge){badge.style.display="flex";}
+
+  setSaveStatus("saved",l?l.name.inLB:"✅ En el leaderboard");
+  toast("☁️ ¡Picks de "+found.n+" cargados desde Firebase!");
+}
+
+
+/* ═══════════════════════════════════════════════════
    COUNTRY LEADERBOARD
 ═══════════════════════════════════════════════════ */
 function renderCountryLB(filterFn){
@@ -3698,6 +3853,7 @@ window.renderMVR=renderMVR;
 window.setMVSRDiv=setMVSRDiv;
 window.checkDeadline=checkDeadline;
 window.renderLB=renderLB;
+window.tryLoadPicksFromCloud=tryLoadPicksFromCloud;
 
 /* ═══════════════════════════════════════════════════
    INIT — all functions defined above, safe to call
@@ -3712,11 +3868,13 @@ renderAdminView();
 renderSponsorsPublic();
 updateProgress(); // init hero bars
 
-// Restore saved email/country
+// Restore saved email/country/club
 const savedEmail=lsGet("w26_email","");
 const savedCountry=lsGet("w26_country","");
+const savedClub=lsGet("w26_club","");
 if(savedEmail){const el=document.getElementById("myEmail");if(el)el.value=savedEmail;}
 if(savedCountry){const el=document.getElementById("myCountry");if(el)el.value=savedCountry;}
+if(savedClub){const el=document.getElementById("myClub");if(el)el.value=savedClub;}
 
 // Init spirit options + apply sponsor config
 initSpiritOptions();
@@ -3741,7 +3899,13 @@ if(window.applyLang){
   window.applyLang();
 }
 
-initFirebase();
+initFirebase().then(()=>{
+  // If returning user has a saved name, try to reload their picks from Firebase
+  const savedN=lsGet("w26_name","");
+  if(savedN&&savedN.length>=2){
+    setTimeout(()=>tryLoadPicksFromCloud(savedN),1200);
+  }
+});
 
 </script>
 </body>
