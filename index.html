@@ -742,6 +742,13 @@ body.light .lang-opt:hover{background:var(--surf2)}
 <div class="page on" id="page-picks">
 <div class="container">
 
+
+  <!-- Sponsors y Aliados (top) -->
+  <div class="sponsors-section" id="sponsorsSectionTop" style="display:none">
+    <div class="sponsors-title" id="sponsorsLabelTop">SPONSORS &amp; ALIADOS</div>
+    <div class="sponsors-grid" id="sponsorsGridTop"></div>
+  </div>
+
   <!-- Deadline Banner -->
   <div id="deadlineBanner" class="deadline-banner open" style="margin-top:24px">
     <div class="dl-icon" id="dlIcon">⏳</div>
@@ -753,59 +760,50 @@ body.light .lang-opt:hover{background:var(--surf2)}
   </div>
 
 
-  <!-- 2022 Results -->
-  <div style="background:var(--surf1);border:1px solid var(--border);border-radius:var(--r2);padding:16px 20px;margin-bottom:20px">
-    <div style="font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:.14em;color:var(--tx3);margin-bottom:10px">REFERENCIA — WUCC 2022 CINCINNATI</div>
-    <div class="r22-grid">
-      <div class="r22-card"><div class="r22-div">Open</div>
-        <div style="font-size:11px;margin-top:4px;line-height:1.9">
-          <span style="color:var(--gold);font-weight:700">🥇</span> PoNY · USA<br>
-          <span style="color:var(--silver);font-weight:700">🥈</span> Raleigh Ring of Fire · USA<br>
-          <span style="color:var(--bronze);font-weight:700">🥉</span> Clapham · GBR
+  <!-- Help accordion -->
+  <div class="help-panel">
+    <button class="help-toggle" onclick="this.classList.toggle('open')">
+      <span>❓ ¿Cómo participar? / How to play?</span>
+      <span class="help-chevron">▼</span>
+    </button>
+    <div class="help-body">
+      <div class="help-cols">
+        <div class="help-col es">
+          <h4>🇨🇴 Cómo participar</h4>
+          <ul class="help-steps-list">
+            <li><span class="hs-n">1</span><span>Escribe tu nombre arriba — será tu ID en el leaderboard.</span></li>
+            <li><span class="hs-n">2</span><span>Selecciona una división (Open, Mixed o Women's) con los botones de arriba.</span></li>
+            <li><span class="hs-n">3</span><span><strong>Grupos:</strong> en cada partido, haz clic en el equipo que crees que ganará.</span></li>
+            <li><span class="hs-n">4</span><span><strong>Fase intermedia:</strong> Open/Mixed tienen Play-in 4°vs5°. Women's tiene 10 Cross-Pools.</span></li>
+            <li><span class="hs-n">5</span><span><strong>Championship:</strong> arma tu bracket hasta el campeón.</span></li>
+            <li><span class="hs-n">6</span><span>Repite para las 3 divisiones y haz clic en <strong>☁️ Guardar en leaderboard</strong>.</span></li>
+            <li><span class="hs-n">7</span><span>Tienes hasta el <strong>15 de agosto 9:00 AM hora Irlanda</strong> para guardar.</span></li>
+          </ul>
+        </div>
+        <div class="help-col en">
+          <h4>🇬🇧 How to play</h4>
+          <ul class="help-steps-list">
+            <li><span class="hs-n">1</span><span>Enter your name above — it's your leaderboard identity.</span></li>
+            <li><span class="hs-n">2</span><span>Select a division (Open, Mixed or Women's) using the cards above.</span></li>
+            <li><span class="hs-n">3</span><span><strong>Groups:</strong> click the team you think will win each match.</span></li>
+            <li><span class="hs-n">4</span><span><strong>Intermediate:</strong> Open/Mixed have 4v5 Play-in. Women's has 10 Cross-Pools.</span></li>
+            <li><span class="hs-n">5</span><span><strong>Championship:</strong> build your bracket to the champion.</span></li>
+            <li><span class="hs-n">6</span><span>Repeat for all 3 divisions and click <strong>☁️ Guardar en leaderboard</strong>.</span></li>
+            <li><span class="hs-n">7</span><span>Deadline: <strong>August 15, 9:00 AM Ireland time</strong>.</span></li>
+          </ul>
         </div>
       </div>
-      <div class="r22-card"><div class="r22-div">Women</div>
-        <div style="font-size:11px;margin-top:4px;line-height:1.9">
-          <span style="color:var(--gold);font-weight:700">🥇</span> Revolution · COL ★ Grupo B<br>
-          <span style="color:var(--silver);font-weight:700">🥈</span> Fury · USA ★ Grupo C<br>
-          <span style="color:var(--bronze);font-weight:700">🥉</span> Raleigh Phoenix · USA
-        </div>
-      </div>
-      <div class="r22-card"><div class="r22-div">Mixed</div>
-        <div style="font-size:11px;margin-top:4px;line-height:1.9">
-          <span style="color:var(--gold);font-weight:700">🥇</span> Seattle Mixtape · USA<br>
-          <span style="color:var(--silver);font-weight:700">🥈</span> Red Flag · CAN<br>
-          <span style="color:var(--bronze);font-weight:700">🥉</span> Manly Mosh · AUS ★ Grupo C
-        </div>
-      </div>
-      <div class="r22-card" style="border-color:rgba(196,241,53,.15)">
-        <div class="r22-div" style="color:rgba(196,241,53,.5)">Badges en app</div>
-        <div style="font-size:11px;color:var(--tx2);margin-top:4px;line-height:1.6">Los equipos que participaron en WUCC 2022 muestran su posición histórica junto al nombre.</div>
+      <div style="margin-top:14px;font-size:11px;font-weight:600;color:var(--tx3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px">📊 Puntaje / Scoring</div>
+      <div class="help-scoring">
+        <div class="hs-row"><span>Partido (grupo/play-in/PP)</span><b>+1 pt</b></div>
+        <div class="hs-row"><span>Avanza a siguiente fase</span><b>+2 pts</b></div>
+        <div class="hs-row"><span>Round of 16 / Pre-QF</span><b>+3 pts</b></div>
+        <div class="hs-row"><span>Cuartos / Quarterfinals</span><b>+5 pts</b></div>
+        <div class="hs-row"><span>Semis / Semifinals</span><b>+8 pts</b></div>
+        <div class="hs-row"><span>Campeón / Champion</span><b>+13 pts</b></div>
+        <div class="hs-row" style="background:rgba(196,241,53,.06)"><span style="color:var(--tx1);font-weight:600">Máximo total / Max total</span><b style="font-size:14px">635 pts</b></div>
       </div>
     </div>
-  </div>
-
-  <!-- Format diagram — changes per division -->
-  <div class="pp-diagram" id="formatDiagram">
-    <div class="pp-diagram-title" id="formatTitle">🔄 FORMATO DEL TORNEO</div>
-    <div id="formatBody"></div>
-  </div>
-
-  <!-- Score pills -->
-  <div class="score-pills">
-    <div class="s-pill">Partido grupos <b>+1 pt</b></div>
-    <div class="s-pill">Avanza fase sig. <b>+2 pts</b></div>
-    <div class="s-pill">Round of 16 <b>+3 pts</b></div>
-    <div class="s-pill">Cuartos <b>+5 pts</b></div>
-    <div class="s-pill">Semis <b>+8 pts</b></div>
-    <div class="s-pill">Campeón <b>+13 pts</b></div>
-    <div class="s-pill" style="margin-left:auto">Máx total <b>635 pts</b></div>
-  </div>
-
-  <!-- Sponsor banner (admin-controlled) -->
-  <div class="sponsor-banner" id="sponsorBanner">
-    🤝 Patrocinado por <a href="#" id="sponsorBannerLink" target="_blank">Nuestros Sponsors</a> &nbsp;·&nbsp;
-    Código: <strong id="sponsorBannerCode">WUCC2026</strong>
   </div>
 
   <!-- Name + Email + Country -->
@@ -902,50 +900,59 @@ body.light .lang-opt:hover{background:var(--surf2)}
     </div>
   </div>
 
-  <!-- Help accordion -->
-  <div class="help-panel">
-    <button class="help-toggle" onclick="this.classList.toggle('open')">
-      <span>❓ ¿Cómo participar? / How to play?</span>
-      <span class="help-chevron">▼</span>
-    </button>
-    <div class="help-body">
-      <div class="help-cols">
-        <div class="help-col es">
-          <h4>🇨🇴 Cómo participar</h4>
-          <ul class="help-steps-list">
-            <li><span class="hs-n">1</span><span>Escribe tu nombre arriba — será tu ID en el leaderboard.</span></li>
-            <li><span class="hs-n">2</span><span>Selecciona una división (Open, Mixed o Women's) con los botones de arriba.</span></li>
-            <li><span class="hs-n">3</span><span><strong>Grupos:</strong> en cada partido, haz clic en el equipo que crees que ganará.</span></li>
-            <li><span class="hs-n">4</span><span><strong>Fase intermedia:</strong> Open/Mixed tienen Play-in 4°vs5°. Women's tiene 10 Cross-Pools.</span></li>
-            <li><span class="hs-n">5</span><span><strong>Championship:</strong> arma tu bracket hasta el campeón.</span></li>
-            <li><span class="hs-n">6</span><span>Repite para las 3 divisiones y haz clic en <strong>☁️ Guardar en leaderboard</strong>.</span></li>
-            <li><span class="hs-n">7</span><span>Tienes hasta el <strong>15 de agosto 9:00 AM hora Irlanda</strong> para guardar.</span></li>
-          </ul>
-        </div>
-        <div class="help-col en">
-          <h4>🇬🇧 How to play</h4>
-          <ul class="help-steps-list">
-            <li><span class="hs-n">1</span><span>Enter your name above — it's your leaderboard identity.</span></li>
-            <li><span class="hs-n">2</span><span>Select a division (Open, Mixed or Women's) using the cards above.</span></li>
-            <li><span class="hs-n">3</span><span><strong>Groups:</strong> click the team you think will win each match.</span></li>
-            <li><span class="hs-n">4</span><span><strong>Intermediate:</strong> Open/Mixed have 4v5 Play-in. Women's has 10 Cross-Pools.</span></li>
-            <li><span class="hs-n">5</span><span><strong>Championship:</strong> build your bracket to the champion.</span></li>
-            <li><span class="hs-n">6</span><span>Repeat for all 3 divisions and click <strong>☁️ Guardar en leaderboard</strong>.</span></li>
-            <li><span class="hs-n">7</span><span>Deadline: <strong>August 15, 9:00 AM Ireland time</strong>.</span></li>
-          </ul>
+  <!-- Format diagram — changes per division -->
+  <div class="pp-diagram" id="formatDiagram">
+    <div class="pp-diagram-title" id="formatTitle">🔄 FORMATO DEL TORNEO</div>
+    <div id="formatBody"></div>
+  </div>
+
+  <!-- 2022 Results -->
+  <div style="background:var(--surf1);border:1px solid var(--border);border-radius:var(--r2);padding:16px 20px;margin-bottom:20px">
+    <div style="font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:.14em;color:var(--tx3);margin-bottom:10px">REFERENCIA — WUCC 2022 CINCINNATI</div>
+    <div class="r22-grid">
+      <div class="r22-card"><div class="r22-div">Open</div>
+        <div style="font-size:11px;margin-top:4px;line-height:1.9">
+          <span style="color:var(--gold);font-weight:700">🥇</span> PoNY · USA<br>
+          <span style="color:var(--silver);font-weight:700">🥈</span> Raleigh Ring of Fire · USA<br>
+          <span style="color:var(--bronze);font-weight:700">🥉</span> Clapham · GBR
         </div>
       </div>
-      <div style="margin-top:14px;font-size:11px;font-weight:600;color:var(--tx3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px">📊 Puntaje / Scoring</div>
-      <div class="help-scoring">
-        <div class="hs-row"><span>Partido (grupo/play-in/PP)</span><b>+1 pt</b></div>
-        <div class="hs-row"><span>Avanza a siguiente fase</span><b>+2 pts</b></div>
-        <div class="hs-row"><span>Round of 16 / Pre-QF</span><b>+3 pts</b></div>
-        <div class="hs-row"><span>Cuartos / Quarterfinals</span><b>+5 pts</b></div>
-        <div class="hs-row"><span>Semis / Semifinals</span><b>+8 pts</b></div>
-        <div class="hs-row"><span>Campeón / Champion</span><b>+13 pts</b></div>
-        <div class="hs-row" style="background:rgba(196,241,53,.06)"><span style="color:var(--tx1);font-weight:600">Máximo total / Max total</span><b style="font-size:14px">635 pts</b></div>
+      <div class="r22-card"><div class="r22-div">Women</div>
+        <div style="font-size:11px;margin-top:4px;line-height:1.9">
+          <span style="color:var(--gold);font-weight:700">🥇</span> Revolution · COL ★ Grupo B<br>
+          <span style="color:var(--silver);font-weight:700">🥈</span> Fury · USA ★ Grupo C<br>
+          <span style="color:var(--bronze);font-weight:700">🥉</span> Raleigh Phoenix · USA
+        </div>
+      </div>
+      <div class="r22-card"><div class="r22-div">Mixed</div>
+        <div style="font-size:11px;margin-top:4px;line-height:1.9">
+          <span style="color:var(--gold);font-weight:700">🥇</span> Seattle Mixtape · USA<br>
+          <span style="color:var(--silver);font-weight:700">🥈</span> Red Flag · CAN<br>
+          <span style="color:var(--bronze);font-weight:700">🥉</span> Manly Mosh · AUS ★ Grupo C
+        </div>
+      </div>
+      <div class="r22-card" style="border-color:rgba(196,241,53,.15)">
+        <div class="r22-div" style="color:rgba(196,241,53,.5)">Badges en app</div>
+        <div style="font-size:11px;color:var(--tx2);margin-top:4px;line-height:1.6">Los equipos que participaron en WUCC 2022 muestran su posición histórica junto al nombre.</div>
       </div>
     </div>
+  </div>
+
+  <!-- Score pills -->
+  <div class="score-pills">
+    <div class="s-pill">Partido grupos <b>+1 pt</b></div>
+    <div class="s-pill">Avanza fase sig. <b>+2 pts</b></div>
+    <div class="s-pill">Round of 16 <b>+3 pts</b></div>
+    <div class="s-pill">Cuartos <b>+5 pts</b></div>
+    <div class="s-pill">Semis <b>+8 pts</b></div>
+    <div class="s-pill">Campeón <b>+13 pts</b></div>
+    <div class="s-pill" style="margin-left:auto">Máx total <b>635 pts</b></div>
+  </div>
+
+  <!-- Sponsor banner (admin-controlled) -->
+  <div class="sponsor-banner" id="sponsorBanner">
+    🤝 Patrocinado por <a href="#" id="sponsorBannerLink" target="_blank">Nuestros Sponsors</a> &nbsp;·&nbsp;
+    Código: <strong id="sponsorBannerCode">WUCC2026</strong>
   </div>
 
   <!-- Division Hero Cards -->
@@ -1556,7 +1563,7 @@ window.applyLang=applyLang;
 
 <!-- FIREBASE SDK -->
 <script type="module">
-import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+import { initializeApp, getApps, getApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
 import { getFirestore, doc, setDoc, getDoc, onSnapshot, collection } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 
 // ═══════════════════════════════════════════════════
@@ -1575,16 +1582,19 @@ const FIREBASE_CONFIG = {
 
 window._fbConnect = async (cfg) => {
   try {
-    const app = initializeApp(cfg);
+    // Reutiliza la app si ya fue inicializada (recarga en caliente)
+    const app = getApps().length ? getApp() : initializeApp(cfg);
     const db = getFirestore(app);
-    await getDoc(doc(db,'_ping','test')).catch(()=>{});
+    // Ping silencioso — solo verifica conectividad, el error se ignora
+    await getDoc(doc(db, '_ping', 'test')).catch(() => {});
     window._db = db;
     window._fbFns = { doc, setDoc, getDoc, onSnapshot, collection };
     window._fbReady = true;
   } catch(e) {
-    console.error('Firebase error', e);
+    console.error('[Firebase] connection error:', e);
     window._fbReady = false;
-    window._fbErr = e.message;
+    // Garantiza que _fbErr siempre sea un string descriptivo
+    window._fbErr = e?.code || e?.message || String(e) || 'unknown-error';
   }
 };
 
@@ -1808,21 +1818,36 @@ setInterval(()=>{if(!isPicksClosed)checkDeadline();}, 1000);
    FIREBASE INIT
 ═══════════════════════════════════════════════════ */
 async function initFirebase(){
-  // Wait for auto-connect (max 4 seconds)
+  // Espera a que termine auto-connect (máx 8 segundos)
   let tries=0;
-  while(window._fbReady===undefined && tries<40){await new Promise(r=>setTimeout(r,100));tries++;}
+  while(window._fbReady===undefined && tries<80){await new Promise(r=>setTimeout(r,100));tries++;}
   const l = window.getLT ? window.getLT() : {fb:{connected:'Conectado ✓',noConfig:'Sin configurar',error:'Error Firebase'}};
   if(window._fbReady){
     fbReady=true;
     setFbStatus("ok", l.fb.connected);
     subscribeToLB(); subscribeToConfig(); subscribeToSponsors(); subscribeToSponsorConfig(); subscribeToAlliances();
   } else {
-    if(window._fbErr==="no-config"){
+    const err = window._fbErr;
+    if(!err || err===undefined){
+      // Timeout: el SDK no cargó o la red no respondió en 8s
+      setFbStatus("err", l.fb.error);
+      console.error("[Firebase] Timeout: el SDK no respondió en 8s. Verifica tu conexión a internet y que firebasejs CDN esté accesible.");
+    } else if(err==="no-config"){
       setFbStatus("err", l.fb.noConfig);
-      console.warn("Firebase: edita FIREBASE_CONFIG en index.html con tus credenciales.");
+      console.warn("[Firebase] Edita FIREBASE_CONFIG en index.html con tus credenciales.");
     } else {
       setFbStatus("err", l.fb.error);
-      console.error("Firebase error:", window._fbErr);
+      console.error("[Firebase] Error de conexión:", err);
+      // Guías de diagnóstico según código de error
+      if(err.includes("api-key-not-valid") || err.includes("API key")){
+        console.warn("[Firebase] La API key no es válida. Verifica FIREBASE_CONFIG.apiKey.");
+      } else if(err.includes("project") || err.includes("not found")){
+        console.warn("[Firebase] Proyecto no encontrado. Verifica FIREBASE_CONFIG.projectId.");
+      } else if(err.includes("network") || err.includes("fetch")){
+        console.warn("[Firebase] Error de red. Verifica tu conexión a internet.");
+      } else if(err.includes("auth")){
+        console.warn("[Firebase] Error de autenticación. Verifica que el dominio esté en la lista blanca en Firebase Console → Authentication → Authorized domains.");
+      }
     }
   }
 }
@@ -3403,18 +3428,27 @@ function renderAlliancesFooter(){
   const grid=document.getElementById("sponsorsGrid");
   const section=document.getElementById("sponsorsSection");
   const label=document.getElementById("sponsorsLabel");
+  const gridTop=document.getElementById("sponsorsGridTop");
+  const sectionTop=document.getElementById("sponsorsSectionTop");
+  const labelTop=document.getElementById("sponsorsLabelTop");
   const footerAl=alliances.filter(al=>al.active&&al.showInFooter!==false);
   const legacyOnly=sponsors.filter(s=>!footerAl.find(al=>al.id===s.id));
   const all=[...footerAl,...legacyOnly];
   if(!grid||!section)return;
-  if(!all.length){section.style.display="none";return;}
+  if(!all.length){section.style.display="none";if(sectionTop)sectionTop.style.display="none";return;}
   section.style.display="block";
   if(label)label.textContent=lsGet("w26_sponsorsLabel","SPONSORS & ALIADOS");
-  grid.innerHTML=all.map(s=>{
+  const html=all.map(s=>{
     const src=s.logo||s.data||"";const name=s.name||"";const link=s.link||"";
     const inner=(src?`<img class="sponsor-logo" src="${src}" alt="${name}">`:`<span style="font-size:22px">🤝</span>`)+(name?`<div class="sponsor-name">${name}</div>`:"");
     return link?`<a class="sponsor-item" href="${link}" target="_blank" rel="noopener" style="text-decoration:none">${inner}</a>`:`<div class="sponsor-item">${inner}</div>`;
   }).join("");
+  grid.innerHTML=html;
+  if(sectionTop&&gridTop){
+    sectionTop.style.display="block";
+    if(labelTop)labelTop.textContent=lsGet("w26_sponsorsLabel","SPONSORS & ALIADOS");
+    gridTop.innerHTML=html;
+  }
 }
 
 function updateAllianceBanner(){
